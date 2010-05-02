@@ -1,0 +1,178 @@
+#center_col {
+	margin-right: 0px;
+}
+#mBox {
+	background-color: white;
+	width: 400px;
+}
+#pBox {
+	vertical-align: middle;
+	overflow: hidden;
+	width: 400px;
+}
+.playing, .imgShowing {
+	position: relative;
+}
+.rBox {
+	float: right;
+	background-color: #F0F7F9;
+	text-align: center;
+}
+.wBBord {
+	border-bottom: 1px solid #6B90DA;
+}
+#setShow, .blocked, .imgLink {
+	display: block;
+}
+#vidTag, #imageTag {
+	margin: 0px;
+}
+#playerTag {
+	background-color: #F0F7F9;
+	height: 20px;
+}
+#vBox {
+	height: 305px;
+}
+.playimg {
+	max-width: 400px;
+	max-height: 345px;
+	border-style: none;
+}
+#videoList {
+	width: 180px;
+}
+#imageList {
+	width: 220px;
+}
+#wikLink {
+	float: left;
+	display: inline;
+}
+#ssb {
+	position: relative;
+	height: 25px;
+}
+#resStat {
+	display: inline;
+	position: absolute;
+	top: 1px;
+	right: 0px;
+}
+#resOL {
+	margin: 0px 2% 0px .1em;
+}
+.toLI {
+	display: list-item;
+}
+.reAddAd {
+	width: 100px;
+}
+.g {
+	margin-top: 0px;
+	min-width: 540px;
+}
+#dymTxt {
+	margin: 0px;
+	float: left;
+}
+#ssb {
+	position: relative;
+	height: 25px;
+}
+#rsStats {
+	display: inline;
+	float: right;
+}
+#prs {
+	display: inline;
+}
+.vidRes {
+	width: 145px;
+	display: block;
+}
+.vidRes .g {
+	margin: 0px;
+	 min-width: 0px;
+	 margin-left: 1em;
+}
+.vidRes img {
+	width: 137px;
+	height: 97px;
+}
+.vrTitle {
+	margin-bottom: 30px;
+}
+#exvidlist {
+	width: 170px;
+}
+.vid_thumb {
+	width: 140px;
+	height: 100px;
+	padding: 0px 10px;
+	border-style: none;
+	border-bottom: 1px solid #000000;
+	background-color: #000000;
+}
+.vid_result {
+	font-size: 11pt;
+	border: 1px solid #000000;
+	margin: 9px;
+}
+.vid_result a {
+	text-decoration: none;
+}
+#ssb {
+	margin-bottom: 0px;
+	padding-bottom: 0px;
+}
+#hidePly {
+	display: none;
+}
+#slideShow {
+	position: fixed;
+	text-align: center;
+	padding: 15px;
+	top: 50%;
+	left: 50%;
+	z-index: 9998;
+	background-color: white;
+	border: 1px solid black;
+}
+.sldImgs {
+	max-width: " + maxwidth + "px;
+	max-height: " + maxheight + "px;
+}
+#sldLink {
+	text-align: center;
+}
+#next{
+	float: right;
+}
+#prev {
+	float: left;
+}
+#res {
+	padding-right: 0px;
+	margin-top: 0px;
+}
+#wikiHeader {
+	font-size: 115%;
+	background-color: #F0F7F9;
+	padding-left: .2em;
+}
+#wikiDesc {
+	font-size: 75%;
+	margin: 0px;
+	padding: .2em;
+	text-indent: 3em;
+	border: 2px solid #F0F7F9;
+}
+#wikiDiv {
+	width: 580px;
+	margin-top: -1px;
+	margin-bottom: .5em;
+}
+.ts td {
+	padding: 0px 0px 0px 17px;
+}

@@ -1,0 +1,102 @@
+#dymTxt {
+	float: left;
+}
+body {
+	margin-bottom: 50px;
+} 
+a img {
+	 border-style: none;
+} 
+.closed {
+	 display: none;
+} 
+#dock {
+	 position: fixed;
+	 height: 40px;
+	 width: 260px;
+	 border: 1px solid #000000;
+	 border-bottom-style: none;
+	 bottom: 0px;
+	 right: 50%;
+	 margin-right: -130px;
+	 text-align: center;
+	 background-color: #F0F7F9;
+} 
+.dockLink {
+	 padding: 1em 1.25em;
+	 display: inline;
+	 cursor: pointer;
+	 float: left;
+} 
+#wikiHeader {
+	 font-size: 18pt;
+	 padding-left: .5em;
+} 
+.wiki_p {
+	 text-indent: 1.5em;
+} 
+#playerTag {
+	 text-align: center;
+	 margin-top: 0px;
+} 
+#pBox {
+	 position: relative;
+} 
+#pBox, #videoList, .imgLink img, #imageList {
+	 border: 1px solid #000000;
+} 
+#playerTag, #vidTag, #imageTag {
+	 background-color: #000000;
+	 color: #FFFFFF;
+	 text-shadow: -1px 0px #888888;
+} 
+#videoList .rl-item {
+	 display: -moz-stack;
+	 width: 16%;
+	 margin: 1px 2%;
+	 text-align: center;
+} 
+#vBox {
+	 height: 480px;
+} 
+#vidTag {
+	 border-bottom: 1px solid #000000;
+} 
+#videoList, #imageList {
+	 border-top-style: none;
+} 
+.rl-domain {
+	 display: block;
+} 
+#miniSldLink {
+	 cursor: pointer;
+	 float: right;
+	 font-size: small;
+	 padding: 2px 4px;
+	 margin-top: 1px;
+	 text-shadow: -1px 1px #666666;
+} 
+#miniSldLink:hover {
+	 background-color: #FFFFFF;
+	 color: #000000;
+	 text-shadow: -1px 1px #CCCCCC } 
+#imageList button, .rl-cannot-play-here, .rl-domain-below, .rl-watch-on, .rl-special, .rl-snippet {
+	 display: none;
+} 
+.imgShowing {
+	 text-align: center;
+} 
+.imgLink {
+	 display: inline-block;
+	  margin: 1%;
+	 width: 9%;
+	 vertical-align: middle;
+} 
+.imgLink img {
+	 height: auto;
+	 padding: 2px;
+	 background-color: #555555;
+} 
+.aset {
+	 display: inline !important;
+}
