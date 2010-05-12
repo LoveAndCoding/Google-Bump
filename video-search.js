@@ -161,14 +161,15 @@ function indiv_video_result(src, link, domain, name) {
 	this.youtubeEmbed = function(link) {
 		var regexUtube = new RegExp("^http:\/\/w{3}\.youtube\.com\/watch");
 		var src = link.replace(regexUtube, "");
-		src = "http://www.youtube.com/v/" + src.substr(3) +
+		src = "http://www.youtube" + (options.pmvd ? "-nocookie" : "") + ".com/v/" + src.substr(3) +
 				"?fs=" + Number(options.fsvd) +
 				"&hd=" + Number(options.hdvd) + 
 				"&autoplay=" + Number(options.apvd) +
 				"&loop=" + Number(options.lpvd) +
 				"&iv_load_policy=" + (options.ivvd ? 1 : 3) +
 				"&cc_load_policy=" + Number(options.ccvd) +
-				"&enablejsapi=1&version=3";
+				"&enablejsapi=1" +
+				(!options.pmvd && !options.lpvd ? "&version=3" : "");
 		return src;
 	};
 	

@@ -53,6 +53,16 @@
 	border-bottom: 1px solid black;
 	margin-bottom: 2px;
 }
+.colorToneToBlack {
+	width: 255px;
+}
+.colorBar {
+	width: 40px;
+}
+.colorToneToBlack, .colorBar {
+	position: relative;
+	height: 255px;
+}
 .sldImgs {
 	display: block;
 }

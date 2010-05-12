@@ -1,1 +1,16 @@
-Nothing here yet...
+Licensing information can be found in the LICENSE file.
+
+This code is in several different pieces. To compile the code you will need Juicer (see below)
+and you need to run the command:
+juicer merge main.js -s -f -o Google-Bump.js
+
+To run a merge that will create a file to be installed in GreaseMonkey, you can run:
+juicer merge main.js -s -f -o %appdata%\Mozilla\Firefox\Profiles\<PROFILE DIRECTORY>\gm_scripts\google_bump\google_bump.user.js
+e.g.
+juicer merge main.js -s -f -o %appdata%\Mozilla\Firefox\Profiles\eyo2kaec.default\gm_scripts\google_bump\google_bump.user.js
+
+Do note that if you have Google Bump and Juicer on a different hard drive from your %appdata% then 
+it will finish but it will throw an error.
+
+This code uses juicer to compile from several different javascript files.
+Juicer (C) Christian Johansen - http://cjohansen.no/en/ruby/juicer_a_css_and_javascript_packaging_tool

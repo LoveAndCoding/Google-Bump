@@ -1,3 +1,6 @@
+/**
+  *	Options object to hold both default and user configured options.
+  */
 function optionlist() {
 	
 		// Visual defaults
@@ -21,6 +24,7 @@ function optionlist() {
 	this.DEFAULT_APVD = true;
 	this.DEFAULT_LPVD = false;
 	this.DEFAULT_IVVD = false;
+	this.DEFAULT_PMVD = false;
 	this.DEFAULT_CCVD = false;
 		// Image defaults
 	this.DEFAULT_IMGS = false;
@@ -60,6 +64,7 @@ function optionlist() {
 	this.apvd = GM_getValue("apvd", this.DEFAULT_APVD);
 	this.lpvd = GM_getValue("lpvd", this.DEFAULT_LPVD);
 	this.ivvd = GM_getValue("ivvd", this.DEFAULT_IVVD);
+	this.pmvd = GM_getValue("pmvd", this.DEFAULT_PMVD);
 	this.ccvd = GM_getValue("ccvd", this.DEFAULT_CCVD);
 		// Image vars
 	this.imgs = GM_getValue("imgs", this.DEFAULT_IMGS);

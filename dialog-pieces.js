@@ -1,3 +1,9 @@
+/**
+  *	Import dependencies
+  *	
+  *	@depends color-picker.js
+  */
+  
 function config_tab(title, id, on) {
 	
 	this.title = title;
@@ -255,8 +261,57 @@ function config_selectionBox(label, id, op_labels, op_values, dflt) {
 	};
 }
 
-function config_description(label, id, dflt) {
+function config_colorBox(label, id, dflt) {
 	
+	this.label = label;
+	this.id = id;
+	this.currentValue = GM_getValue(id, dflt);
+	this.defaultVal = dflt;
+	this.box;
+	this.popout;
+	
+	this.draw = function (parentNode) {
+		var disp = $create("p", {
+			textContent : this.label + ": ",
+			className : "confLbl"
+		});
+		this.box = $create("div", {
+			name : this.id,
+			className : "configColorBox"
+		});
+		this.box.style.backgroundColor = 'rgb(' + this.currentValue + ')';
+		
+		this.popout = popupManager.newColor();
+		
+		var SR = this;
+		this.box.addEventListener("click", function(event) { 
+			popupManager.closeColor();
+			SR.popout.draw(SR.box);
+		}, true);
+		// // Creates the desired Options with the given  values and ids
+		// for (var lo = 0; lo < this.options.length; lo++) {
+			// var op = $create("option", {
+				// textContent : this.options[lo],
+				// value : this.values[lo],
+				// id : this.id + "_" + lo
+			// });
+			// if (this.values[lo] == this.currentValue) {
+				// op.selected = true;
+			// }
+			// this.list.appendChild(op);
+		// }
+		
+		parentNode.appendChild(disp);
+		parentNode.appendChild(this.box);
+		parentNode.appendChild($create("br"));
+	};
+	
+	this.setDefault = function () {
+		if (this.list) {
+			this.list.value = this.defaultVal;
+			GM_setValue(this.id, this.defaultVal);
+		}
+	};
 }
 
 function button(value, action) {
@@ -270,8 +325,6 @@ function button(value, action) {
 			type : 'button',
 			value : this.val
 		});
-		
-		//this.action = action;
 		
 		var SR = this;
 		this.btn.addEventListener("click", function () {
