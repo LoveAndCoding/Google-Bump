@@ -1,70 +1,6 @@
 /**
   *	General Purpose Color Picker
   */
-// // Main Rectangle
-// var c = document.createElement('canvas');
-// c.width = 255;
-// c.height = 255;
-// c.style.position = 'relative';
-// document.body.appendChild(c);
-// var ctx = c.getContext('2d');
-
-// var wtc = ctx.createLinearGradient(0,0,255,0);
-// wtc.addColorStop(0, 'rgb(255,255,255)');
-// wtc.addColorStop(1, 'rgb(255,0,0)');
-// ctx.fillStyle = wtc;
-// ctx.fillRect(0,0,255,255);
-// var btw = ctx.createLinearGradient(0,0,0,255);
-// btw.addColorStop(0,'rgba(255,255,255,0)');
-// btw.addColorStop(1,'black');
-// ctx.fillStyle = btw;
-// ctx.fillRect(0,0,255,255);
-
-// // Color Bar
-// var cbar = document.createElement('canvas');
-// cbar.width = 40;
-// cbar.height = 255;
-// cbar.style.position = 'relative';
-// document.body.appendChild(cbar);
-// var cbtx = cbar.getContext('2d');
-// var rtr = cbtx.createLinearGradient(0,0,0,255);
-// rtr.addColorStop(0, 'rgb(255,0,0)');
-// rtr.addColorStop(1/6, 'rgb(255,255,0)');
-// rtr.addColorStop(1/3, 'rgb(0,255,0)');
-// rtr.addColorStop(1/2, 'rgb(0,255,255)');
-// rtr.addColorStop(2/3, 'rgb(0,0,255)');
-// rtr.addColorStop(5/6, 'rgb(255,0,255)');
-// rtr.addColorStop(1, 'rgb(255,0,0)');
-// cbtx.fillStyle = rtr;
-// cbtx.fillRect(10,0,20,255);
-
-// function color_click(e) {
-	// var data = ctx.getImageData(e.layerX, e.layerY, 1, 1).data;
-	// var nc = document.createElement("canvas");
-	// nc.width = 50;
-	// nc.height = 50;
-	// var ncx = nc.getContext("2d");
-	// ncx.fillStyle = "rgb(" + data[0] + "," + data[1] + "," + data[2] + ")";
-	// ncx.fillRect(0, 0, 50, 50);
-	// document.body.appendChild(nc);
-// }
-
-// function color_pick(e) {
-	// if(e.layerX >= 10 && e.layerX < 30) {
-		// var data = cbtx.getImageData(e.layerX, e.layerY, 1, 1).data;
-		// var wtc = ctx.createLinearGradient(0,0,255,0);
-		// wtc.addColorStop(0, 'rgb(255,255,255)');
-		// wtc.addColorStop(1, 'rgb(' + data[0] + ',' + data[1] + ',' + data[2] + ')');
-		// ctx.fillStyle = wtc;
-		// ctx.fillRect(0,0,255,255);
-		// var btw = ctx.createLinearGradient(0,0,0,255);
-		// btw.addColorStop(0,'rgba(255,255,255,0)');
-		// btw.addColorStop(1,'black');
-		// ctx.fillStyle = btw;
-		// ctx.fillRect(0,0,255,255);
-	// }
-// }
-
 function color_picker(color) {
 	
 	this.clickHandles = [];
@@ -75,14 +11,14 @@ function color_picker(color) {
 	this.cbCtx;
 	this.container;
 	
-	this.draw = function (parentNode) {
+	this.draw = function (attachedNode) {
 		this.container = $create('div', {
 			'className' : 'colorContainer'
 		});
 		this.drawBW(this.color);
-		this.drawCB();
+		this.drawCB(0);
 		
-		parentNode.appendChild(this.container);
+		document.body.appendChild(this.container);
 	};
 	
 	this.drawBW = function (tone) {
@@ -118,7 +54,7 @@ function color_picker(color) {
 		this.bwCtx.fillRect(0,0,255,255);
 	};
 	
-	this.drawCB = function () {
+	this.drawCB = function (yOffset) {
 		// Color Bar
 		this.cbCanvas = $create('canvas', {
 			'className' : 'colorBar'
@@ -128,6 +64,14 @@ function color_picker(color) {
 		this.cbCanvas.style.position = 'relative';
 		this.container.appendChild(this.cbCanvas);
 		this.cbCtx = this.cbCanvas.getContext('2d');
+		this.redrawCB(yOffset);
+			
+		var SR = this;
+		this.cbCanvas.addEventListener('click', function (e) { SR.colorPick(e) }, false);
+	};
+	
+	this.redrawCB = function (yOffset) {
+		this.cbCtx.clearRect(0,0,255,255);
 		var rtr = this.cbCtx.createLinearGradient(0,0,0,255);
 		rtr.addColorStop(0, 'rgb(255,0,0)');
 		rtr.addColorStop(1/6, 'rgb(255,255,0)');
@@ -139,15 +83,23 @@ function color_picker(color) {
 		this.cbCtx.fillStyle = rtr;
 		this.cbCtx.fillRect(10,0,20,255);
 		
-		var SR = this;
-		this.cbCanvas.addEventListener('click', function (e) { SR.colorPick(e) }, false);
+		this.cbCtx.strokeStyle = "rgba(255,255,255,1)";
+		this.cbCtx.strokeRect(7,yOffset-2, 26, 5);
+		this.cbCtx.strokeStyle = "rgba(0,0,0,1)";
+		this.cbCtx.strokeRect(6,yOffset-3,28,7);
 	};
 	
 	this.colorPick = function (e) {
-		var data = this.cbCtx.getImageData(e.layerX, e.layerY, 1, 1).data;
-		
-		this.color = data[0] + ',' + data[1] + ',' + data[2];
-		this.redrawBW(this.color);
+		e.stopPropagation();
+		e.preventDefault();
+		if(e.layerX >= 10 && e.layerX < 30) {
+			var data = this.cbCtx.getImageData(e.layerX, e.layerY, 1, 1).data;
+			
+			this.redrawCB(e.layerY);
+			
+			this.color = data[0] + ',' + data[1] + ',' + data[2];
+			this.redrawBW(this.color);
+		}
 	};
 	
 	this.clickDelegate = function (e) {
@@ -180,6 +132,3 @@ function color_picker(color) {
 		$remove(this.container);
 	};
 }
-
-// c.addEventListener('click', color_click, false);
-// cbar.addEventListener('click', color_pick, false);

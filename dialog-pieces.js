@@ -275,7 +275,8 @@ function config_colorBox(label, id, dflt) {
 			textContent : this.label + ": ",
 			className : "confLbl"
 		});
-		this.box = $create("div", {
+		this.box = $create("input", {
+			type : 'text',
 			name : this.id,
 			className : "configColorBox"
 		});
@@ -285,21 +286,38 @@ function config_colorBox(label, id, dflt) {
 		
 		var SR = this;
 		this.box.addEventListener("click", function(event) { 
+			this.blur();
+			
+			offLeft = 0;
+			offTop = 0;
+			var node = this;
+			while(node != document.body) {
+				offLeft += node.offsetLeft + 1;
+				offTop += node.offsetTop + 1;
+				node = node.offsetParent;
+			}
+			
 			popupManager.closeColor();
 			SR.popout.draw(SR.box);
+			SR.popout.container.style.top = (offTop - 1) + "px";
+			SR.popout.container.style.left = (offLeft - 1) + "px";
+			
+			document.addEventListener('click', function (e) {
+				if(!checkallparentsforit(this, "colorContainer")) {
+					e.stopPropagation();
+					e.preventDefault();
+					
+					popupManager.closeColor();
+					document.removeEventListener('click', arguments.callee, false);
+				}
+			}, false);
+			event.stopPropagation();
 		}, true);
-		// // Creates the desired Options with the given  values and ids
-		// for (var lo = 0; lo < this.options.length; lo++) {
-			// var op = $create("option", {
-				// textContent : this.options[lo],
-				// value : this.values[lo],
-				// id : this.id + "_" + lo
-			// });
-			// if (this.values[lo] == this.currentValue) {
-				// op.selected = true;
-			// }
-			// this.list.appendChild(op);
-		// }
+		this.popout.registerClick(function(e, clr) {
+			SR.box.style.backgroundColor = "rgb(" + clr + ")";
+			GM_setValue(id, clr);
+			popupManager.closeColor();
+		});
 		
 		parentNode.appendChild(disp);
 		parentNode.appendChild(this.box);
@@ -307,8 +325,8 @@ function config_colorBox(label, id, dflt) {
 	};
 	
 	this.setDefault = function () {
-		if (this.list) {
-			this.list.value = this.defaultVal;
+		if (this.box) {
+			this.box.style.backgroundColor = 'rgb(' + this.defaultVal + ')';
 			GM_setValue(this.id, this.defaultVal);
 		}
 	};

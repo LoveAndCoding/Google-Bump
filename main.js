@@ -26,6 +26,8 @@ function runThrough() {
 	var q = document.evaluate('//*[@name="q"]', document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
 	queryBox = q.snapshotItem(0);
 	
+	logoToTrans();
+	
 	if ($("preload")) {
 		resetPg();
 	} else {
@@ -64,7 +66,17 @@ function runThrough() {
 	
 	// Creates the player if either a video or image search is active
 	if (options.vids || options.imgs) {
-		makePlayer();
+		
+		var mBox = rightBox("mBox");
+		if ($("res").childNodes) {
+			$("res").insertBefore(mBox, $("res").childNodes[0]);
+		} else {
+			$("res").appendChild(mBox);
+		}
+		
+		if (options.imgPlyr || options.embd) {
+			makePlayer();
+		}
 	}
 	
 	// Main features
@@ -108,13 +120,13 @@ function runThrough() {
 // End Functions --------------------------------------------------------------------
 
 // Global Variables
-var filler, centDiv, centDivConf, conf, stylr, centDivSld, sldTmr, sldObj, dockShow, multiBox, multi, queryBox, imgSearch;
+var filler, centDiv, centDivConf, conf, stylr, centDivSld, sldTmr, sldObj, dockShow, multiBox, multi, queryBox, imgSearch, embedder;
 var pon = 0;
 // The following is an undefined varialbe to allow the reset of all variables; Do not set
 var SET_UNDEFINED;
 
 GM_registerMenuCommand("Options", configurations, "o", "control shift");
-GM_registerMenuCommand("Style", styler, "y", "control shift");
+GM_registerMenuCommand("Styles", styler, "y", "control shift");
 GM_registerMenuCommand("Script Info (Opens in New Tab)", redirInfo);
 
 var popupManager = new popup_manager();
@@ -125,7 +137,7 @@ var currUrl = location.href;
 var delayed = false;
 
 // Starts the process
-if($('res')) {
+if($('res') && $('res').children.length > 0) {
 	runThrough();
 } else {
 	delayed = true;
@@ -133,7 +145,7 @@ if($('res')) {
 }
 
 function waitingForPage() {
-	if($('res')) {
+	if($('res') && $('res').children.length > 0) {
 		userInput = setupText();
 		currUrl = location.href;
 		runThrough();

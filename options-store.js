@@ -31,6 +31,7 @@ function optionlist() {
 	this.DEFAULT_IMGPLYR = true;
 	this.DEFAULT_IMGSIZE = "large";
 	this.DEFAULT_SLDSHW = true;
+	this.DEFAULT_SLDKEY = true;
 	this.DEFAULT_IMGLOAD = true;
 	this.DEFAULT_SKIPERR = true;
 	this.DEFAULT_SLDTM = 4000;
@@ -41,6 +42,21 @@ function optionlist() {
 	this.DEFAULT_OLDSIZE = true;
 		// Advanced defaults
 	this.DEFAULT_DELAY = 400;
+		// Color Defaults
+			// Background Colors
+	this.DEFAULT_GENBGCLR = '255,255,255';
+	this.DEFAULT_RESLTCLR = '255,255,255';
+	this.DEFAULT_GLBARCLR = '255,255,255';
+	this.DEFAULT_ADDEDCLR = '240,247,249';
+	this.DEFAULT_PLYBLCLR = '255,255,255';
+			// Text Colors
+	this.DEFAULT_RESTXTCLR = '0,0,0';
+	this.DEFAULT_LNKTXTCLR = '17,17,204';
+	this.DEFAULT_URLTXTCLR = '34,136,34';
+	this.DEFAULT_SIMTXTCLR = '66,114,219';
+	this.DEFAULT_MDATXTCLR = '0,0,0';
+	this.DEFAULT_PLYTXTCLR = '0,0,0';
+	this.DEFAULT_PBLTXTCLR = '0,0,0';
 	
 	
 		// Visual vars
@@ -71,6 +87,7 @@ function optionlist() {
 	this.imgPlyr = GM_getValue("imgPlyr", this.DEFAULT_IMGPLYR);
 	this.imgSize = GM_getValue("imgSize", this.DEFAULT_IMGSIZE);
 	this.sldshw = GM_getValue("sldshw", this.DEFAULT_SLDSHW);
+	this.sldkey = GM_getValue("sldkey", this.DEFAULT_SLDKEY);
 	this.imgLoad = GM_getValue("imgLoad", this.DEFAULT_IMGLOAD);
 	this.skipErr = GM_getValue("skipErr", this.DEFAULT_SKIPERR);
 	this.sldTm = GM_getValue("sldtm", this.DEFAULT_SLDTM);

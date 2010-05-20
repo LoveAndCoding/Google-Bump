@@ -176,7 +176,7 @@ function style_dialog(popup) {
 	this.dialog;
 	this.windows = new Array();
 	this.isDrawn = false;
-	this.popup = false;
+	this.popup = popup;
 	
 	this.draw = function () {
 		var centDivStyl = $create("div", {
@@ -289,6 +289,12 @@ function style_dialog(popup) {
 		}
 	};
 	
+	this.setDefaults = function () {
+		for (var wo = 0; wo < this.windows.length; wo++) {
+			this.windows[wo].setDefaults();
+		}
+	};
+	
 }
 
 function config_dialog(popup) {
@@ -366,7 +372,7 @@ function config_dialog(popup) {
 		app_section.sectionOptions.push(new config_checkBox("Move \"Did you mean\" text", "dym", options.DEFAULT_DYM));
 		app_section.sectionOptions.push(new config_checkBox("Remove Sidebar Ads", "sideads", options.DEFAULT_SIDEADS));
 		app_set_window.sections.push(app_section);
-		app_set_window.sections.push(new config_desc_section("Styles", "Styles can now be configured in the style menu. If keyboard shortcuts are enabled, you can use CTRL + SHIFT + Y to access, otherwise you can get to it the same way you access this menu."));
+		app_set_window.sections.push(new config_desc_section("Styles", "Styles can now be configured in the style menu. If keyboard shortcuts are enabled, you can use CTRL + SHIFT + Y to access, otherwise you can get to it the same way you access this menu."));
 		//app_section.sectionOptions.push(new config_selectionBox("Layout Style", "style", ["Classic", "Media", "Dock", "Columns", "Centered"], ["classic", "media", "dock", "column", "center"], options.DEFAULT_STYL));
 		
 		// Image Search Settings
@@ -381,6 +387,7 @@ function config_dialog(popup) {
 			// Slideshow Settings
 		var sld_section = new config_section("SlideShow Options");
 		sld_section.sectionOptions.push(new config_checkBox("Enable Slideshow", "sldshw", options.DEFAULT_SLDSHW));
+		sld_section.sectionOptions.push(new config_checkBox("Enable Keyboad Controls in Slidshow", "sldkey", options.DEFAULT_SLDKEY));
 		sld_section.sectionOptions.push(new config_checkBox("Pause while image is loading", "imgLoad", options.DEFAULT_IMGLOAD));
 		sld_section.sectionOptions.push(new config_checkBox("Skip images that cannot be loaded", "skipErr", options.DEFAULT_SKIPERR));
 		sld_section.sectionOptions.push(new config_selectionBox("Display images in slideshow for", "sldtm", ["1 Second","2 Second","3 Second","4 Second","5 Second","7 Second","10 Second"], [1000, 2000, 3000, 4000, 5000, 7000, 10000], options.DEFAULT_SLDTM));
@@ -537,7 +544,7 @@ function slideshow_dialog(popup) {
 		});
 		pvBtn.draw(this.dialog);
 		this.psBtn = new button('Pause', function () {
-			if (this.btn.value == 'Pause') {
+			if (SR.isPlaying) {
 				SR.pause();
 			} else {
 				SR.play();
@@ -556,6 +563,14 @@ function slideshow_dialog(popup) {
 		
 		this.play();
 		this.nextImage(imgOn);
+		
+		if (options.sldkey) {
+			document.addEventListener('keypress', function (e) {
+				if (SR.isDrawn) {
+					SR.keyboardControls(e);
+				}
+			}, false);
+		}
 	};
 	
 	this.undraw = function () {
@@ -565,6 +580,41 @@ function slideshow_dialog(popup) {
 			$remove(this.dialog);
 			this.isDrawn = false;
 			this.onImage = -1;
+			
+			document.removeEventListener('keypress', function (e) {
+				if (SR.isDrawn) {
+					SR.keyboardControls(e);
+				}
+			}, false);
+		}
+	};
+	
+	this.keyboardControls = function (e) {
+		if (e.charCode == 32) { // Space
+			e.stopPropagation();
+			e.preventDefault();
+			
+			if(this.isPlaying) {
+				this.pause();
+			} else {
+				this.play();
+			}
+		} else if (e.keyCode == 37) { // Left
+			this.pause();
+			this.prevImage();
+		} else if (e.keyCode == 39) { // Right
+			this.pause();
+			this.nextImage();
+		} else if (e.keyCode == 36) { // Home (Beginning)
+			e.stopPropagation();
+			e.preventDefault();
+			
+			this.nextImage(0);
+		} else if (e.keyCode == 35) { // End
+			e.stopPropagation();
+			e.preventDefault();
+			
+			this.prevImage(this.images.length - 1);
 		}
 	};
 	
@@ -574,7 +624,7 @@ function slideshow_dialog(popup) {
 			this.images[this.onImage].removeEventListener("load", this.waitForLoad, false);
 		}
 		
-		if(!imgGoTo || !isFinite(imgGoTo) || imgGoTo < 0) {
+		if(typeof(imgGoTo) == "undefined" || imgGoTo < 0 || imgGoTo >= this.images.length) {
 			this.onImage++;
 		} else {
 			this.onImage = imgGoTo;
@@ -609,11 +659,15 @@ function slideshow_dialog(popup) {
 		}
 	};
 	
-	this.prevImage = function () {
+	this.prevImage = function (imgGoTo) {
 		if(this.onImage >= 0) {
 			this.holder.removeChild(this.images[this.onImage]);
 		}
-		this.onImage--;
+		if(typeof(imgGoTo) == "undefined" || imgGoTo < 0 || imgGoTo >= this.images.length) {
+			this.onImage--;
+		} else {
+			this.onImage = imgGoTo;
+		}
 		if(this.onImage < 0) {
 			this.onImage = this.images.length - 1;
 		}

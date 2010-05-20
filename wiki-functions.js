@@ -1,4 +1,33 @@
 	// Start Wiki Based Functions --------------------------------------------------
+// Creates and inserts the link to a wikipedia and wiktionary search
+function lookup(lookingFor) {
+	// var logoBox = $("ssb");
+	var p = $create("p", {
+		textContent : "Find " + lookingFor +  " on ",
+		className : 'added',
+		id : 'wikiLink'
+	});
+	var link = $create("a");
+	link.textContent = "Wikipedia";
+	link.href = "http://en.wikipedia.org/wiki/Special:Search?go=Go&search=" + lookingFor;
+	var link2 = $create("a");
+	link2.textContent = "Wiktionary";
+	link2.href = "http://en.wiktionary.org/wiki/Special:Search?go=Go&search=" + lookingFor;
+	p.appendChild(link);
+	p.innerHTML += " | ";
+	p.appendChild(link2);
+	
+	if($('dymTxt')) {
+		$('leftnav').insertBefore(p, $('dymTxt').nextSibling);
+	} else {
+		$('leftnav').insertBefore(p, $('leftnav').childNodes[0]);
+	}
+	// p.className = "added";
+	// p.id = "wikLink";
+	// logoBox.insertBefore(p,logoBox.childNodes[1]);
+	// var resultsstats = logoBox.childNodes[logoBox.childNodes.length - 1];
+	// resultsstats.id = "resStat";
+}
 // Handles the case of a wikipedia page being found
 function foundwikilink(response) {
 	var defdiv = $create("div");
@@ -98,6 +127,6 @@ function checkwikistate(response) {
 }
 // Searches wikipedia based on what the user is searching for
 function menutogglewiki(theSearch) {
-	get("http://en.wikipedia.org/wiki/Special:Search?go=Go&search=" + theSearch, checkwikistate, nowikilink);
+	get("http://en.wikipedia.org/wiki/Special:Search?go=Go&search=" + encodeURIComponent(theSearch), checkwikistate, nowikilink);
 }
 	// End Wiki Based Functions ----------------------------------------------------

@@ -92,9 +92,7 @@ function indiv_video_result(src, link, domain, name) {
 	this.clicked = function (event, res) {
 		event.stopPropagation();
 		event.preventDefault();
-		$("pBox").className = "playing";
-		var vBox = $create("div");
-		vBox.id = "vBox";
+		
 		// Embeds the video
 		var src;
 		if (res.domain == "youtube") {
@@ -151,10 +149,7 @@ function indiv_video_result(src, link, domain, name) {
 		}
 		object.appendChild(embed);
 		
-		vBox.appendChild(object);
-		
-		setupPlayer(res.name);
-		$("pBox").appendChild(vBox);
+		embedder.addVideoEmbed(name, true, object)
 	};
 	
 	// Handles logic for youtube embeds including extra options

@@ -1,4 +1,9 @@
-	// Start Display Functions ---------------------------------------------------------
+/**
+  *	Import Dependencies
+  *	
+  *	@depends media-embed.js
+  */
+  // Start Display Functions ---------------------------------------------------------
 // Adds all the styles for the page.
 function allStyles () {
 	var maxwidth = window.innerWidth - 50;
@@ -82,7 +87,7 @@ function allStyles () {
 		//$("resOL").parentNode.appendChild($("nav"));
 		
 	} else if (options.styl == "dock") {
-		var dockSS = "#dymTxt { float: left; } body { margin-bottom: 50px; } " +
+		var dockSS = "body { margin-bottom: 50px; } " +
 						"a img { border-style: none; } " +
 						".closed { display: none; } " +
 						"#dock { position: fixed; height: 40px; width: 260px; border: 1px solid #000000; border-bottom-style: none; bottom: 0px; right: 50%; margin-right: -130px; text-align: center; background-color: #F0F7F9; } " +
@@ -204,20 +209,20 @@ function allStyles () {
 							"#tsf { position: relative; } " +
 							".gbh { left: auto !important; right: auto !important; width: 760px; } " +
 							"#ssb { margin-bottom: 0px; padding-bottom: 0px; } " +
-							"#mBox { position: relative; width: 760px; height: 220px; overflow: hidden; border-bottom: 1px solid #6B90DA; border-top: 1px solid #6B90DA; } " +
+							"#mBox { position: relative; width: 600px; height: 220px; margin-left: -16px; overflow: hidden; border-bottom: 1px solid #6B90DA; border-top: 1px solid #6B90DA; } " +
 							"#wikiDiv { min-height: 122px; z-index: 1003; border-bottom: 1px solid #000000; border-right: 1px solid #000000; position: absolute; top: 0px; left: 0px; background-color: #FFFFFF; width: 200px; } " +
 							"#wikiHeader { font-size: 100%; text-align: center; border-bottom: 1px solid #000000; } " +
 							"#wikiHeader a, #wikiHeader a:active { color: #0077CC; text-decoration: none; } " +
 							"#wikiDesc { margin: 0px; padding: 5px 2px 2px 2px; font-size: 85%; } " +
 							"#wikiExp { min-height: 120px; z-index: 1002; text-align: center; font-size: 75%; position: absolute; top: 0px; left: 0px; background-color: #FFFFFF; border-right: 1px solid #000000; border-bottom: 1px solid #000000; cursor: pointer; color: #0077CC; padding: 1px 4px; } " +
 							"#pBox { width: 380px; text-align: center; height: 220px; background-color: #FFFFFF; } " +
-							"#videoList { float: left; height: 220px; width: 379px; overflow-y: auto; overflow-x: hidden; border-right: 1px solid #6B90DA; } " + 
+							"#videoList { float: left; height: 220px; width: 299px; overflow-y: auto; overflow-x: hidden; border-right: 1px solid #6B90DA; } " + 
 							"#vidTag, #imageTag, #playerTag { text-align: center; margin: 0px; padding: 0px 8px; background-color: #F0F7F9; border-bottom: 1px solid #6B90DA; } " +
 							".rl-item { max-width: 100px; float: left; padding: 5px 10px; } " +
 							".rl-thumbnail img { max-width: 100px; } " +
 							".rl-domain-below { overflow-x: hidden; width: 100px; } " +
 							".rl-details, .rl-snippet, .rl-snippet-grid-view, .rl-watch-on, .rl-cannot-play-here, .rl-special { display: none; } " +
-							"#imageList { text-align: center; height: 220px; width: 379px; float: right; z-index: 1001; overflow-y: auto; overflow-x: hidden; } " +
+							"#imageList { text-align: center; height: 220px; width: 299px; float: right; z-index: 1001; overflow-y: auto; overflow-x: hidden; } " +
 							"#imageList img { max-width: 100px; } " +
 							".playing { display: block !important; z-index: 1004 !important; } " +
 							".imgShowing { display: block !important; z-index: 1004 !important; } " +
@@ -242,6 +247,7 @@ function allStyles () {
 	} else {
 		var ssheet = "#center_col { margin-right: 0px; } " +
 					"#mBox { background-color: white; width: 400px; } #pBox { vertical-align: middle; overflow: hidden; width: 400px; } .playing, .imgShowing { position: relative; } " +
+					".playing #embedArea { height: 340px; } #foot { clear: both; } " +
 					".rBox { float: right; background-color: #F0F7F9; text-align: center; } .wBBord { border-bottom: 1px solid #6B90DA; } " +
 					"#setShow, .blocked, .imgLink { display: block; } #vidTag, #imageTag { margin: 0px; } " +
 					"#playerTag { background-color: #F0F7F9; height: 20px; } #vBox { height: 305px; } " +
@@ -249,7 +255,7 @@ function allStyles () {
 					"#videoList { width: 180px; } #imageList { width: 220px; } #wikLink { float: left; display: inline; } #ssb { position: relative; height: 25px; } " +
 					"#resStat { display: inline; position: absolute; top: 1px; right: 0px; } " + 
 					"#resOL { margin: 0px 2% 0px .1em; } .toLI { display: list-item; } .reAddAd { width: 100px; } .g { margin-top: 0px; min-width: 540px; } " +
-					"#dymTxt { margin: 0px; float: left; } #ssb { position: relative; height: 25px; } #rsStats { display: inline; float: right; } " + 
+					"#ssb { position: relative; height: 25px; } #rsStats { display: inline; float: right; } " + 
 					"#prs { display: inline; } .vidRes { width: 145px; display: block; } .vidRes .g { margin: 0px;  min-width: 0px;  margin-left: 1em; } " + 
 					".vidRes img { width: 137px; height: 97px; } .vrTitle { margin-bottom: 30px; } #exvidlist { width: 170px; } " + 
 					".vid_thumb { width: 140px; height: 100px; padding: 0px 10px; border-style: none; border-bottom: 1px solid #000000; background-color: #000000; } " +
@@ -286,12 +292,11 @@ function allStyles () {
 					"#res { margin: 0px 8px; } #cnt { max-width: 100%; } " +
 					"#ssb { height: auto; overflow: hidden; } " +
 					"#wikLink { float: left; } .conf_subsect { margin-bottom: 10px; } " +
-					".error { color:#FF0000; } ";
+					".error { color:#FF0000; } " +
+					".controlIcon { cursor: pointer; } " +
+					"#dymTxt, #wikiLink { margin: 5px; } ";
 	if (options.oldSize) {
 		genSS += "#sff .lst, #sff .lsb { font-size: small; height: auto; } ";
-	}
-	if (options.dym) { 
-		genSS += "#dymTxt { float: left; } ";
 	}
 	if (options.margs) {
 		genSS += "#gbar { padding-left: 8px; } .e, ";
@@ -304,6 +309,7 @@ function allStyles () {
 	GM_addStyle(genSS);
 	
 	var msSS = "#currentSearch { margin-top: 0px !important; } " + 
+				".lsbb { white-space: nowrap; } " +
 				"#allSearches { border: 1px solid #0077CC; margin-top: 10px; background-color: #FFFFFF; z-index: 1000; float: left; } " +
 				"#expand, #collapse { cursor: pointer; font-family: sans-serif; float: right; color: #0077CC; margin-right: 3px; margin-bottom: 2px; } " +
 				"#collapse { font-size: 60%; padding-left: .3em; padding-right: .35em; } " +
@@ -316,10 +322,28 @@ function allStyles () {
 				"#adding { margin-left: 3em; cursor: pointer; font-size: 85%; color: blue; margin-top: -1em; } " +
 				"#searchAll { font-size: normal; } " +
 				"#otherSearchContent { margin-bottom: 44px; } " +
-				".gac_m { z-index: 1500 !important; " + (options.styl != "center" ? "left: 151px !important;" : "") + " border: 1px solid #D0D0D0 !important; border-top-style: none !important; } " +
+				".gac_m { z-index: 1500 !important; border: 1px solid #D0D0D0 !important; border-top-style: none !important; } " +
 				".ts td { padding-left: 4px !important; } ";
 	
 	GM_addStyle(msSS);
+	
+	var clrSS = "\
+		.colorContainer { \
+			position: fixed; \
+			z-index: 10001; \
+			background-color: #FFFFFF; \
+			padding: 8px; \
+			border: 1px solid #000000; \
+			-moz-border-radius: 3px; \
+		} \
+		.configColorBox { \
+			width: 15px; \
+			height: 15px; \
+			border: 1px solid #000000; \
+			-moz-border-radius: 3px; \
+		} \
+		";
+	GM_addStyle(clrSS);
 	
 	if(document.getElementsByClassName("g")[0]) {
 		var lists = document.getElementsByClassName("g")[0].parentNode;
@@ -352,41 +376,8 @@ function stringtohtml(htmlstring) {
 }
 // Creates a player div used by both the video and image searchs
 function makePlayer() {
-	var bigBox = rightBox("mBox");
-	var player = rightBox("pBox");
-	// Sets the proper display text for an empty player
-	if (options.styl == "center" && options.vids) {
-		player.innerHTML = "<div id=\"playerTag\">Player</div>";
-	} else if (options.styl == "center") {
-		player.innerHTML = "<div id=\"playerTag\">Image</div>";
-	} else if (options.vids && options.imgs) {
-		player.textContent = "Please select either a Video or an image below to view it here.";
-		player.className = player.className + " wBBord";
-	} else if (options.vids) {
-		player.textContent = "Please Select a video to view it here (if from compatable site)";
-	} else {
-		player.textContent = "Click on an image to view it here.";
-	}
-	bigBox.appendChild(player);
-	if ($("res").childNodes) {
-		$("res").insertBefore(bigBox, $("res").childNodes[0]);
-	} else {
-		$("res").appendChild(bigBox);
-	}
-	
-	if (options.styl == "dock") {
-		player.className = "removed";
-	} else if (options.styl == "center" && options.imgs && options.vids) {
-		var hidePlayer = $create("div", {
-			id : "hidePly",
-			textContent : "X"
-		});
-		hidePlayer.addEventListener("click", function (event) {
-			removeAllChildren(player);
-			player.className = "rBox closed";
-		}, false);
-		player.appendChild(hidePlayer);
-	}
+	embedder = new Media_Embed();
+	embedder.draw($('mBox'));
 }
 // Sets up the player for use
 function setupPlayer(label) {
@@ -406,5 +397,29 @@ function setupPlayer(label) {
 	}, false);
 	player.appendChild(tagDiv);
 	player.appendChild(hidePlayer);
+}
+//
+function logoToTrans() {
+	var currLogo = $('logo').childNodes[1];
+	
+	var canvas = $create('canvas', {
+		id : 'transLogo'
+	});
+	var ctx = canvas.getContext('2d');
+	ctx.drawImage(currLogo, 0, 41,137,49,0,0,137,49);
+	
+	var imgd = ctx.getImageData(0, 0, 137, 49);
+	var pix = imgd.data
+	for (var i = 0, n = pix.length; i < n; i += 4) {
+		if (pix[i] == pix[i+1] && pix[i+1] == pix[i+2]) {
+			pix[i+3] = (255-pix[i]);
+		} else {
+			pix[i+3] = 255 - Math.min(pix[i],Math.min(pix[i+1],pix[i+2]));
+		}
+	}
+	ctx.putImageData(imgd, 0, 0);
+	
+	removeAllChildren($('logo'));
+	$('logo').appendChild(canvas);
 }
 	// End Display Functions -----------------------------------------------------------

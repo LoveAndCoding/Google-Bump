@@ -39,20 +39,20 @@ function noSuggestions() {
 		lis[i].parentNode.className = lis[i].parentNode.className + " removed";
 	}
 	*/
-	var lis = document.getElementsByTagName("li");
+	var lis = $cl("g");
 	for (var k = 0; k < lis.length; k++) {
-		if (lis[k].className.indexOf("g") !== 0) {
+		if (lis[k].className.indexOf("videobox") >= 0 || lis[k].id == "imagebox") {
 			lis[k].className = lis[k].className + " removed";
 		} else {
-			var found = false;
-			for(var cn = (lis[k].childNodes.length - 1); cn > 0;cn--) {
-				if (lis[k].childNodes[cn].className && lis[k].childNodes[cn].className.indexOf("s") >= 0) {
-					found = true;
-				}
-			}
-			if (!found) {
-				lis[k].className = lis[k].className + " removed";
-			}
+			// var found = false;
+			// for(var cn = (lis[k].childNodes.length - 1); cn > 0;cn--) {
+				// if (lis[k].childNodes[cn].className && lis[k].childNodes[cn].className.indexOf("s") >= 0) {
+					// found = true;
+				// }
+			// }
+			// if (!found) {
+				// lis[k].className = lis[k].className + " removed";
+			// }
 		}
 	}
 	if ($('trev') !== null) {
@@ -64,17 +64,17 @@ function noSuggestions() {
 }
 // Moves the "Did you mean text" to a different position
 function didyoumean() {
-	// var dym = $cl('spell');
-	// if (dym.length == 4) {
-		// var p1 = dym[0].parentNode;
-		// var p2 = dym[2].parentNode;
-		// var thebar = $('ssb');
-		// var seconditem = thebar.childNodes[1];
-		// var resultsstats = thebar.childNodes[thebar.childNodes.length - 1];
-		// p2.className = "removed";
-		// p1.id = "dymTxt";
-		// thebar.insertBefore(p1, seconditem);
-		// resultsstats.id = "rsStats";
-	// }
+	var dym = $cl('spell');
+	if (dym.length == 4) {
+		var p1 = dym[0].parentNode;
+		var p2 = dym[2].parentNode;
+		var thebar = $('leftnav');
+		//var seconditem = thebar.childNodes[1];
+		//var resultsstats = thebar.childNodes[thebar.childNodes.length - 1];
+		p2.className = "removed";
+		p1.id = "dymTxt";
+		thebar.insertBefore(p1, thebar.childNodes[0]);
+		//resultsstats.id = "rsStats";
+	}
 }
 	// End Visual Functions ------------------------------------------------------------

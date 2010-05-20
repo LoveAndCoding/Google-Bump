@@ -166,6 +166,6 @@ function showvids(response) {
 }
 // Searches for videos based on what the user is searching for
 function menutogglevids(theSearch) {
-	get("http://video.google.com/videosearch?q=" + theSearch, showvids, novids);
+	get("http://video.google.com/videosearch?q=" + encodeURIComponent(theSearch), showvids, novids);
 }
 	// End Video Search Functions --------------------------------------------------

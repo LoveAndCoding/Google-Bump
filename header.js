@@ -12,7 +12,7 @@
 
 /*
 	Author: KTaShes
-	Date: May 12 2010
+	Date: May 20 2010
 	
 	Code can now be found on GitHub @ http://github.com/ktsashes/Google-Bump
 	

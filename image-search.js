@@ -3,25 +3,38 @@
   *	=================================================================
   */
 
-function indiv_img_result(src, link, title) {
+function indiv_img_result(src, link, title, num) {
 	
 	this.src = src;
-	this.link = link;
+	this.link = decodeURI(link);
 	this.title = title;
+	this.locNum = num;
 	
 	this.draw = function (parentNode) {
 		var link = $create("a", {
 			href : this.link,
 			className : 'imgLink'
 		});
-		link.href = this.link;
-		link.className = "imgLink";
-		var img = $create("img", {
-			src : this.src,
-			alt : this.title,
-			title : this.title
-		});
-		link.appendChild(img);
+		if(options.imgSize == "title") {
+			
+			link.innerHTML = this.title;
+			link.className += " titleOnly";
+			
+		} else if(options.imgSize == "details") {
+			
+			link.innerHTML = this.title;
+			link.className += " titleOnly";
+			
+		} else {
+			
+			var img = $create("img", {
+				src : this.src,
+				alt : this.title,
+				title : this.title
+			});
+			link.appendChild(img);
+			
+		}
 		parentNode.appendChild(link);
 		
 		var SR = this;
@@ -29,10 +42,14 @@ function indiv_img_result(src, link, title) {
 	};
 	
 	this.clicked = function (event) {
-		event.stopPropagation();
-		event.preventDefault();
-		
-		alert(this.title);
+		if(options.imgPlyr) {
+			if(event) {
+				event.stopPropagation();
+				event.preventDefault();
+			}
+			
+			embedder.addImageEmbed(this, true);
+		}
 	};
 	
 	this.buildImage = function () {
@@ -95,16 +112,19 @@ function Image_Search(query) {
 		
 		var SR = this;
 		this.prevBtn = new button('<', function () { SR.prev(); });
-		this.slideBtn = new button('Play', function () { SR.startSlides(); });
-		this.nextBtn = new button('>', function () { SR.next(); });
-		
 		this.prevBtn.draw(this.div);
-		this.slideBtn.draw(this.div);
-		this.nextBtn.draw(this.div);
-		
 		this.prevBtn.btn.disabled = true;
-		this.slideBtn.btn.disabled = true;
+		
+		if(options.sldshw) {
+			this.slideBtn = new button('Play', function () { SR.startSlides(); this.btn.blur(); });
+			this.slideBtn.draw(this.div);
+			this.slideBtn.btn.disabled = true;
+		}
+		
+		this.nextBtn = new button('>', function () { SR.next(); });
+		this.nextBtn.draw(this.div);
 		this.nextBtn.btn.disabled = true;
+		
 		parentNode.appendChild(this.div);
 		
 		this.search();
@@ -140,14 +160,19 @@ function Image_Search(query) {
 		}
 	};
 	
-	this.clickImage = function () {
-		
+	this.clickImage = function (indx) {
+		if(indx < 0) {
+			indx = this.imgs.length - 1;
+		} else if (indx >= this.imgs.length) {
+			indx = 0;
+		}
+		this.imgs[indx].clicked();
 	};
 	
-	this.startSlides = function () {
+	this.startSlides = function (startOn) {
 		if (!this.slideshow.is_drawn()) {
 			popupManager.closeAll();
-			this.slideshow.draw();
+			this.slideshow.draw(startOn);
 		} else if (this.slideshow && this.slideshow.is_drawn()) {
 			this.slideshow.undraw();
 		}
@@ -179,7 +204,7 @@ function Image_Search(query) {
 		
 		if(na[0]) {
 			for(var nao = 0; nao < na[0].length; nao++) {
-				var img = new indiv_img_result(na[0][nao][14] + "?q=tbn:" + na[0][nao][2] + na[0][nao][3], na[0][nao][3], na[0][nao][6]);
+				var img = new indiv_img_result(na[0][nao][14] + "?q=tbn:" + na[0][nao][2] + na[0][nao][3], na[0][nao][3], na[0][nao][6], this.imgs.length);
 				this.imgs.push(img);
 				this.slideshow.dialog.add_image(img);
 			}
@@ -205,7 +230,7 @@ function Image_Search(query) {
 	
 	this.search = function () {
 		var SR = this;
-		get("http://images.google.com/images?q=" + this.query + "&gbv=2&start=" + (21 * this.pages), function (r) { SR.processPage(r) }, function (r) { SR.errorPage(r) });
+		get("http://images.google.com/images?q=" + encodeURIComponent(this.query) + "&gbv=2&start=" + (21 * this.pages), function (r) { SR.processPage(r) }, function (r) { SR.errorPage(r) });
 		this.pages++;
 	};
 	

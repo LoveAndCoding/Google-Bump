@@ -45,84 +45,84 @@ function multisearcher() {
 					"Y5%2Bk2Ib1C%2BEAAAAASUVORK5CYII%3D";
 	
 	this.draw = function () {
-		this.wrapper = $create("div", {
-			id : "allSearches"
-		});
+		// this.wrapper = $create("div", {
+			// id : "allSearches"
+		// });
 		
-		var fullorig = findrightnode(this.original, "ts");
+		// var fullorig = findrightnode(this.original, "ts");
 		
-		var topHat = $('sff');
-		var newHolder = $create("div", {
-			id : "otherSearchContent"
-		});
-		for (var ci = 0; ci < topHat.childNodes.length;) {
-			newHolder.appendChild(topHat.childNodes[ci]);
-		}
-		topHat.appendChild(newHolder);
+		// var topHat = $('sff');
+		// var newHolder = $create("div", {
+			// id : "otherSearchContent"
+		// });
+		// for (var ci = 0; ci < topHat.childNodes.length;) {
+			// newHolder.appendChild(topHat.childNodes[ci]);
+		// }
+		// topHat.appendChild(newHolder);
 		
-		topHat.insertBefore(this.wrapper, topHat.childNodes[0]);
-		this.wrapper.appendChild(fullorig);
-		fullorig.id = "currentSearch";
+		// topHat.insertBefore(this.wrapper, topHat.childNodes[0]);
+		// this.wrapper.appendChild(fullorig);
+		// fullorig.id = "currentSearch";
 		
-		var expand = $create("img", {
-			src : 'data:image/png;base64,' + this.downArrow,
-			id : 'expand',
-			alt : 'expand'
-		});
-		this.wrapper.appendChild(expand);
+		// var expand = $create("img", {
+			// src : 'data:image/png;base64,' + this.downArrow,
+			// id : 'expand',
+			// alt : 'expand'
+		// });
+		// this.wrapper.appendChild(expand);
 		
-		this.multiwrapper = $create("div");
-		this.multiwrapper.id = "expandedMulti";
-		var tabhead1 = $create("h3");
-		tabhead1.textContent = "Current Tab";
-		tabhead1.className = "TabHead";
-		var tabhead2 = $create("h3");
-		tabhead2.textContent = "New Tab(s)";
-		tabhead2.className = "TabHead";
+		// this.multiwrapper = $create("div");
+		// this.multiwrapper.id = "expandedMulti";
+		// var tabhead1 = $create("h3");
+		// tabhead1.textContent = "Current Tab";
+		// tabhead1.className = "TabHead";
+		// var tabhead2 = $create("h3");
+		// tabhead2.textContent = "New Tab(s)";
+		// tabhead2.className = "TabHead";
 		
-		this.multiwrapper.appendChild(tabhead1);
-		this.multiwrapper.appendChild(new multisearchbox(null).optionList("Orig"));
-		this.multiwrapper.appendChild($create("hr"));
-		this.multiwrapper.appendChild(tabhead2);
-		this.multiwrapper.appendChild($create("br"));
+		// this.multiwrapper.appendChild(tabhead1);
+		// this.multiwrapper.appendChild(new multisearchbox(null).optionList("Orig"));
+		// this.multiwrapper.appendChild($create("hr"));
+		// this.multiwrapper.appendChild(tabhead2);
+		// this.multiwrapper.appendChild($create("br"));
 		
-		this.newSearchWrapper = $create("div", {
-			id : 'newSearchBoxes'
-		});
+		// this.newSearchWrapper = $create("div", {
+			// id : 'newSearchBoxes'
+		// });
 		
-		for (var nm = GM_getValue("numMulti",2); nm > 0 ; nm--) {
-			var msb = new multisearchbox(this);
-			msb.draw(this.newSearchWrapper);
-			this.boxes.push(msb);
-		}
+		// for (var nm = GM_getValue("numMulti",2); nm > 0 ; nm--) {
+			// var msb = new multisearchbox(this);
+			// msb.draw(this.newSearchWrapper);
+			// this.boxes.push(msb);
+		// }
 		
-		this.multiwrapper.appendChild(this.newSearchWrapper);
+		// this.multiwrapper.appendChild(this.newSearchWrapper);
 		
-		var adder = $create("div");
-		adder.id = "adding";
-		adder.textContent = "Add more...";
-		this.multiwrapper.appendChild(adder);
+		// var adder = $create("div");
+		// adder.id = "adding";
+		// adder.textContent = "Add more...";
+		// this.multiwrapper.appendChild(adder);
 		
-		var srchAll = $create("button", {
-			textContent : "Search All",
-			id : "searchAll"
-		});
-		this.multiwrapper.appendChild(srchAll);
+		// var srchAll = $create("button", {
+			// textContent : "Search All",
+			// id : "searchAll"
+		// });
+		// this.multiwrapper.appendChild(srchAll);
 		
-		var srchNew = $create("button", {
-			textContent : "Search New",
-			id : "searchNew"
-		});
-		this.multiwrapper.appendChild(srchNew);
+		// var srchNew = $create("button", {
+			// textContent : "Search New",
+			// id : "searchNew"
+		// });
+		// this.multiwrapper.appendChild(srchNew);
 		
-		var fillOutAll = $create('button', {
-			textContent : 'Set All from Original',
-			id : 'setBoxes'
-		});
-		this.multiwrapper.appendChild(fillOutAll);
+		// var fillOutAll = $create('button', {
+			// textContent : 'Set All from Original',
+			// id : 'setBoxes'
+		// });
+		// this.multiwrapper.appendChild(fillOutAll);
 		
-		var SR = this;
-		adder.addEventListener("click", function (event) {
+		// var SR = this;
+		// adder.addEventListener("click", function (event) {
 			// var newl = $cl("SBoxes").length;
 			// GM_setValue("numMulti",newl + 1);
 			// newSB(newl, multi);
@@ -132,70 +132,81 @@ function multisearcher() {
 			// multi.appendChild(adder);
 			// multi.appendChild(srchAll);
 			// multi.appendChild(srchNew);
-			SR.addBox();
-		}, false);
+			// SR.addBox();
+		// }, false);
 		
-		expand.addEventListener("click", function (event) {
-			SR.expandCollapse();
-		}, false);
+		// expand.addEventListener("click", function (event) {
+			// SR.expandCollapse();
+		// }, false);
 		
-		$("tsf").addEventListener("submit", function (event) {
-			if (SR.expanded) {
-				event.stopPropagation();
-				event.preventDefault();
-				var siteto = $("searchListOrig").value;
-				var srchval;
-				var inputs = $tag("input");
-				for (var i = 0; i < inputs.length; i++) {
-					if(inputs[i].name == "q") {
-						srchval = inputs[i].value;
-						break;
-					}
-				}
-				redirgo([siteto, srchval], false);
-			}
-		}, false);
+		// $("tsf").addEventListener("submit", function (event) {
+			// if (SR.expanded) {
+				// event.stopPropagation();
+				// event.preventDefault();
+				// var siteto = $("searchListOrig").value;
+				// var srchval;
+				// var inputs = $tag("input");
+				// for (var i = 0; i < inputs.length; i++) {
+					// if(inputs[i].name == "q") {
+						// srchval = inputs[i].value;
+						// break;
+					// }
+				// }
+				// redirgo([siteto, srchval], false);
+			// }
+		// }, false);
 		
-		srchAll.addEventListener("click", function (event) {
-			event.stopPropagation();
-			event.preventDefault();
-			var curtabThis;
-			var inputs = $tag("input");
-			for (var i = 0; i < inputs.length; i++) {
-				if(inputs[i].name == "q") {
-					curtabThis = inputs[i].value;
-					break;
-				}
-			}
-			var tablist = [];
-			for (i = $cl("SBoxes").length - 1; i >= 0; i--) {
-				tablist.push($("searchList" + i).value);
-				tablist.push($("searchText" + i).value);
-			}
-			tablist.push($("searchListOrig").value);
-			tablist.push(curtabThis);
-			redirgo(tablist, false);
-		}, false);
+		// srchAll.addEventListener("click", function (event) {
+			// event.stopPropagation();
+			// event.preventDefault();
+			// var curtabThis;
+			// var inputs = $tag("input");
+			// for (var i = 0; i < inputs.length; i++) {
+				// if(inputs[i].name == "q") {
+					// curtabThis = inputs[i].value;
+					// break;
+				// }
+			// }
+			// var tablist = [];
+			// for (i = $cl("SBoxes").length - 1; i >= 0; i--) {
+				// tablist.push($("searchList" + i).value);
+				// tablist.push($("searchText" + i).value);
+			// }
+			// tablist.push($("searchListOrig").value);
+			// tablist.push(curtabThis);
+			// redirgo(tablist, false);
+		// }, false);
 		
-		srchNew.addEventListener("click", function (event) {
-			event.stopPropagation();
-			event.preventDefault();
-			var tablist = [];
-			for (i = $cl("SBoxes").length - 1; i >= 0; i--) {
-				tablist.push($("searchList" + i).value);
-				tablist.push($("searchText" + i).value);
-			}
-			redirgo(tablist, true);
-		}, false);
+		// srchNew.addEventListener("click", function (event) {
+			// event.stopPropagation();
+			// event.preventDefault();
+			// var tablist = [];
+			// for (i = $cl("SBoxes").length - 1; i >= 0; i--) {
+				// tablist.push($("searchList" + i).value);
+				// tablist.push($("searchText" + i).value);
+			// }
+			// redirgo(tablist, true);
+		// }, false);
 		
-		fillOutAll.addEventListener("click", function (event) {
-			event.stopPropagation();
-			event.preventDefault();
-			var sbs = $cl('searchBoxes');
-			for (sb in sbs) {
-				sbs[sb].value = queryBox.value;
-			}
-		}, false);
+		// fillOutAll.addEventListener("click", function (event) {
+			// event.stopPropagation();
+			// event.preventDefault();
+			// var sbs = $cl('searchBoxes');
+			// for (sb in sbs) {
+				// sbs[sb].value = queryBox.value;
+			// }
+		// }, false);
+		
+		var theirButton = $cl('lsb')[0];
+		var myButton = $create('input', {
+			type : 'button',
+			className : 'lsb',
+			value : 'More Options',
+			style : 'border-left: 1px solid #CCCCCC;'
+		});
+		
+		theirButton.parentNode.appendChild(myButton);
+		
 	};
 	
 	this.addBox = function () {

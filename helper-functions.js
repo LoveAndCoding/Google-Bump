@@ -38,7 +38,7 @@ function $remove(node) {
 		node = $(node);
 	}
 	
-	if (node) {
+	if (node && node.parentNode) {
 		return node.parentNode.removeChild(node);
 	} else {
 		return false;
@@ -101,14 +101,14 @@ function findrightnode(target, clname, att) {
 	}
 }
 // Helper function to check if the clicked item is a child of a given class
-function checkallparentsforit(event, clname) {
-	var onn = event.target;
+function checkallparentsforit(el, clname) {
+	var onn = el;
 	// Loop up and returns if value is found
-	while (onn.parentNode) {
+	while (typeof(onn) != "undefined" && onn !== null) {
 		if (onn.className == clname || onn.id == clname) {
 			return true;
 		}
-		onn = onn.parentNode;
+		onn = onn.parentNode || null;
 	}
 	return false;
 }

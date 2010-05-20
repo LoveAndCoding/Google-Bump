@@ -12,7 +12,7 @@
 
 /*
 	Author: KTaShes
-	Date: May 12 2010
+	Date: May 20 2010
 	
 	Code can now be found on GitHub @ http://github.com/ktsashes/Google-Bump
 	
@@ -77,7 +77,37 @@ var image_store = {
 						"QjNgNWY3E6toDFasBqLAHmis8QFiy24PIz1" +
 						"oBFdgEjNJFg0wwPWPSEhO4CZEPQQSpyUoZr" +
 						"GPDcCBBgANKNMbOvj7dYAAAAAElFTkSuQmC" +
-						"C"
+						"C",
+	
+	image_slideshow :	"data:image/png;base64,iVBORw0KGgoAAA" +
+						"ANSUhEUgAAABAAAAAQCAYAAAAf8%2F9hAAAA" +
+						"GXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJl" +
+						"YWR5ccllPAAAAGtJREFUeNpi%2FP%2F%2FPw" +
+						"MlgImBQsACIlKmfIHxiXUOI4iYk8MDMQCbJB" +
+						"7wn1gv%2FCclDP7j0PAfj%2BH%2F0V3ASIJL" +
+						"GEmNhf%2BURiMjJQYwEpuQ%2FpOg%2BT9KQk" +
+						"JS%2BJ9ImxnRDSA5%2FuEmDXhmotgAgAADAF" +
+						"GQFx04us8gAAAAAElFTkSuQmCC",
+	
+	image_left_arrow :	"data:image/png;base64,iVBORw0KGgoAAA" +
+						"ANSUhEUgAAABAAAAAQCAYAAAAf8%2F9hAAAA" +
+						"GXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJl" +
+						"YWR5ccllPAAAAF1JREFUeNpi%2FP%2F%2FPw" +
+						"MlgImBQkCxASwwRsqUL%2BhyML8xYtM4J4cH" +
+						"rwv%2BU%2BIFZM2MpBpAkmaUMMDibELeYKRu" +
+						"LEBNJNkLTNicRUpMMOHyG7GGMOELIGIA49DP" +
+						"TAABBgBMsBIfaeHnDgAAAABJRU5ErkJggg%3" +
+						"D%3D",
+	
+	image_right_arrow :	"data:image/png;base64,iVBORw0KGgoAA" +
+						"AANSUhEUgAAABAAAAAQCAYAAAAf8%2F9hAA" +
+						"AAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZ" +
+						"VJlYWR5ccllPAAAAFpJREFUeNpi%2FP%2F%" +
+						"2FPwMlgImBQkCxASwwRsqUL7jUwPzIiCw4J" +
+						"4eHZBf8J9cLjPgMIdYFOA1hIeREPN5hpG4s" +
+						"oIcygUBkJDUM%2FuOyiIkSzaSGAVYvMg79z" +
+						"AQQYACovRIfeUjOIwAAAABJRU5ErkJggg%3" +
+						"D%3D"
 }
 /**
   *	Options object to hold both default and user configured options.
@@ -112,6 +142,7 @@ function optionlist() {
 	this.DEFAULT_IMGPLYR = true;
 	this.DEFAULT_IMGSIZE = "large";
 	this.DEFAULT_SLDSHW = true;
+	this.DEFAULT_SLDKEY = true;
 	this.DEFAULT_IMGLOAD = true;
 	this.DEFAULT_SKIPERR = true;
 	this.DEFAULT_SLDTM = 4000;
@@ -122,6 +153,21 @@ function optionlist() {
 	this.DEFAULT_OLDSIZE = true;
 		// Advanced defaults
 	this.DEFAULT_DELAY = 400;
+		// Color Defaults
+			// Background Colors
+	this.DEFAULT_GENBGCLR = '255,255,255';
+	this.DEFAULT_RESLTCLR = '255,255,255';
+	this.DEFAULT_GLBARCLR = '255,255,255';
+	this.DEFAULT_ADDEDCLR = '240,247,249';
+	this.DEFAULT_PLYBLCLR = '255,255,255';
+			// Text Colors
+	this.DEFAULT_RESTXTCLR = '0,0,0';
+	this.DEFAULT_LNKTXTCLR = '17,17,204';
+	this.DEFAULT_URLTXTCLR = '34,136,34';
+	this.DEFAULT_SIMTXTCLR = '66,114,219';
+	this.DEFAULT_MDATXTCLR = '0,0,0';
+	this.DEFAULT_PLYTXTCLR = '0,0,0';
+	this.DEFAULT_PBLTXTCLR = '0,0,0';
 	
 	
 		// Visual vars
@@ -152,6 +198,7 @@ function optionlist() {
 	this.imgPlyr = GM_getValue("imgPlyr", this.DEFAULT_IMGPLYR);
 	this.imgSize = GM_getValue("imgSize", this.DEFAULT_IMGSIZE);
 	this.sldshw = GM_getValue("sldshw", this.DEFAULT_SLDSHW);
+	this.sldkey = GM_getValue("sldkey", this.DEFAULT_SLDKEY);
 	this.imgLoad = GM_getValue("imgLoad", this.DEFAULT_IMGLOAD);
 	this.skipErr = GM_getValue("skipErr", this.DEFAULT_SKIPERR);
 	this.sldTm = GM_getValue("sldtm", this.DEFAULT_SLDTM);
@@ -207,7 +254,7 @@ function $remove(node) {
 		node = $(node);
 	}
 	
-	if (node) {
+	if (node && node.parentNode) {
 		return node.parentNode.removeChild(node);
 	} else {
 		return false;
@@ -270,14 +317,14 @@ function findrightnode(target, clname, att) {
 	}
 }
 // Helper function to check if the clicked item is a child of a given class
-function checkallparentsforit(event, clname) {
-	var onn = event.target;
+function checkallparentsforit(el, clname) {
+	var onn = el;
 	// Loop up and returns if value is found
-	while (onn.parentNode) {
+	while (typeof(onn) != "undefined" && onn !== null) {
 		if (onn.className == clname || onn.id == clname) {
 			return true;
 		}
-		onn = onn.parentNode;
+		onn = onn.parentNode || null;
 	}
 	return false;
 }
@@ -341,7 +388,190 @@ function closeEx() {
 }
 	// End Helper Functions ------------------------------------------------------------
 
-	// Start Display Functions ---------------------------------------------------------
+function Control_Icon (icon, title, handle) {
+	this.img = icon;
+	this.title = title;
+	this.clickers = [];
+	if ( handle ) this.clickers.push( handle );
+	
+	this.draw = function (parentNode) {
+		
+		var icn = $create('img', {
+			src : this.img,
+			alt : this.title,
+			title : this.title,
+			className : 'controlIcon'
+		});
+		
+		parentNode.appendChild(icn);
+		var SR = this;
+		icn.addEventListener('click', function (e) { SR.handleClick(e); }, false);
+		
+	};
+	
+	this.handleClick = function (e) {
+		for ( var hc = 0; hc < this.clickers.length; hc++ ) {
+			this.clickers[hc]();
+		}
+	};
+	
+	this.addClicker = function (handle) {
+		this.clickers.push( handle );
+	};
+	
+	this.removeClicker = function (handle) {
+		for ( var rc = 0; rc < this.clickers.length; rc++ ) {
+			if (this.clickers[rc] == handle) {
+				this.clickers.splice(rc,1);
+				return;
+			}
+		}
+	};
+};
+
+function Image_Toolbar (img) {
+	this.res = img;
+	
+	this.draw = function (parentNode) {
+		
+	};
+}
+
+function Video_Toolbar (vid) {
+	this.res = vid;
+	
+	this.draw = function (parentNode) {
+		
+	};
+}
+
+function Media_Embed () {
+	
+	this.player;
+	this.labelArea;
+	this.controlsArea;
+	this.embedArea;
+	this.title;
+	this.controls;
+	this.imgRes;
+	this.vidRes;
+	
+	this.draw = function (parentNode) {
+		this.player = rightBox("pBox");
+		
+		this.clearEmbed("Select an item below to view it here.");
+		
+		var hidePlayer = $create("div", {
+			id : "hidePly",
+			textContent : "X"
+		});
+		var SR = this;
+		hidePlayer.addEventListener("click", function (event) {
+			removeAllChildren(SR.player);
+			SR.player.className = "rBox closed";
+		}, false);
+		this.player.appendChild(hidePlayer);
+		
+		parentNode.appendChild(this.player);
+	};
+	
+	this.addImageEmbed = function (img, controls) {
+		this.imgRes = img;
+		var title = img.title;
+		var url = img.link;
+		
+		this.clearEmbed(title);
+		
+		if(controls) {
+			this.drawImageControls();
+		}
+		
+		var alink = $create("a", {
+			href : url
+		});
+		var imgtag = $create("img", {
+			src : url,
+			alt : title,
+			title : title,
+			className : "playimg"
+		});
+		alink.appendChild(imgtag);
+		this.embedArea.appendChild(alink);
+		this.player.className = "rBox imgShowing";
+	};
+	
+	this.addVideoEmbed = function (title, controls, embed) {
+		this.clearEmbed(title);
+		
+		this.embedArea.appendChild(embed);
+		this.player.className = "rBox playing";
+	};
+	
+	this.clearEmbed = function (label) {
+		if (!this.labelArea) {
+			this.labelArea = $create("div", {
+				id : "playerTag"
+			});
+			this.player.appendChild(this.labelArea);
+		}
+		this.labelArea.innerHTML = label;
+		
+		if(!this.controlsArea) {
+			this.controlsArea = $create("div", {
+				id : "controlArea"
+			});
+			this.player.appendChild(this.controlsArea);
+		}
+		removeAllChildren(this.controlsArea);
+		
+		if (!this.embedArea) {
+			this.embedArea = $create("div", {
+				id : "embedArea"
+			});
+			this.player.appendChild(this.embedArea);
+		}
+		removeAllChildren(this.embedArea);
+	};
+	
+	this.drawImageControls = function () {
+		
+		// Reusable Var
+		var icn;
+		
+		var SR = this;
+		
+		icn = new Control_Icon(image_store.image_left_arrow, "Previous Image", function () {
+			imgSearch.clickImage(SR.imgRes.locNum - 1);
+		});
+		icn.draw(this.controlsArea);
+		
+		icn = new Control_Icon(image_store.image_slideshow, "Play Slideshow from here", function () {
+			imgSearch.startSlides(SR.imgRes.locNum)
+		});
+		icn.draw(this.controlsArea);
+		
+		icn = new Control_Icon(image_store.image_right_arrow, "Next Image", function () {
+			imgSearch.clickImage(SR.imgRes.locNum + 1);
+		});
+		icn.draw(this.controlsArea);
+	};
+	
+	this.drawVideoControls = function () {
+		
+		// Reusable Var
+		var icn;
+		
+		
+		
+	};
+}
+
+/**
+  *	Import Dependencies
+  *	
+  *	@depends media-embed.js
+  */
+  // Start Display Functions ---------------------------------------------------------
 // Adds all the styles for the page.
 function allStyles () {
 	var maxwidth = window.innerWidth - 50;
@@ -425,7 +655,7 @@ function allStyles () {
 		//$("resOL").parentNode.appendChild($("nav"));
 		
 	} else if (options.styl == "dock") {
-		var dockSS = "#dymTxt { float: left; } body { margin-bottom: 50px; } " +
+		var dockSS = "body { margin-bottom: 50px; } " +
 						"a img { border-style: none; } " +
 						".closed { display: none; } " +
 						"#dock { position: fixed; height: 40px; width: 260px; border: 1px solid #000000; border-bottom-style: none; bottom: 0px; right: 50%; margin-right: -130px; text-align: center; background-color: #F0F7F9; } " +
@@ -547,20 +777,20 @@ function allStyles () {
 							"#tsf { position: relative; } " +
 							".gbh { left: auto !important; right: auto !important; width: 760px; } " +
 							"#ssb { margin-bottom: 0px; padding-bottom: 0px; } " +
-							"#mBox { position: relative; width: 760px; height: 220px; overflow: hidden; border-bottom: 1px solid #6B90DA; border-top: 1px solid #6B90DA; } " +
+							"#mBox { position: relative; width: 600px; height: 220px; margin-left: -16px; overflow: hidden; border-bottom: 1px solid #6B90DA; border-top: 1px solid #6B90DA; } " +
 							"#wikiDiv { min-height: 122px; z-index: 1003; border-bottom: 1px solid #000000; border-right: 1px solid #000000; position: absolute; top: 0px; left: 0px; background-color: #FFFFFF; width: 200px; } " +
 							"#wikiHeader { font-size: 100%; text-align: center; border-bottom: 1px solid #000000; } " +
 							"#wikiHeader a, #wikiHeader a:active { color: #0077CC; text-decoration: none; } " +
 							"#wikiDesc { margin: 0px; padding: 5px 2px 2px 2px; font-size: 85%; } " +
 							"#wikiExp { min-height: 120px; z-index: 1002; text-align: center; font-size: 75%; position: absolute; top: 0px; left: 0px; background-color: #FFFFFF; border-right: 1px solid #000000; border-bottom: 1px solid #000000; cursor: pointer; color: #0077CC; padding: 1px 4px; } " +
 							"#pBox { width: 380px; text-align: center; height: 220px; background-color: #FFFFFF; } " +
-							"#videoList { float: left; height: 220px; width: 379px; overflow-y: auto; overflow-x: hidden; border-right: 1px solid #6B90DA; } " + 
+							"#videoList { float: left; height: 220px; width: 299px; overflow-y: auto; overflow-x: hidden; border-right: 1px solid #6B90DA; } " + 
 							"#vidTag, #imageTag, #playerTag { text-align: center; margin: 0px; padding: 0px 8px; background-color: #F0F7F9; border-bottom: 1px solid #6B90DA; } " +
 							".rl-item { max-width: 100px; float: left; padding: 5px 10px; } " +
 							".rl-thumbnail img { max-width: 100px; } " +
 							".rl-domain-below { overflow-x: hidden; width: 100px; } " +
 							".rl-details, .rl-snippet, .rl-snippet-grid-view, .rl-watch-on, .rl-cannot-play-here, .rl-special { display: none; } " +
-							"#imageList { text-align: center; height: 220px; width: 379px; float: right; z-index: 1001; overflow-y: auto; overflow-x: hidden; } " +
+							"#imageList { text-align: center; height: 220px; width: 299px; float: right; z-index: 1001; overflow-y: auto; overflow-x: hidden; } " +
 							"#imageList img { max-width: 100px; } " +
 							".playing { display: block !important; z-index: 1004 !important; } " +
 							".imgShowing { display: block !important; z-index: 1004 !important; } " +
@@ -585,6 +815,7 @@ function allStyles () {
 	} else {
 		var ssheet = "#center_col { margin-right: 0px; } " +
 					"#mBox { background-color: white; width: 400px; } #pBox { vertical-align: middle; overflow: hidden; width: 400px; } .playing, .imgShowing { position: relative; } " +
+					".playing #embedArea { height: 340px; } #foot { clear: both; } " +
 					".rBox { float: right; background-color: #F0F7F9; text-align: center; } .wBBord { border-bottom: 1px solid #6B90DA; } " +
 					"#setShow, .blocked, .imgLink { display: block; } #vidTag, #imageTag { margin: 0px; } " +
 					"#playerTag { background-color: #F0F7F9; height: 20px; } #vBox { height: 305px; } " +
@@ -592,7 +823,7 @@ function allStyles () {
 					"#videoList { width: 180px; } #imageList { width: 220px; } #wikLink { float: left; display: inline; } #ssb { position: relative; height: 25px; } " +
 					"#resStat { display: inline; position: absolute; top: 1px; right: 0px; } " + 
 					"#resOL { margin: 0px 2% 0px .1em; } .toLI { display: list-item; } .reAddAd { width: 100px; } .g { margin-top: 0px; min-width: 540px; } " +
-					"#dymTxt { margin: 0px; float: left; } #ssb { position: relative; height: 25px; } #rsStats { display: inline; float: right; } " + 
+					"#ssb { position: relative; height: 25px; } #rsStats { display: inline; float: right; } " + 
 					"#prs { display: inline; } .vidRes { width: 145px; display: block; } .vidRes .g { margin: 0px;  min-width: 0px;  margin-left: 1em; } " + 
 					".vidRes img { width: 137px; height: 97px; } .vrTitle { margin-bottom: 30px; } #exvidlist { width: 170px; } " + 
 					".vid_thumb { width: 140px; height: 100px; padding: 0px 10px; border-style: none; border-bottom: 1px solid #000000; background-color: #000000; } " +
@@ -629,12 +860,11 @@ function allStyles () {
 					"#res { margin: 0px 8px; } #cnt { max-width: 100%; } " +
 					"#ssb { height: auto; overflow: hidden; } " +
 					"#wikLink { float: left; } .conf_subsect { margin-bottom: 10px; } " +
-					".error { color:#FF0000; } ";
+					".error { color:#FF0000; } " +
+					".controlIcon { cursor: pointer; } " +
+					"#dymTxt, #wikiLink { margin: 5px; } ";
 	if (options.oldSize) {
 		genSS += "#sff .lst, #sff .lsb { font-size: small; height: auto; } ";
-	}
-	if (options.dym) { 
-		genSS += "#dymTxt { float: left; } ";
 	}
 	if (options.margs) {
 		genSS += "#gbar { padding-left: 8px; } .e, ";
@@ -647,6 +877,7 @@ function allStyles () {
 	GM_addStyle(genSS);
 	
 	var msSS = "#currentSearch { margin-top: 0px !important; } " + 
+				".lsbb { white-space: nowrap; } " +
 				"#allSearches { border: 1px solid #0077CC; margin-top: 10px; background-color: #FFFFFF; z-index: 1000; float: left; } " +
 				"#expand, #collapse { cursor: pointer; font-family: sans-serif; float: right; color: #0077CC; margin-right: 3px; margin-bottom: 2px; } " +
 				"#collapse { font-size: 60%; padding-left: .3em; padding-right: .35em; } " +
@@ -659,10 +890,28 @@ function allStyles () {
 				"#adding { margin-left: 3em; cursor: pointer; font-size: 85%; color: blue; margin-top: -1em; } " +
 				"#searchAll { font-size: normal; } " +
 				"#otherSearchContent { margin-bottom: 44px; } " +
-				".gac_m { z-index: 1500 !important; " + (options.styl != "center" ? "left: 151px !important;" : "") + " border: 1px solid #D0D0D0 !important; border-top-style: none !important; } " +
+				".gac_m { z-index: 1500 !important; border: 1px solid #D0D0D0 !important; border-top-style: none !important; } " +
 				".ts td { padding-left: 4px !important; } ";
 	
 	GM_addStyle(msSS);
+	
+	var clrSS = "\
+		.colorContainer { \
+			position: fixed; \
+			z-index: 10001; \
+			background-color: #FFFFFF; \
+			padding: 8px; \
+			border: 1px solid #000000; \
+			-moz-border-radius: 3px; \
+		} \
+		.configColorBox { \
+			width: 15px; \
+			height: 15px; \
+			border: 1px solid #000000; \
+			-moz-border-radius: 3px; \
+		} \
+		";
+	GM_addStyle(clrSS);
 	
 	if(document.getElementsByClassName("g")[0]) {
 		var lists = document.getElementsByClassName("g")[0].parentNode;
@@ -695,41 +944,8 @@ function stringtohtml(htmlstring) {
 }
 // Creates a player div used by both the video and image searchs
 function makePlayer() {
-	var bigBox = rightBox("mBox");
-	var player = rightBox("pBox");
-	// Sets the proper display text for an empty player
-	if (options.styl == "center" && options.vids) {
-		player.innerHTML = "<div id=\"playerTag\">Player</div>";
-	} else if (options.styl == "center") {
-		player.innerHTML = "<div id=\"playerTag\">Image</div>";
-	} else if (options.vids && options.imgs) {
-		player.textContent = "Please select either a Video or an image below to view it here.";
-		player.className = player.className + " wBBord";
-	} else if (options.vids) {
-		player.textContent = "Please Select a video to view it here (if from compatable site)";
-	} else {
-		player.textContent = "Click on an image to view it here.";
-	}
-	bigBox.appendChild(player);
-	if ($("res").childNodes) {
-		$("res").insertBefore(bigBox, $("res").childNodes[0]);
-	} else {
-		$("res").appendChild(bigBox);
-	}
-	
-	if (options.styl == "dock") {
-		player.className = "removed";
-	} else if (options.styl == "center" && options.imgs && options.vids) {
-		var hidePlayer = $create("div", {
-			id : "hidePly",
-			textContent : "X"
-		});
-		hidePlayer.addEventListener("click", function (event) {
-			removeAllChildren(player);
-			player.className = "rBox closed";
-		}, false);
-		player.appendChild(hidePlayer);
-	}
+	embedder = new Media_Embed();
+	embedder.draw($('mBox'));
 }
 // Sets up the player for use
 function setupPlayer(label) {
@@ -749,6 +965,30 @@ function setupPlayer(label) {
 	}, false);
 	player.appendChild(tagDiv);
 	player.appendChild(hidePlayer);
+}
+//
+function logoToTrans() {
+	var currLogo = $('logo').childNodes[1];
+	
+	var canvas = $create('canvas', {
+		id : 'transLogo'
+	});
+	var ctx = canvas.getContext('2d');
+	ctx.drawImage(currLogo, 0, 41,137,49,0,0,137,49);
+	
+	var imgd = ctx.getImageData(0, 0, 137, 49);
+	var pix = imgd.data
+	for (var i = 0, n = pix.length; i < n; i += 4) {
+		if (pix[i] == pix[i+1] && pix[i+1] == pix[i+2]) {
+			pix[i+3] = (255-pix[i]);
+		} else {
+			pix[i+3] = 255 - Math.min(pix[i],Math.min(pix[i+1],pix[i+2]));
+		}
+	}
+	ctx.putImageData(imgd, 0, 0);
+	
+	removeAllChildren($('logo'));
+	$('logo').appendChild(canvas);
 }
 	// End Display Functions -----------------------------------------------------------
 
@@ -802,70 +1042,6 @@ function verNotice() {
 /**
   *	General Purpose Color Picker
   */
-// // Main Rectangle
-// var c = document.createElement('canvas');
-// c.width = 255;
-// c.height = 255;
-// c.style.position = 'relative';
-// document.body.appendChild(c);
-// var ctx = c.getContext('2d');
-
-// var wtc = ctx.createLinearGradient(0,0,255,0);
-// wtc.addColorStop(0, 'rgb(255,255,255)');
-// wtc.addColorStop(1, 'rgb(255,0,0)');
-// ctx.fillStyle = wtc;
-// ctx.fillRect(0,0,255,255);
-// var btw = ctx.createLinearGradient(0,0,0,255);
-// btw.addColorStop(0,'rgba(255,255,255,0)');
-// btw.addColorStop(1,'black');
-// ctx.fillStyle = btw;
-// ctx.fillRect(0,0,255,255);
-
-// // Color Bar
-// var cbar = document.createElement('canvas');
-// cbar.width = 40;
-// cbar.height = 255;
-// cbar.style.position = 'relative';
-// document.body.appendChild(cbar);
-// var cbtx = cbar.getContext('2d');
-// var rtr = cbtx.createLinearGradient(0,0,0,255);
-// rtr.addColorStop(0, 'rgb(255,0,0)');
-// rtr.addColorStop(1/6, 'rgb(255,255,0)');
-// rtr.addColorStop(1/3, 'rgb(0,255,0)');
-// rtr.addColorStop(1/2, 'rgb(0,255,255)');
-// rtr.addColorStop(2/3, 'rgb(0,0,255)');
-// rtr.addColorStop(5/6, 'rgb(255,0,255)');
-// rtr.addColorStop(1, 'rgb(255,0,0)');
-// cbtx.fillStyle = rtr;
-// cbtx.fillRect(10,0,20,255);
-
-// function color_click(e) {
-	// var data = ctx.getImageData(e.layerX, e.layerY, 1, 1).data;
-	// var nc = document.createElement("canvas");
-	// nc.width = 50;
-	// nc.height = 50;
-	// var ncx = nc.getContext("2d");
-	// ncx.fillStyle = "rgb(" + data[0] + "," + data[1] + "," + data[2] + ")";
-	// ncx.fillRect(0, 0, 50, 50);
-	// document.body.appendChild(nc);
-// }
-
-// function color_pick(e) {
-	// if(e.layerX >= 10 && e.layerX < 30) {
-		// var data = cbtx.getImageData(e.layerX, e.layerY, 1, 1).data;
-		// var wtc = ctx.createLinearGradient(0,0,255,0);
-		// wtc.addColorStop(0, 'rgb(255,255,255)');
-		// wtc.addColorStop(1, 'rgb(' + data[0] + ',' + data[1] + ',' + data[2] + ')');
-		// ctx.fillStyle = wtc;
-		// ctx.fillRect(0,0,255,255);
-		// var btw = ctx.createLinearGradient(0,0,0,255);
-		// btw.addColorStop(0,'rgba(255,255,255,0)');
-		// btw.addColorStop(1,'black');
-		// ctx.fillStyle = btw;
-		// ctx.fillRect(0,0,255,255);
-	// }
-// }
-
 function color_picker(color) {
 	
 	this.clickHandles = [];
@@ -876,14 +1052,14 @@ function color_picker(color) {
 	this.cbCtx;
 	this.container;
 	
-	this.draw = function (parentNode) {
+	this.draw = function (attachedNode) {
 		this.container = $create('div', {
 			'className' : 'colorContainer'
 		});
 		this.drawBW(this.color);
-		this.drawCB();
+		this.drawCB(0);
 		
-		parentNode.appendChild(this.container);
+		document.body.appendChild(this.container);
 	};
 	
 	this.drawBW = function (tone) {
@@ -919,7 +1095,7 @@ function color_picker(color) {
 		this.bwCtx.fillRect(0,0,255,255);
 	};
 	
-	this.drawCB = function () {
+	this.drawCB = function (yOffset) {
 		// Color Bar
 		this.cbCanvas = $create('canvas', {
 			'className' : 'colorBar'
@@ -929,6 +1105,14 @@ function color_picker(color) {
 		this.cbCanvas.style.position = 'relative';
 		this.container.appendChild(this.cbCanvas);
 		this.cbCtx = this.cbCanvas.getContext('2d');
+		this.redrawCB(yOffset);
+			
+		var SR = this;
+		this.cbCanvas.addEventListener('click', function (e) { SR.colorPick(e) }, false);
+	};
+	
+	this.redrawCB = function (yOffset) {
+		this.cbCtx.clearRect(0,0,255,255);
 		var rtr = this.cbCtx.createLinearGradient(0,0,0,255);
 		rtr.addColorStop(0, 'rgb(255,0,0)');
 		rtr.addColorStop(1/6, 'rgb(255,255,0)');
@@ -940,15 +1124,23 @@ function color_picker(color) {
 		this.cbCtx.fillStyle = rtr;
 		this.cbCtx.fillRect(10,0,20,255);
 		
-		var SR = this;
-		this.cbCanvas.addEventListener('click', function (e) { SR.colorPick(e) }, false);
+		this.cbCtx.strokeStyle = "rgba(255,255,255,1)";
+		this.cbCtx.strokeRect(7,yOffset-2, 26, 5);
+		this.cbCtx.strokeStyle = "rgba(0,0,0,1)";
+		this.cbCtx.strokeRect(6,yOffset-3,28,7);
 	};
 	
 	this.colorPick = function (e) {
-		var data = this.cbCtx.getImageData(e.layerX, e.layerY, 1, 1).data;
-		
-		this.color = data[0] + ',' + data[1] + ',' + data[2];
-		this.redrawBW(this.color);
+		e.stopPropagation();
+		e.preventDefault();
+		if(e.layerX >= 10 && e.layerX < 30) {
+			var data = this.cbCtx.getImageData(e.layerX, e.layerY, 1, 1).data;
+			
+			this.redrawCB(e.layerY);
+			
+			this.color = data[0] + ',' + data[1] + ',' + data[2];
+			this.redrawBW(this.color);
+		}
 	};
 	
 	this.clickDelegate = function (e) {
@@ -982,8 +1174,6 @@ function color_picker(color) {
 	};
 }
 
-// c.addEventListener('click', color_click, false);
-// cbar.addEventListener('click', color_pick, false);
 /**
   *	Import dependencies
   *	
@@ -1261,7 +1451,8 @@ function config_colorBox(label, id, dflt) {
 			textContent : this.label + ": ",
 			className : "confLbl"
 		});
-		this.box = $create("div", {
+		this.box = $create("input", {
+			type : 'text',
 			name : this.id,
 			className : "configColorBox"
 		});
@@ -1271,21 +1462,38 @@ function config_colorBox(label, id, dflt) {
 		
 		var SR = this;
 		this.box.addEventListener("click", function(event) { 
+			this.blur();
+			
+			offLeft = 0;
+			offTop = 0;
+			var node = this;
+			while(node != document.body) {
+				offLeft += node.offsetLeft + 1;
+				offTop += node.offsetTop + 1;
+				node = node.offsetParent;
+			}
+			
 			popupManager.closeColor();
 			SR.popout.draw(SR.box);
+			SR.popout.container.style.top = (offTop - 1) + "px";
+			SR.popout.container.style.left = (offLeft - 1) + "px";
+			
+			document.addEventListener('click', function (e) {
+				if(!checkallparentsforit(this, "colorContainer")) {
+					e.stopPropagation();
+					e.preventDefault();
+					
+					popupManager.closeColor();
+					document.removeEventListener('click', arguments.callee, false);
+				}
+			}, false);
+			event.stopPropagation();
 		}, true);
-		// // Creates the desired Options with the given  values and ids
-		// for (var lo = 0; lo < this.options.length; lo++) {
-			// var op = $create("option", {
-				// textContent : this.options[lo],
-				// value : this.values[lo],
-				// id : this.id + "_" + lo
-			// });
-			// if (this.values[lo] == this.currentValue) {
-				// op.selected = true;
-			// }
-			// this.list.appendChild(op);
-		// }
+		this.popout.registerClick(function(e, clr) {
+			SR.box.style.backgroundColor = "rgb(" + clr + ")";
+			GM_setValue(id, clr);
+			popupManager.closeColor();
+		});
 		
 		parentNode.appendChild(disp);
 		parentNode.appendChild(this.box);
@@ -1293,8 +1501,8 @@ function config_colorBox(label, id, dflt) {
 	};
 	
 	this.setDefault = function () {
-		if (this.list) {
-			this.list.value = this.defaultVal;
+		if (this.box) {
+			this.box.style.backgroundColor = 'rgb(' + this.defaultVal + ')';
 			GM_setValue(this.id, this.defaultVal);
 		}
 	};
@@ -1504,7 +1712,7 @@ function style_dialog(popup) {
 	this.dialog;
 	this.windows = new Array();
 	this.isDrawn = false;
-	this.popup = false;
+	this.popup = popup;
 	
 	this.draw = function () {
 		var centDivStyl = $create("div", {
@@ -1617,6 +1825,12 @@ function style_dialog(popup) {
 		}
 	};
 	
+	this.setDefaults = function () {
+		for (var wo = 0; wo < this.windows.length; wo++) {
+			this.windows[wo].setDefaults();
+		}
+	};
+	
 }
 
 function config_dialog(popup) {
@@ -1694,7 +1908,7 @@ function config_dialog(popup) {
 		app_section.sectionOptions.push(new config_checkBox("Move \"Did you mean\" text", "dym", options.DEFAULT_DYM));
 		app_section.sectionOptions.push(new config_checkBox("Remove Sidebar Ads", "sideads", options.DEFAULT_SIDEADS));
 		app_set_window.sections.push(app_section);
-		app_set_window.sections.push(new config_desc_section("Styles", "Styles can now be configured in the style menu. If keyboard shortcuts are enabled, you can use CTRL + SHIFT + Y to access, otherwise you can get to it the same way you access this menu."));
+		app_set_window.sections.push(new config_desc_section("Styles", "Styles can now be configured in the style menu. If keyboard shortcuts are enabled, you can use CTRL + SHIFT + Y to access, otherwise you can get to it the same way you access this menu."));
 		//app_section.sectionOptions.push(new config_selectionBox("Layout Style", "style", ["Classic", "Media", "Dock", "Columns", "Centered"], ["classic", "media", "dock", "column", "center"], options.DEFAULT_STYL));
 		
 		// Image Search Settings
@@ -1709,6 +1923,7 @@ function config_dialog(popup) {
 			// Slideshow Settings
 		var sld_section = new config_section("SlideShow Options");
 		sld_section.sectionOptions.push(new config_checkBox("Enable Slideshow", "sldshw", options.DEFAULT_SLDSHW));
+		sld_section.sectionOptions.push(new config_checkBox("Enable Keyboad Controls in Slidshow", "sldkey", options.DEFAULT_SLDKEY));
 		sld_section.sectionOptions.push(new config_checkBox("Pause while image is loading", "imgLoad", options.DEFAULT_IMGLOAD));
 		sld_section.sectionOptions.push(new config_checkBox("Skip images that cannot be loaded", "skipErr", options.DEFAULT_SKIPERR));
 		sld_section.sectionOptions.push(new config_selectionBox("Display images in slideshow for", "sldtm", ["1 Second","2 Second","3 Second","4 Second","5 Second","7 Second","10 Second"], [1000, 2000, 3000, 4000, 5000, 7000, 10000], options.DEFAULT_SLDTM));
@@ -1865,7 +2080,7 @@ function slideshow_dialog(popup) {
 		});
 		pvBtn.draw(this.dialog);
 		this.psBtn = new button('Pause', function () {
-			if (this.btn.value == 'Pause') {
+			if (SR.isPlaying) {
 				SR.pause();
 			} else {
 				SR.play();
@@ -1884,6 +2099,14 @@ function slideshow_dialog(popup) {
 		
 		this.play();
 		this.nextImage(imgOn);
+		
+		if (options.sldkey) {
+			document.addEventListener('keypress', function (e) {
+				if (SR.isDrawn) {
+					SR.keyboardControls(e);
+				}
+			}, false);
+		}
 	};
 	
 	this.undraw = function () {
@@ -1893,6 +2116,41 @@ function slideshow_dialog(popup) {
 			$remove(this.dialog);
 			this.isDrawn = false;
 			this.onImage = -1;
+			
+			document.removeEventListener('keypress', function (e) {
+				if (SR.isDrawn) {
+					SR.keyboardControls(e);
+				}
+			}, false);
+		}
+	};
+	
+	this.keyboardControls = function (e) {
+		if (e.charCode == 32) { // Space
+			e.stopPropagation();
+			e.preventDefault();
+			
+			if(this.isPlaying) {
+				this.pause();
+			} else {
+				this.play();
+			}
+		} else if (e.keyCode == 37) { // Left
+			this.pause();
+			this.prevImage();
+		} else if (e.keyCode == 39) { // Right
+			this.pause();
+			this.nextImage();
+		} else if (e.keyCode == 36) { // Home (Beginning)
+			e.stopPropagation();
+			e.preventDefault();
+			
+			this.nextImage(0);
+		} else if (e.keyCode == 35) { // End
+			e.stopPropagation();
+			e.preventDefault();
+			
+			this.prevImage(this.images.length - 1);
 		}
 	};
 	
@@ -1902,7 +2160,7 @@ function slideshow_dialog(popup) {
 			this.images[this.onImage].removeEventListener("load", this.waitForLoad, false);
 		}
 		
-		if(!imgGoTo || !isFinite(imgGoTo) || imgGoTo < 0) {
+		if(typeof(imgGoTo) == "undefined" || imgGoTo < 0 || imgGoTo >= this.images.length) {
 			this.onImage++;
 		} else {
 			this.onImage = imgGoTo;
@@ -1937,11 +2195,15 @@ function slideshow_dialog(popup) {
 		}
 	};
 	
-	this.prevImage = function () {
+	this.prevImage = function (imgGoTo) {
 		if(this.onImage >= 0) {
 			this.holder.removeChild(this.images[this.onImage]);
 		}
-		this.onImage--;
+		if(typeof(imgGoTo) == "undefined" || imgGoTo < 0 || imgGoTo >= this.images.length) {
+			this.onImage--;
+		} else {
+			this.onImage = imgGoTo;
+		}
 		if(this.onImage < 0) {
 			this.onImage = this.images.length - 1;
 		}
@@ -2080,84 +2342,84 @@ function multisearcher() {
 					"Y5%2Bk2Ib1C%2BEAAAAASUVORK5CYII%3D";
 	
 	this.draw = function () {
-		this.wrapper = $create("div", {
-			id : "allSearches"
-		});
+		// this.wrapper = $create("div", {
+			// id : "allSearches"
+		// });
 		
-		var fullorig = findrightnode(this.original, "ts");
+		// var fullorig = findrightnode(this.original, "ts");
 		
-		var topHat = $('sff');
-		var newHolder = $create("div", {
-			id : "otherSearchContent"
-		});
-		for (var ci = 0; ci < topHat.childNodes.length;) {
-			newHolder.appendChild(topHat.childNodes[ci]);
-		}
-		topHat.appendChild(newHolder);
+		// var topHat = $('sff');
+		// var newHolder = $create("div", {
+			// id : "otherSearchContent"
+		// });
+		// for (var ci = 0; ci < topHat.childNodes.length;) {
+			// newHolder.appendChild(topHat.childNodes[ci]);
+		// }
+		// topHat.appendChild(newHolder);
 		
-		topHat.insertBefore(this.wrapper, topHat.childNodes[0]);
-		this.wrapper.appendChild(fullorig);
-		fullorig.id = "currentSearch";
+		// topHat.insertBefore(this.wrapper, topHat.childNodes[0]);
+		// this.wrapper.appendChild(fullorig);
+		// fullorig.id = "currentSearch";
 		
-		var expand = $create("img", {
-			src : 'data:image/png;base64,' + this.downArrow,
-			id : 'expand',
-			alt : 'expand'
-		});
-		this.wrapper.appendChild(expand);
+		// var expand = $create("img", {
+			// src : 'data:image/png;base64,' + this.downArrow,
+			// id : 'expand',
+			// alt : 'expand'
+		// });
+		// this.wrapper.appendChild(expand);
 		
-		this.multiwrapper = $create("div");
-		this.multiwrapper.id = "expandedMulti";
-		var tabhead1 = $create("h3");
-		tabhead1.textContent = "Current Tab";
-		tabhead1.className = "TabHead";
-		var tabhead2 = $create("h3");
-		tabhead2.textContent = "New Tab(s)";
-		tabhead2.className = "TabHead";
+		// this.multiwrapper = $create("div");
+		// this.multiwrapper.id = "expandedMulti";
+		// var tabhead1 = $create("h3");
+		// tabhead1.textContent = "Current Tab";
+		// tabhead1.className = "TabHead";
+		// var tabhead2 = $create("h3");
+		// tabhead2.textContent = "New Tab(s)";
+		// tabhead2.className = "TabHead";
 		
-		this.multiwrapper.appendChild(tabhead1);
-		this.multiwrapper.appendChild(new multisearchbox(null).optionList("Orig"));
-		this.multiwrapper.appendChild($create("hr"));
-		this.multiwrapper.appendChild(tabhead2);
-		this.multiwrapper.appendChild($create("br"));
+		// this.multiwrapper.appendChild(tabhead1);
+		// this.multiwrapper.appendChild(new multisearchbox(null).optionList("Orig"));
+		// this.multiwrapper.appendChild($create("hr"));
+		// this.multiwrapper.appendChild(tabhead2);
+		// this.multiwrapper.appendChild($create("br"));
 		
-		this.newSearchWrapper = $create("div", {
-			id : 'newSearchBoxes'
-		});
+		// this.newSearchWrapper = $create("div", {
+			// id : 'newSearchBoxes'
+		// });
 		
-		for (var nm = GM_getValue("numMulti",2); nm > 0 ; nm--) {
-			var msb = new multisearchbox(this);
-			msb.draw(this.newSearchWrapper);
-			this.boxes.push(msb);
-		}
+		// for (var nm = GM_getValue("numMulti",2); nm > 0 ; nm--) {
+			// var msb = new multisearchbox(this);
+			// msb.draw(this.newSearchWrapper);
+			// this.boxes.push(msb);
+		// }
 		
-		this.multiwrapper.appendChild(this.newSearchWrapper);
+		// this.multiwrapper.appendChild(this.newSearchWrapper);
 		
-		var adder = $create("div");
-		adder.id = "adding";
-		adder.textContent = "Add more...";
-		this.multiwrapper.appendChild(adder);
+		// var adder = $create("div");
+		// adder.id = "adding";
+		// adder.textContent = "Add more...";
+		// this.multiwrapper.appendChild(adder);
 		
-		var srchAll = $create("button", {
-			textContent : "Search All",
-			id : "searchAll"
-		});
-		this.multiwrapper.appendChild(srchAll);
+		// var srchAll = $create("button", {
+			// textContent : "Search All",
+			// id : "searchAll"
+		// });
+		// this.multiwrapper.appendChild(srchAll);
 		
-		var srchNew = $create("button", {
-			textContent : "Search New",
-			id : "searchNew"
-		});
-		this.multiwrapper.appendChild(srchNew);
+		// var srchNew = $create("button", {
+			// textContent : "Search New",
+			// id : "searchNew"
+		// });
+		// this.multiwrapper.appendChild(srchNew);
 		
-		var fillOutAll = $create('button', {
-			textContent : 'Set All from Original',
-			id : 'setBoxes'
-		});
-		this.multiwrapper.appendChild(fillOutAll);
+		// var fillOutAll = $create('button', {
+			// textContent : 'Set All from Original',
+			// id : 'setBoxes'
+		// });
+		// this.multiwrapper.appendChild(fillOutAll);
 		
-		var SR = this;
-		adder.addEventListener("click", function (event) {
+		// var SR = this;
+		// adder.addEventListener("click", function (event) {
 			// var newl = $cl("SBoxes").length;
 			// GM_setValue("numMulti",newl + 1);
 			// newSB(newl, multi);
@@ -2167,70 +2429,81 @@ function multisearcher() {
 			// multi.appendChild(adder);
 			// multi.appendChild(srchAll);
 			// multi.appendChild(srchNew);
-			SR.addBox();
-		}, false);
+			// SR.addBox();
+		// }, false);
 		
-		expand.addEventListener("click", function (event) {
-			SR.expandCollapse();
-		}, false);
+		// expand.addEventListener("click", function (event) {
+			// SR.expandCollapse();
+		// }, false);
 		
-		$("tsf").addEventListener("submit", function (event) {
-			if (SR.expanded) {
-				event.stopPropagation();
-				event.preventDefault();
-				var siteto = $("searchListOrig").value;
-				var srchval;
-				var inputs = $tag("input");
-				for (var i = 0; i < inputs.length; i++) {
-					if(inputs[i].name == "q") {
-						srchval = inputs[i].value;
-						break;
-					}
-				}
-				redirgo([siteto, srchval], false);
-			}
-		}, false);
+		// $("tsf").addEventListener("submit", function (event) {
+			// if (SR.expanded) {
+				// event.stopPropagation();
+				// event.preventDefault();
+				// var siteto = $("searchListOrig").value;
+				// var srchval;
+				// var inputs = $tag("input");
+				// for (var i = 0; i < inputs.length; i++) {
+					// if(inputs[i].name == "q") {
+						// srchval = inputs[i].value;
+						// break;
+					// }
+				// }
+				// redirgo([siteto, srchval], false);
+			// }
+		// }, false);
 		
-		srchAll.addEventListener("click", function (event) {
-			event.stopPropagation();
-			event.preventDefault();
-			var curtabThis;
-			var inputs = $tag("input");
-			for (var i = 0; i < inputs.length; i++) {
-				if(inputs[i].name == "q") {
-					curtabThis = inputs[i].value;
-					break;
-				}
-			}
-			var tablist = [];
-			for (i = $cl("SBoxes").length - 1; i >= 0; i--) {
-				tablist.push($("searchList" + i).value);
-				tablist.push($("searchText" + i).value);
-			}
-			tablist.push($("searchListOrig").value);
-			tablist.push(curtabThis);
-			redirgo(tablist, false);
-		}, false);
+		// srchAll.addEventListener("click", function (event) {
+			// event.stopPropagation();
+			// event.preventDefault();
+			// var curtabThis;
+			// var inputs = $tag("input");
+			// for (var i = 0; i < inputs.length; i++) {
+				// if(inputs[i].name == "q") {
+					// curtabThis = inputs[i].value;
+					// break;
+				// }
+			// }
+			// var tablist = [];
+			// for (i = $cl("SBoxes").length - 1; i >= 0; i--) {
+				// tablist.push($("searchList" + i).value);
+				// tablist.push($("searchText" + i).value);
+			// }
+			// tablist.push($("searchListOrig").value);
+			// tablist.push(curtabThis);
+			// redirgo(tablist, false);
+		// }, false);
 		
-		srchNew.addEventListener("click", function (event) {
-			event.stopPropagation();
-			event.preventDefault();
-			var tablist = [];
-			for (i = $cl("SBoxes").length - 1; i >= 0; i--) {
-				tablist.push($("searchList" + i).value);
-				tablist.push($("searchText" + i).value);
-			}
-			redirgo(tablist, true);
-		}, false);
+		// srchNew.addEventListener("click", function (event) {
+			// event.stopPropagation();
+			// event.preventDefault();
+			// var tablist = [];
+			// for (i = $cl("SBoxes").length - 1; i >= 0; i--) {
+				// tablist.push($("searchList" + i).value);
+				// tablist.push($("searchText" + i).value);
+			// }
+			// redirgo(tablist, true);
+		// }, false);
 		
-		fillOutAll.addEventListener("click", function (event) {
-			event.stopPropagation();
-			event.preventDefault();
-			var sbs = $cl('searchBoxes');
-			for (sb in sbs) {
-				sbs[sb].value = queryBox.value;
-			}
-		}, false);
+		// fillOutAll.addEventListener("click", function (event) {
+			// event.stopPropagation();
+			// event.preventDefault();
+			// var sbs = $cl('searchBoxes');
+			// for (sb in sbs) {
+				// sbs[sb].value = queryBox.value;
+			// }
+		// }, false);
+		
+		var theirButton = $cl('lsb')[0];
+		var myButton = $create('input', {
+			type : 'button',
+			className : 'lsb',
+			value : 'More Options',
+			style : 'border-left: 1px solid #CCCCCC;'
+		});
+		
+		theirButton.parentNode.appendChild(myButton);
+		
 	};
 	
 	this.addBox = function () {
@@ -2387,25 +2660,7 @@ function multisearchbox (parentObj) {
   *	@depends multisearch.js
   */
 	// Start Text / Input Based Functions ------------------------------------------
-// Creates and inserts the link to a wikipedia and wiktionary search
-function lookup(lookingFor) {
-	var logoBox = $("ssb");
-	var p = $create("p");
-	p.textContent = "Find " + lookingFor +  " on ";
-	var link = $create("a");
-	link.textContent = "Wikipedia | ";
-	link.href = "http://en.wikipedia.org/wiki/Special:Search?go=Go&search=" + lookingFor;
-	var link2 = $create("a");
-	link2.textContent = "Wiktionary";
-	link2.href = "http://en.wiktionary.org/wiki/Special:Search?go=Go&search=" + lookingFor;
-	p.appendChild(link);
-	p.appendChild(link2);
-	p.className = "added";
-	p.id = "wikLink";
-	logoBox.insertBefore(p,logoBox.childNodes[1]);
-	var resultsstats = logoBox.childNodes[logoBox.childNodes.length - 1];
-	resultsstats.id = "resStat";
-}
+
 // Script for the auto redirection
 function redirgo(theList, tablast) {
 	if (theList.length < 2) {
@@ -2598,20 +2853,20 @@ function noSuggestions() {
 		lis[i].parentNode.className = lis[i].parentNode.className + " removed";
 	}
 	*/
-	var lis = document.getElementsByTagName("li");
+	var lis = $cl("g");
 	for (var k = 0; k < lis.length; k++) {
-		if (lis[k].className.indexOf("g") !== 0) {
+		if (lis[k].className.indexOf("videobox") >= 0 || lis[k].id == "imagebox") {
 			lis[k].className = lis[k].className + " removed";
 		} else {
-			var found = false;
-			for(var cn = (lis[k].childNodes.length - 1); cn > 0;cn--) {
-				if (lis[k].childNodes[cn].className && lis[k].childNodes[cn].className.indexOf("s") >= 0) {
-					found = true;
-				}
-			}
-			if (!found) {
-				lis[k].className = lis[k].className + " removed";
-			}
+			// var found = false;
+			// for(var cn = (lis[k].childNodes.length - 1); cn > 0;cn--) {
+				// if (lis[k].childNodes[cn].className && lis[k].childNodes[cn].className.indexOf("s") >= 0) {
+					// found = true;
+				// }
+			// }
+			// if (!found) {
+				// lis[k].className = lis[k].className + " removed";
+			// }
 		}
 	}
 	if ($('trev') !== null) {
@@ -2623,18 +2878,18 @@ function noSuggestions() {
 }
 // Moves the "Did you mean text" to a different position
 function didyoumean() {
-	// var dym = $cl('spell');
-	// if (dym.length == 4) {
-		// var p1 = dym[0].parentNode;
-		// var p2 = dym[2].parentNode;
-		// var thebar = $('ssb');
-		// var seconditem = thebar.childNodes[1];
-		// var resultsstats = thebar.childNodes[thebar.childNodes.length - 1];
-		// p2.className = "removed";
-		// p1.id = "dymTxt";
-		// thebar.insertBefore(p1, seconditem);
-		// resultsstats.id = "rsStats";
-	// }
+	var dym = $cl('spell');
+	if (dym.length == 4) {
+		var p1 = dym[0].parentNode;
+		var p2 = dym[2].parentNode;
+		var thebar = $('leftnav');
+		//var seconditem = thebar.childNodes[1];
+		//var resultsstats = thebar.childNodes[thebar.childNodes.length - 1];
+		p2.className = "removed";
+		p1.id = "dymTxt";
+		thebar.insertBefore(p1, thebar.childNodes[0]);
+		//resultsstats.id = "rsStats";
+	}
 }
 	// End Visual Functions ------------------------------------------------------------
 
@@ -2798,9 +3053,7 @@ function indiv_video_result(src, link, domain, name) {
 	this.clicked = function (event, res) {
 		event.stopPropagation();
 		event.preventDefault();
-		$("pBox").className = "playing";
-		var vBox = $create("div");
-		vBox.id = "vBox";
+		
 		// Embeds the video
 		var src;
 		if (res.domain == "youtube") {
@@ -2857,10 +3110,7 @@ function indiv_video_result(src, link, domain, name) {
 		}
 		object.appendChild(embed);
 		
-		vBox.appendChild(object);
-		
-		setupPlayer(res.name);
-		$("pBox").appendChild(vBox);
+		embedder.addVideoEmbed(name, true, object)
 	};
 	
 	// Handles logic for youtube embeds including extra options
@@ -3079,7 +3329,7 @@ function showvids(response) {
 }
 // Searches for videos based on what the user is searching for
 function menutogglevids(theSearch) {
-	get("http://video.google.com/videosearch?q=" + theSearch, showvids, novids);
+	get("http://video.google.com/videosearch?q=" + encodeURIComponent(theSearch), showvids, novids);
 }
 	// End Video Search Functions --------------------------------------------------
 
@@ -3088,25 +3338,38 @@ function menutogglevids(theSearch) {
   *	=================================================================
   */
 
-function indiv_img_result(src, link, title) {
+function indiv_img_result(src, link, title, num) {
 	
 	this.src = src;
-	this.link = link;
+	this.link = decodeURI(link);
 	this.title = title;
+	this.locNum = num;
 	
 	this.draw = function (parentNode) {
 		var link = $create("a", {
 			href : this.link,
 			className : 'imgLink'
 		});
-		link.href = this.link;
-		link.className = "imgLink";
-		var img = $create("img", {
-			src : this.src,
-			alt : this.title,
-			title : this.title
-		});
-		link.appendChild(img);
+		if(options.imgSize == "title") {
+			
+			link.innerHTML = this.title;
+			link.className += " titleOnly";
+			
+		} else if(options.imgSize == "details") {
+			
+			link.innerHTML = this.title;
+			link.className += " titleOnly";
+			
+		} else {
+			
+			var img = $create("img", {
+				src : this.src,
+				alt : this.title,
+				title : this.title
+			});
+			link.appendChild(img);
+			
+		}
 		parentNode.appendChild(link);
 		
 		var SR = this;
@@ -3114,10 +3377,14 @@ function indiv_img_result(src, link, title) {
 	};
 	
 	this.clicked = function (event) {
-		event.stopPropagation();
-		event.preventDefault();
-		
-		alert(this.title);
+		if(options.imgPlyr) {
+			if(event) {
+				event.stopPropagation();
+				event.preventDefault();
+			}
+			
+			embedder.addImageEmbed(this, true);
+		}
 	};
 	
 	this.buildImage = function () {
@@ -3180,16 +3447,19 @@ function Image_Search(query) {
 		
 		var SR = this;
 		this.prevBtn = new button('<', function () { SR.prev(); });
-		this.slideBtn = new button('Play', function () { SR.startSlides(); });
-		this.nextBtn = new button('>', function () { SR.next(); });
-		
 		this.prevBtn.draw(this.div);
-		this.slideBtn.draw(this.div);
-		this.nextBtn.draw(this.div);
-		
 		this.prevBtn.btn.disabled = true;
-		this.slideBtn.btn.disabled = true;
+		
+		if(options.sldshw) {
+			this.slideBtn = new button('Play', function () { SR.startSlides(); this.btn.blur(); });
+			this.slideBtn.draw(this.div);
+			this.slideBtn.btn.disabled = true;
+		}
+		
+		this.nextBtn = new button('>', function () { SR.next(); });
+		this.nextBtn.draw(this.div);
 		this.nextBtn.btn.disabled = true;
+		
 		parentNode.appendChild(this.div);
 		
 		this.search();
@@ -3225,14 +3495,19 @@ function Image_Search(query) {
 		}
 	};
 	
-	this.clickImage = function () {
-		
+	this.clickImage = function (indx) {
+		if(indx < 0) {
+			indx = this.imgs.length - 1;
+		} else if (indx >= this.imgs.length) {
+			indx = 0;
+		}
+		this.imgs[indx].clicked();
 	};
 	
-	this.startSlides = function () {
+	this.startSlides = function (startOn) {
 		if (!this.slideshow.is_drawn()) {
 			popupManager.closeAll();
-			this.slideshow.draw();
+			this.slideshow.draw(startOn);
 		} else if (this.slideshow && this.slideshow.is_drawn()) {
 			this.slideshow.undraw();
 		}
@@ -3264,7 +3539,7 @@ function Image_Search(query) {
 		
 		if(na[0]) {
 			for(var nao = 0; nao < na[0].length; nao++) {
-				var img = new indiv_img_result(na[0][nao][14] + "?q=tbn:" + na[0][nao][2] + na[0][nao][3], na[0][nao][3], na[0][nao][6]);
+				var img = new indiv_img_result(na[0][nao][14] + "?q=tbn:" + na[0][nao][2] + na[0][nao][3], na[0][nao][3], na[0][nao][6], this.imgs.length);
 				this.imgs.push(img);
 				this.slideshow.dialog.add_image(img);
 			}
@@ -3290,7 +3565,7 @@ function Image_Search(query) {
 	
 	this.search = function () {
 		var SR = this;
-		get("http://images.google.com/images?q=" + this.query + "&gbv=2&start=" + (21 * this.pages), function (r) { SR.processPage(r) }, function (r) { SR.errorPage(r) });
+		get("http://images.google.com/images?q=" + encodeURIComponent(this.query) + "&gbv=2&start=" + (21 * this.pages), function (r) { SR.processPage(r) }, function (r) { SR.errorPage(r) });
 		this.pages++;
 	};
 	
@@ -3534,6 +3809,35 @@ function menutoggleimages(theSearch) {
 	// End Image Search Functions -------------------------------------------------
 
 	// Start Wiki Based Functions --------------------------------------------------
+// Creates and inserts the link to a wikipedia and wiktionary search
+function lookup(lookingFor) {
+	// var logoBox = $("ssb");
+	var p = $create("p", {
+		textContent : "Find " + lookingFor +  " on ",
+		className : 'added',
+		id : 'wikiLink'
+	});
+	var link = $create("a");
+	link.textContent = "Wikipedia";
+	link.href = "http://en.wikipedia.org/wiki/Special:Search?go=Go&search=" + lookingFor;
+	var link2 = $create("a");
+	link2.textContent = "Wiktionary";
+	link2.href = "http://en.wiktionary.org/wiki/Special:Search?go=Go&search=" + lookingFor;
+	p.appendChild(link);
+	p.innerHTML += " | ";
+	p.appendChild(link2);
+	
+	if($('dymTxt')) {
+		$('leftnav').insertBefore(p, $('dymTxt').nextSibling);
+	} else {
+		$('leftnav').insertBefore(p, $('leftnav').childNodes[0]);
+	}
+	// p.className = "added";
+	// p.id = "wikLink";
+	// logoBox.insertBefore(p,logoBox.childNodes[1]);
+	// var resultsstats = logoBox.childNodes[logoBox.childNodes.length - 1];
+	// resultsstats.id = "resStat";
+}
 // Handles the case of a wikipedia page being found
 function foundwikilink(response) {
 	var defdiv = $create("div");
@@ -3633,7 +3937,7 @@ function checkwikistate(response) {
 }
 // Searches wikipedia based on what the user is searching for
 function menutogglewiki(theSearch) {
-	get("http://en.wikipedia.org/wiki/Special:Search?go=Go&search=" + theSearch, checkwikistate, nowikilink);
+	get("http://en.wikipedia.org/wiki/Special:Search?go=Go&search=" + encodeURIComponent(theSearch), checkwikistate, nowikilink);
 }
 	// End Wiki Based Functions ----------------------------------------------------
 
@@ -3664,6 +3968,8 @@ function redirInfo() {
 function runThrough() {
 	var q = document.evaluate('//*[@name="q"]', document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
 	queryBox = q.snapshotItem(0);
+	
+	logoToTrans();
 	
 	if ($("preload")) {
 		resetPg();
@@ -3703,7 +4009,17 @@ function runThrough() {
 	
 	// Creates the player if either a video or image search is active
 	if (options.vids || options.imgs) {
-		makePlayer();
+		
+		var mBox = rightBox("mBox");
+		if ($("res").childNodes) {
+			$("res").insertBefore(mBox, $("res").childNodes[0]);
+		} else {
+			$("res").appendChild(mBox);
+		}
+		
+		if (options.imgPlyr || options.embd) {
+			makePlayer();
+		}
 	}
 	
 	// Main features
@@ -3747,13 +4063,13 @@ function runThrough() {
 // End Functions --------------------------------------------------------------------
 
 // Global Variables
-var filler, centDiv, centDivConf, conf, stylr, centDivSld, sldTmr, sldObj, dockShow, multiBox, multi, queryBox, imgSearch;
+var filler, centDiv, centDivConf, conf, stylr, centDivSld, sldTmr, sldObj, dockShow, multiBox, multi, queryBox, imgSearch, embedder;
 var pon = 0;
 // The following is an undefined varialbe to allow the reset of all variables; Do not set
 var SET_UNDEFINED;
 
 GM_registerMenuCommand("Options", configurations, "o", "control shift");
-GM_registerMenuCommand("Style", styler, "y", "control shift");
+GM_registerMenuCommand("Styles", styler, "y", "control shift");
 GM_registerMenuCommand("Script Info (Opens in New Tab)", redirInfo);
 
 var popupManager = new popup_manager();
@@ -3764,7 +4080,7 @@ var currUrl = location.href;
 var delayed = false;
 
 // Starts the process
-if($('res')) {
+if($('res') && $('res').children.length > 0) {
 	runThrough();
 } else {
 	delayed = true;
@@ -3772,7 +4088,7 @@ if($('res')) {
 }
 
 function waitingForPage() {
-	if($('res')) {
+	if($('res') && $('res').children.length > 0) {
 		userInput = setupText();
 		currUrl = location.href;
 		runThrough();

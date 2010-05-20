@@ -55,5 +55,35 @@ var image_store = {
 						"QjNgNWY3E6toDFasBqLAHmis8QFiy24PIz1" +
 						"oBFdgEjNJFg0wwPWPSEhO4CZEPQQSpyUoZr" +
 						"GPDcCBBgANKNMbOvj7dYAAAAAElFTkSuQmC" +
-						"C"
+						"C",
+	
+	image_slideshow :	"data:image/png;base64,iVBORw0KGgoAAA" +
+						"ANSUhEUgAAABAAAAAQCAYAAAAf8%2F9hAAAA" +
+						"GXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJl" +
+						"YWR5ccllPAAAAGtJREFUeNpi%2FP%2F%2FPw" +
+						"MlgImBQsACIlKmfIHxiXUOI4iYk8MDMQCbJB" +
+						"7wn1gv%2FCclDP7j0PAfj%2BH%2F0V3ASIJL" +
+						"GEmNhf%2BURiMjJQYwEpuQ%2FpOg%2BT9KQk" +
+						"JS%2BJ9ImxnRDSA5%2FuEmDXhmotgAgAADAF" +
+						"GQFx04us8gAAAAAElFTkSuQmCC",
+	
+	image_left_arrow :	"data:image/png;base64,iVBORw0KGgoAAA" +
+						"ANSUhEUgAAABAAAAAQCAYAAAAf8%2F9hAAAA" +
+						"GXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJl" +
+						"YWR5ccllPAAAAF1JREFUeNpi%2FP%2F%2FPw" +
+						"MlgImBQkCxASwwRsqUL%2BhyML8xYtM4J4cH" +
+						"rwv%2BU%2BIFZM2MpBpAkmaUMMDibELeYKRu" +
+						"LEBNJNkLTNicRUpMMOHyG7GGMOELIGIA49DP" +
+						"TAABBgBMsBIfaeHnDgAAAABJRU5ErkJggg%3" +
+						"D%3D",
+	
+	image_right_arrow :	"data:image/png;base64,iVBORw0KGgoAA" +
+						"AANSUhEUgAAABAAAAAQCAYAAAAf8%2F9hAA" +
+						"AAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZ" +
+						"VJlYWR5ccllPAAAAFpJREFUeNpi%2FP%2F%" +
+						"2FPwMlgImBQkCxASwwRsqUL7jUwPzIiCw4J" +
+						"4eHZBf8J9cLjPgMIdYFOA1hIeREPN5hpG4s" +
+						"oIcygUBkJDUM%2FuOyiIkSzaSGAVYvMg79z" +
+						"AQQYACovRIfeUjOIwAAAABJRU5ErkJggg%3" +
+						"D%3D"
 }

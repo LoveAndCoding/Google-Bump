@@ -1,0 +1,4 @@
+.colorContainer {
+	position: absolute;
+	z-index: 10001;
+}

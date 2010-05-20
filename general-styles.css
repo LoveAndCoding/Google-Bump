@@ -181,3 +181,6 @@
 .error {
 	color:#FF0000;
 }
+.controlIcon {
+	cursor: pointer;
+}

@@ -1,6 +1,9 @@
 #center_col {
 	margin-right: 0px;
 }
+#foot {
+	clear: both;
+}
 #mBox {
 	background-color: white;
 	width: 400px;
@@ -12,6 +15,9 @@
 }
 .playing, .imgShowing {
 	position: relative;
+}
+.playing .embedArea {
+	height: 400px;
 }
 .rBox {
 	float: right;

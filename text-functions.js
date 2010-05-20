@@ -4,25 +4,7 @@
   *	@depends multisearch.js
   */
 	// Start Text / Input Based Functions ------------------------------------------
-// Creates and inserts the link to a wikipedia and wiktionary search
-function lookup(lookingFor) {
-	var logoBox = $("ssb");
-	var p = $create("p");
-	p.textContent = "Find " + lookingFor +  " on ";
-	var link = $create("a");
-	link.textContent = "Wikipedia | ";
-	link.href = "http://en.wikipedia.org/wiki/Special:Search?go=Go&search=" + lookingFor;
-	var link2 = $create("a");
-	link2.textContent = "Wiktionary";
-	link2.href = "http://en.wiktionary.org/wiki/Special:Search?go=Go&search=" + lookingFor;
-	p.appendChild(link);
-	p.appendChild(link2);
-	p.className = "added";
-	p.id = "wikLink";
-	logoBox.insertBefore(p,logoBox.childNodes[1]);
-	var resultsstats = logoBox.childNodes[logoBox.childNodes.length - 1];
-	resultsstats.id = "resStat";
-}
+
 // Script for the auto redirection
 function redirgo(theList, tablast) {
 	if (theList.length < 2) {
