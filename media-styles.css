@@ -1,142 +1,126 @@
-a, img { 
-	border-style: none;
-}
-#res { 
-	padding-top: 7px; 
-}
-/*
-		Results, images, and videos are based on available options
-		
-		#resOL { position: absolute; right: 0px; top: 7px;
-		if (options.vids && options.imgs) {
-			mediaSS += "height: 300px;";
-		} else if (options.imgs) {
-			mediaSS += "height: 500px; } #imageList img { margin: 4px !important; padding: 4px !important; } #imageList { margin-top: 1% !important; width: 100% !important; height: 150px !important; position: static !important; } #resOL {";
-		} else {
-			mediaSS += "height: 500px; } #videoList { width: 100% !important; } #resOL {";
-		}
-		mediaSS += " width: 44%; overflow: auto; border: 1px solid black; background-color: #FFFFFF; }
-*/
-#videoList {
-	border: 1px solid black; 
-	overflow: auto;
-	width: 55%;
-	height: auto;
-	margin-top: 1%;
-}
-#videoList p {
-	margin-top: 0px;
-	margin-bottom: 5px;
-	text-decoration: underline;
-}
-#imageList {
-	border: 1px solid black;
-	overflow: auto;
-	width: 44%;
-	height: auto;
-	position: absolute;
-	top: 312px;
-	right: 0px;
-}
-#imageList img {
-	margin: 1.4%;
-}
-#pBox {
-	border: 1px solid black;
-	height: 500px;
-	text-align: center;
-	width: 55%;
-}
-#pBox img {
-	max-width: 95%;
-	max-height: 95%;
-	margin-top: 1%;
-}
-#hidePly {
-	display: none !important;
-}
-#wikLink {
-	float: left;
-}
-.removed, .rl-details, .rl-snippet,
-.rl-short-snippet, .rl-snippet-grid-view,
-.rl-watch-on, .rl-special, .rl-cannot-play-here {
-	display: none; 
-}
-#wikiHeader {
-	font-size: 115%;
-	background-color: #D8E2F5;
-	padding-left: .2em;
-}
-#wikiDesc {
-	font-size: 75%;
-	margin: 0px;
-	padding: .2em;
-	text-indent: 3em;
-	border: 2px solid #D8E2F5;
-	background-color: #FFFFFF;
-}
-#wikiDiv {
-	width: 100%;
-	margin-bottom: .5em;
-	margin-top: 1%;
-}
-#res {
-	padding-right: 0px;
-	position: relative;
-}
-.vid_result, .rl-res {
-	width: 102px;
-	margin-left: 2%;
-	margin-right: 2%;
-	display: inline-table;
-	height: auto;
-	text-align: center;
-}
-.thumbnail-img {
-	width: 100px;
-	height: 80px;
-}
-.rl-metadata, .rl-thumbnail {
-	display: block;
-	font-size: small;
-}
-#sldLink {
-	text-align: center;
-	display: block;
-}
-#slideShow {
-	position: fixed;
-	text-align: center;
-	padding: 15px;
-	top: 50%;
-	left: 50%;
-	z-index: 9998;
-	background-color: white;
-	border: 1px solid black;
-}
-.sldImgs {
-	/*
-		Max width and height based on page width and height
-	max-width: " + maxwidth + "px;
-	max-height: " + maxheight + "px;
-	*/
-}
-#greyOut {
-	background-color: black;
-	opacity: .6;
-	width: 100%;
-	height: 100%;
-	z-index: 1000;
-	position: fixed;
-	top: 0px;
-	left: 0px;
-}
-#pBox, #imageList, #videoList {
-	background-color: #D8E2F5;
-}
-.rl-res, #imageList img {
-	padding: 1%;
-	background-color: #FFFFFF;
-	border: 1px solid black;
-}
+		a, img {  \
+			border-style: none; \
+		} \
+		#res {  \
+			padding-top: 7px;  \
+		} \
+		#videoList { \
+			border: 1px solid black;  \
+			overflow: auto; \
+			width: 55%; \
+			height: auto; \
+			margin-top: 1%; \
+		} \
+		#videoList p { \
+			margin-top: 0px; \
+			margin-bottom: 5px; \
+			text-decoration: underline; \
+		} \
+		#imageList { \
+			border: 1px solid black; \
+			overflow: auto; \
+			width: 44%; \
+			height: auto; \
+			position: absolute; \
+			top: 312px; \
+			right: 0px; \
+		} \
+		#imageList img { \
+			margin: 1.4%; \
+		} \
+		#pBox { \
+			border: 1px solid black; \
+			height: 500px; \
+			text-align: center; \
+			width: 55%; \
+		} \
+		#pBox img { \
+			max-width: 95%; \
+			max-height: 95%; \
+			margin-top: 1%; \
+		} \
+		#hidePly { \
+			display: none !important; \
+		} \
+		#wikLink { \
+			float: left; \
+		} \
+		.removed, .rl-details, .rl-snippet, \
+		.rl-short-snippet, .rl-snippet-grid-view, \
+		.rl-watch-on, .rl-special, .rl-cannot-play-here { \
+			display: none;  \
+		} \
+		#wikiHeader { \
+			font-size: 115%; \
+			background-color: #D8E2F5; \
+			padding-left: .2em; \
+		} \
+		#wikiDesc { \
+			font-size: 75%; \
+			margin: 0px; \
+			padding: .2em; \
+			text-indent: 3em; \
+			border: 2px solid #D8E2F5; \
+			background-color: #FFFFFF; \
+		} \
+		#wikiDiv { \
+			width: 100%; \
+			margin-bottom: .5em; \
+			margin-top: 1%; \
+		} \
+		#res { \
+			padding-right: 0px; \
+			position: relative; \
+		} \
+		.vid_result, .rl-res { \
+			width: 102px; \
+			margin-left: 2%; \
+			margin-right: 2%; \
+			display: inline-table; \
+			height: auto; \
+			text-align: center; \
+		} \
+		.thumbnail-img { \
+			width: 100px; \
+			height: 80px; \
+		} \
+		.rl-metadata, .rl-thumbnail { \
+			display: block; \
+			font-size: small; \
+		} \
+		#sldLink { \
+			text-align: center; \
+			display: block; \
+		} \
+		#slideShow { \
+			position: fixed; \
+			text-align: center; \
+			padding: 15px; \
+			top: 50%; \
+			left: 50%; \
+			z-index: 9998; \
+			background-color: white; \
+			border: 1px solid black; \
+		} \
+		.sldImgs { \
+			max-width: " + maxwidth + "px; \
+			max-height: " + maxheight + "px; \
+		} \
+		#greyOut { \
+			background-color: black; \
+			opacity: .6; \
+			width: 100%; \
+			height: 100%; \
+			z-index: 1000; \
+			position: fixed; \
+			top: 0px; \
+			left: 0px; \
+		} \
+		#pBox, #imageList, #videoList { \
+			background-color: #D8E2F5; \
+		} \
+		.rl-res, #imageList img { \
+			padding: 1%; \
+			background-color: #FFFFFF; \
+			border: 1px solid black; \
+		} /* "; /* End Stylesheet */

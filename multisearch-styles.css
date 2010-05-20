@@ -1,81 +1,81 @@
-#currentSearch {
-	margin-top: 0px !important;
-}
-.lsbb {
-	white-space: nowrap;
-}
-#allSearches {
-	border: 1px solid #0077CC;
-	margin-top: 10px;
-	background-color: #FFFFFF;
-	z-index: 1000;
-	float: left;
-}
-#expand, #collapse {
-	cursor: pointer;
-	font-family: sans-serif;
-	float: right;
-	color: #0077CC;
-	margin-right: 3px;
-	margin-bottom: 2px;
-}
-#collapse {
-	font-size: 60%;
-	padding-left: .3em;
-	padding-right: .35em;
-}
-#expand {
-	font-size: 50%;
-	padding-left: .2em;
-	padding-right: .25em;
-}
-.TabHead {
-	font-size: 75%;
-	color: #555555;
-	margin: 0px;
-	margin-left: 1em;
-	display: inline;
-}
-.siteSelector {
-	display: inline;
-	margin-left: 1em;
-	margin-bottom: 1em;
-}
-.searchBoxes {
-	display: inline;
-	margin-left: 1em;
-	width: 50%;
-}
-.closeBtn {
-	color: red;
-	display: inline;
-	margin: 0px;
-	cursor: pointer;
-	font-size: 50%;
-	vertical-align: top;
-	margin-left: .8em;
-}
-#expandedMulti hr {
-	margin: 1px;
-}
-#adding {
-	margin-left: 3em;
-	cursor: pointer;
-	font-size: 85%;
-	color: blue;
-	margin-top: -1em;
-}
-#searchAll {
-	font-size: normal;
-}
-#otherSearchContent {
-	margin-bottom: 44px;
-}
-.gac_m {
-	z-index: 1500 !important;
-	border: 1px solid #D0D0D0 !important;
-	border-top-style: none !important;
-}
-.ts td {
-	padding-left: 4px !important;
-} 
+		#currentSearch { \
+			margin-top: 0px !important; \
+		} \
+		.lsbb { \
+			white-space: nowrap; \
+		} \
+		#allSearches { \
+			border: 1px solid #0077CC; \
+			margin-top: 10px; \
+			background-color: #FFFFFF; \
+			z-index: 1000; \
+			float: left; \
+		} \
+		#expand, #collapse { \
+			cursor: pointer; \
+			font-family: sans-serif; \
+			float: right; \
+			color: #0077CC; \
+			margin-right: 3px; \
+			margin-bottom: 2px; \
+		} \
+		#collapse { \
+			font-size: 60%; \
+			padding-left: .3em; \
+			padding-right: .35em; \
+		} \
+		#expand { \
+			font-size: 50%; \
+			padding-left: .2em; \
+			padding-right: .25em; \
+		} \
+		.TabHead { \
+			font-size: 75%; \
+			color: #555555; \
+			margin: 0px; \
+			margin-left: 1em; \
+			display: inline; \
+		} \
+		.siteSelector { \
+			display: inline; \
+			margin-left: 1em; \
+			margin-bottom: 1em; \
+		} \
+		.searchBoxes { \
+			display: inline; \
+			margin-left: 1em; \
+			width: 50%; \
+		} \
+		.closeBtn { \
+			color: red; \
+			display: inline; \
+			margin: 0px; \
+			cursor: pointer; \
+			font-size: 50%; \
+			vertical-align: top; \
+			margin-left: .8em; \
+		} \
+		#expandedMulti hr { \
+			margin: 1px; \
+		} \
+		#adding { \
+			margin-left: 3em; \
+			cursor: pointer; \
+			font-size: 85%; \
+			color: blue; \
+			margin-top: -1em; \
+		} \
+		#searchAll { \
+			font-size: normal; \
+		} \
+		#otherSearchContent { \
+			margin-bottom: 44px; \
+		} \
+		.gac_m { \
+			z-index: 1500 !important; \
+			border: 1px solid #D0D0D0 !important; \
+			border-top-style: none !important; \
+		} \
+		.ts td { \
+			padding-left: 4px !important; \
+		} /* "; /* End Stylesheet */

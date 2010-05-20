@@ -247,7 +247,7 @@ function style_dialog(popup) {
 			// Searches
 		var otr_section = new config_section("Style");
 		otr_section.sectionOptions.push(new config_selectionBox("Layout Style", "style", ["Classic", "Media", "Dock", "Columns", "Centered"], ["classic", "media", "dock", "column", "center"], options.DEFAULT_STYL));
-		otr_section.sectionOptions.push(new config_colorBox('Background Color','bgcolor','240,247,249'));
+		otr_section.sectionOptions.push(new config_colorBox('Background Color','genbgclr',options.DEFAULT_GENBGCLR));
 		gen_set_window.sections.push(otr_section);
 		
 		// Draw the windows

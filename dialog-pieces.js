@@ -169,7 +169,7 @@ function config_desc_section(title, content) {
 		return;
 	};
 	
-	this.setDefaults = function () {
+	this.setDefault = function () {
 		return;
 	};
 }

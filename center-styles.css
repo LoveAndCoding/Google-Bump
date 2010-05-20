@@ -1,146 +1,146 @@
-body {
-	width: 760px;
-	margin: 0px auto !important;
-	padding-top: 3px;
-	border: 1px solid #000000;
-	border-top-style: none;
-}
-html {
-	background-color: #DDDDFF;
-}
-#tsf {
-	position: relative;
-}
-.gbh {
-	left: auto !important;
-	right: auto !important;
-	width: 760px;
-}
-#ssb {
-	margin-bottom: 0px;
-	padding-bottom: 0px;
-}
-#mBox {
-	position: relative;
-	width: 584px;
-	height: 220px;
-	overflow: hidden;
-	border-bottom: 1px solid #6B90DA;
-	border-top: 1px solid #6B90DA;
-}
-#wikiDiv {
-	min-height: 122px;
-	z-index: 1003;
-	border-bottom: 1px solid #000000;
-	border-right: 1px solid #000000;
-	position: absolute;
-	top: 0px;
-	left: 0px;
-	background-color: #FFFFFF;
-	width: 200px;
-}
-#wikiHeader {
-	font-size: 100%;
-	text-align: center;
-	border-bottom: 1px solid #000000;
-}
-#wikiHeader a, #wikiHeader a:active {
-	color: #0077CC;
-	text-decoration: none;
-}
-#wikiDesc {
-	margin: 0px;
-	padding: 5px 2px 2px 2px;
-	font-size: 85%;
-}
-#wikiExp {
-	min-height: 120px;
-	z-index: 1002;
-	text-align: center;
-	font-size: 75%;
-	position: absolute;
-	top: 0px;
-	left: 0px;
-	background-color: #FFFFFF;
-	border-right: 1px solid #000000;
-	border-bottom: 1px solid #000000;
-	cursor: pointer;
-	color: #0077CC;
-	padding: 1px 4px;
-}
-#pBox {
-	width: 380px;
-	text-align: center;
-	height: 220px;
-	background-color: #FFFFFF;
-}
-#videoList {
-	float: left;
-	height: 220px;
-	width: 290px;
-	overflow-y: auto;
-	overflow-x: hidden;
-	border-right: 1px solid #6B90DA;
-}
-#vidTag, #imageTag, #playerTag {
-	text-align: center;
-	margin: 0px;
-	padding: 0px 8px;
-	background-color: #F0F7F9;
-	border-bottom: 1px solid #6B90DA;
-}
-.rl-item {
-	max-width: 100px;
-	float: left;
-	padding: 5px 10px;
-}
-.rl-thumbnail img {
-	max-width: 100px;
-}
-.rl-domain-below {
-	overflow-x: hidden;
-	width: 100px;
-}
-.rl-details, .rl-snippet, .rl-snippet-grid-view, .rl-watch-on, .rl-cannot-play-here, .rl-special {
-	display: none;
-}
-#imageList {
-	text-align: center;
-	height: 220px;
-	width: 290px;
-	float: right;
-	z-index: 1001;
-	overflow-y: auto;
-	overflow-x: hidden;
-}
-#imageList img {
-	max-width: 100px;
-}
-.playing {
-	display: block !important;
-	z-index: 1004 !important;
-}
-.imgShowing {
-	display: block !important;
-	z-index: 1004 !important;
-}
-.imgShowing img {
-	max-height: 190px;
-	max-width: 380px;
-	margin-top: 2px;
-}
-.sldImgs {
-	display: block;
-}
-#vBox {
-	background-color: #FFFFFF;
-}
-#resOL {
-	padding-left: 4px;
-}
-#res {
-	margin: 0px !important;
-}
-#ssb {
-	margin: 0px !important;
-} 
+		body { \
+			width: 760px; \
+			margin: 0px auto !important; \
+			padding-top: 3px; \
+			border: 1px solid #000000; \
+			border-top-style: none; \
+		} \
+		html { \
+			background-color: #DDDDFF; \
+		} \
+		#tsf { \
+			position: relative; \
+		} \
+		.gbh { \
+			left: auto !important; \
+			right: auto !important; \
+			width: 760px; \
+		} \
+		#ssb { \
+			margin-bottom: 0px; \
+			padding-bottom: 0px; \
+		} \
+		#mBox { \
+			position: relative; \
+			width: 584px; \
+			height: 220px; \
+			overflow: hidden; \
+			border-bottom: 1px solid #6B90DA; \
+			border-top: 1px solid #6B90DA; \
+		} \
+		#wikiDiv { \
+			min-height: 122px; \
+			z-index: 1003; \
+			border-bottom: 1px solid #000000; \
+			border-right: 1px solid #000000; \
+			position: absolute; \
+			top: 0px; \
+			left: 0px; \
+			background-color: #FFFFFF; \
+			width: 200px; \
+		} \
+		#wikiHeader { \
+			font-size: 100%; \
+			text-align: center; \
+			border-bottom: 1px solid #000000; \
+		} \
+		#wikiHeader a, #wikiHeader a:active { \
+			color: #0077CC; \
+			text-decoration: none; \
+		} \
+		#wikiDesc { \
+			margin: 0px; \
+			padding: 5px 2px 2px 2px; \
+			font-size: 85%; \
+		} \
+		#wikiExp { \
+			min-height: 120px; \
+			z-index: 1002; \
+			text-align: center; \
+			font-size: 75%; \
+			position: absolute; \
+			top: 0px; \
+			left: 0px; \
+			background-color: #FFFFFF; \
+			border-right: 1px solid #000000; \
+			border-bottom: 1px solid #000000; \
+			cursor: pointer; \
+			color: #0077CC; \
+			padding: 1px 4px; \
+		} \
+		#pBox { \
+			width: 380px; \
+			text-align: center; \
+			height: 220px; \
+			background-color: #FFFFFF; \
+		} \
+		#videoList { \
+			float: left; \
+			height: 220px; \
+			width: 290px; \
+			overflow-y: auto; \
+			overflow-x: hidden; \
+			border-right: 1px solid #6B90DA; \
+		}\
+		#vidTag, #imageTag, #playerTag { \
+			text-align: center; \
+			margin: 0px; \
+			padding: 0px 8px; \
+			background-color: #F0F7F9; \
+			border-bottom: 1px solid #6B90DA; \
+		} \
+		.rl-item { \
+			max-width: 100px; \
+			float: left; \
+			padding: 5px 10px; \
+		} \
+		.rl-thumbnail img { \
+			max-width: 100px; \
+		} \
+		.rl-domain-below { \
+			overflow-x: hidden; \
+			width: 100px; \
+		} \
+		.rl-details, .rl-snippet, .rl-snippet-grid-view, .rl-watch-on, .rl-cannot-play-here, .rl-special { \
+			display: none; \
+		} \
+		#imageList { \
+			text-align: center; \
+			height: 220px; \
+			width: 290px; \
+			float: right; \
+			z-index: 1001; \
+			overflow-y: auto; \
+			overflow-x: hidden; \
+		} \
+		#imageList img { \
+			max-width: 100px; \
+		} \
+		.playing { \
+			display: block !important; \
+			z-index: 1004 !important; \
+		} \
+		.imgShowing { \
+			display: block !important; \
+			z-index: 1004 !important; \
+		} \
+		.imgShowing img { \
+			max-height: 190px; \
+			max-width: 380px; \
+			margin-top: 2px; \
+		} \
+		.sldImgs { \
+			display: block; \
+		} \
+		#vBox { \
+			background-color: #FFFFFF; \
+		} \
+		#resOL { \
+			padding-left: 4px; \
+		} \
+		#res { \
+			margin: 0px !important; \
+		} \
+		#ssb { \
+			margin: 0px !important; \
+		} /* "; /* End Stylesheet */

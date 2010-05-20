@@ -1,4 +1,15 @@
-.colorContainer {
-	position: absolute;
-	z-index: 10001;
-}
+		.colorContainer { \
+			position: fixed; \
+			z-index: 10001; \
+			background-color: #FFFFFF; \
+			padding: 8px; \
+			border: 1px solid #000000; \
+			-moz-border-radius: 3px; \
+		} \
+		.configColorBox { \
+			width: 15px; \
+			height: 15px; \
+			border: 1px solid #000000; \
+			cursor: pointer; \
+			-moz-border-radius: 3px; \
+		} /* "; /* End Stylesheet */

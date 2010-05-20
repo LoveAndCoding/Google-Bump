@@ -1,0 +1,2 @@
+
+	this.multisearch_stylesheet = " \

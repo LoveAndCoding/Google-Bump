@@ -101,4 +101,7 @@ function optionlist() {
 	this.newversion = parseFloat(GM_getValue("newver", 0.0));
 		// Advanced vars
 	this.delay = parseInt(GM_getValue("delay", this.DEFAULT_DELAY));
+	
+		// Color vars
+	this.genbgclr = parseInt(GM_getValue("genbgclr", this.DEFAULT_GENBGCLR));
 }
