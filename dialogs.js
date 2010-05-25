@@ -246,9 +246,25 @@ function style_dialog(popup) {
 		var gen_set_window = new config_window(genTab, "GenStyl");
 			// Searches
 		var otr_section = new config_section("Style");
-		otr_section.sectionOptions.push(new config_selectionBox("Layout Style", "style", ["Classic", "Media", "Dock", "Columns", "Centered"], ["classic", "media", "dock", "column", "center"], options.DEFAULT_STYL));
-		otr_section.sectionOptions.push(new config_colorBox('Background Color','genbgclr',options.DEFAULT_GENBGCLR));
+		otr_section.sectionOptions.push(new config_selectionBox("Layout Style", "style", ["Classic", "Media", "Dock",/* "Columns",*/ "Centered"], ["classic", "media", "dock",/* "column",*/ "center"], options.DEFAULT_STYL));
+		var bgc_section = new config_section("Background Colors");
+		bgc_section.sectionOptions.push(new config_colorBox('Body (Mostly for Center Style)', 'genbgclr', options.DEFAULT_GENBGCLR));
+		bgc_section.sectionOptions.push(new config_colorBox('Main Area', 'resltclr', options.DEFAULT_RESLTCLR));
+		bgc_section.sectionOptions.push(new config_colorBox('Google Bar (Top)', 'glbarclr', options.DEFAULT_GLBARCLR));
+		bgc_section.sectionOptions.push(new config_colorBox('Added Items', 'addedclr', options.DEFAULT_ADDEDCLR));
+		bgc_section.sectionOptions.push(new config_colorBox('Embedable Videos', 'plyblclr', options.DEFAULT_PLYBLCLR));
+		bgc_section.sectionOptions.push(new config_colorBox('Overlay', 'ovrlyclr', options.DEFAULT_OVRLYCLR));
+		var txc_section = new config_section("Text Colors");
+		txc_section.sectionOptions.push(new config_colorBox('General', 'restxtclr', options.DEFAULT_RESTXTCLR));
+		txc_section.sectionOptions.push(new config_colorBox('Links', 'lnktxtclr', options.DEFAULT_LNKTXTCLR));
+		txc_section.sectionOptions.push(new config_colorBox('Result URL', 'urltxtclr', options.DEFAULT_URLTXTCLR));
+		txc_section.sectionOptions.push(new config_colorBox('Similar and Paging Links', 'simtxtclr', options.DEFAULT_SIMTXTCLR));
+		txc_section.sectionOptions.push(new config_colorBox('Added Items', 'mdatxtclr', options.DEFAULT_MDATXTCLR));
+		txc_section.sectionOptions.push(new config_colorBox('Embed Area Text', 'plytxtclr', options.DEFAULT_PLYTXTCLR));
+		txc_section.sectionOptions.push(new config_colorBox('Embedable Videos', 'pbltxtclr', options.DEFAULT_PBLTXTCLR));
 		gen_set_window.sections.push(otr_section);
+		gen_set_window.sections.push(bgc_section);
+		gen_set_window.sections.push(txc_section);
 		
 		// Draw the windows
 		app_set_window.draw(wrapper);
@@ -330,7 +346,7 @@ function config_dialog(popup) {
 		// Creates and appends the navigation tabs
 		var genTab = new config_tab("General", "t_GenConf");
 		var abtTab = new config_tab("Created by KTaSh", "t_AbtConf", genTab);
-		var appTab = new config_tab("Visual", "t_AppConf", genTab);
+		var appTab = new config_tab("Clutter", "t_AppConf", genTab);
 		var imgTab = new config_tab("Images", "t_ImgConf", genTab);
 		var vidTab = new config_tab("Videos", "t_VidConf", genTab);
 		var otrTab = new config_tab("Advanced", "t_OtrConf", genTab);
@@ -372,8 +388,6 @@ function config_dialog(popup) {
 		app_section.sectionOptions.push(new config_checkBox("Move \"Did you mean\" text", "dym", options.DEFAULT_DYM));
 		app_section.sectionOptions.push(new config_checkBox("Remove Sidebar Ads", "sideads", options.DEFAULT_SIDEADS));
 		app_set_window.sections.push(app_section);
-		app_set_window.sections.push(new config_desc_section("Styles", "Styles can now be configured in the style menu. If keyboard shortcuts are enabled, you can use CTRL + SHIFT + Y to access, otherwise you can get to it the same way you access this menu."));
-		//app_section.sectionOptions.push(new config_selectionBox("Layout Style", "style", ["Classic", "Media", "Dock", "Columns", "Centered"], ["classic", "media", "dock", "column", "center"], options.DEFAULT_STYL));
 		
 		// Image Search Settings
 		var img_set_window = new config_window(imgTab, "ImgConf");

@@ -151,7 +151,7 @@ function showimages(response) {
 	} else {
 		realbox.textContent = "No Images Found";
 	}
-	//$("res").removeChild(tempbox);
+	//$('ires').removeChild(tempbox);
 	$("mBox").appendChild(realbox);
 	$("mBox").appendChild(listerdiv);
 	if (options.imgPgs > pon) {
@@ -228,5 +228,10 @@ function menutoggleimages(theSearch) {
 	// pon++;
 	imgSearch = new Image_Search(theSearch);
 	imgSearch.draw($("mBox"));
+	
+	if (options.styl == "dock") {
+		imgSearch.div.className = "removed";
+		$("imgDock").className = "";
+	}
 }
 	// End Image Search Functions -------------------------------------------------

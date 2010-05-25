@@ -21,7 +21,6 @@
 		} \
 		.rBox { \
 			float: right; \
-			background-color: #F0F7F9; \
 			text-align: center; \
 		} \
 		.wBBord { \
@@ -34,7 +33,6 @@
 			margin: 0px; \
 		} \
 		#playerTag { \
-			background-color: #F0F7F9; \
 			height: 20px; \
 		} \
 		#vBox { \
@@ -111,6 +109,9 @@
 		#exvidlist { \
 			width: 170px; \
 		} \
+		.playing #embedArea { \
+			height: 340px; \
+		} \
 		.vid_thumb { \
 			width: 140px; \
 			height: 100px; \
@@ -175,7 +176,6 @@
 		} \
 		#wikiDiv { \
 			width: 580px; \
-			margin-top: -1px; \
 			margin-bottom: .5em; \
 		} \
 		.ts td { \

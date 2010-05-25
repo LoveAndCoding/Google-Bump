@@ -12,4 +12,14 @@
 			border: 1px solid #000000; \
 			cursor: pointer; \
 			-moz-border-radius: 3px; \
+		} \
+		.colorToneToBlack { \
+			width: 255px; \
+		} \
+		.colorBar { \
+			width: 40px; \
+		} \
+		.colorToneToBlack, .colorBar { \
+			position: relative; \
+			height: 255px; \
 		} /* "; /* End Stylesheet */

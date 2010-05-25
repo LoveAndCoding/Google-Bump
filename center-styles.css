@@ -11,6 +11,9 @@
 		#tsf { \
 			position: relative; \
 		} \
+		#cnt { \
+			min-width: 0px !important; \
+		} \
 		.gbh { \
 			left: auto !important; \
 			right: auto !important; \
@@ -22,7 +25,6 @@
 		} \
 		#mBox { \
 			position: relative; \
-			width: 584px; \
 			height: 220px; \
 			overflow: hidden; \
 			border-bottom: 1px solid #6B90DA; \
@@ -69,7 +71,6 @@
 			padding: 1px 4px; \
 		} \
 		#pBox { \
-			width: 380px; \
 			text-align: center; \
 			height: 220px; \
 			background-color: #FFFFFF; \

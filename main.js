@@ -68,10 +68,10 @@ function runThrough() {
 	if (options.vids || options.imgs) {
 		
 		var mBox = rightBox("mBox");
-		if ($("res").childNodes) {
-			$("res").insertBefore(mBox, $("res").childNodes[0]);
+		if ($('ires').childNodes) {
+			$('ires').insertBefore(mBox, $('ires').childNodes[0]);
 		} else {
-			$("res").appendChild(mBox);
+			$('ires').appendChild(mBox);
 		}
 		
 		if (options.imgPlyr || options.embd) {
@@ -130,14 +130,13 @@ GM_registerMenuCommand("Styles", styler, "y", "control shift");
 GM_registerMenuCommand("Script Info (Opens in New Tab)", redirInfo);
 
 var popupManager = new popup_manager();
-var options = new optionlist();
 // Finds and saves what the user looks for  and saves the url-- Currently returns incorrect value if back button is used
 var userInput = setupText();
 var currUrl = location.href;
 var delayed = false;
 
 // Starts the process
-if($('res') && $('res').children.length > 0) {
+if($('ires') && $('ires').children.length > 0) {
 	runThrough();
 } else {
 	delayed = true;
@@ -145,7 +144,7 @@ if($('res') && $('res').children.length > 0) {
 }
 
 function waitingForPage() {
-	if($('res') && $('res').children.length > 0) {
+	if($('ires') && $('ires').children.length > 0) {
 		userInput = setupText();
 		currUrl = location.href;
 		runThrough();

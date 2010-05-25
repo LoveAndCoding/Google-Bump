@@ -9,45 +9,13 @@
 function allStyles () {
 	var maxwidth = window.innerWidth - 50;
 	var maxheight = window.innerHeight - 100;
-	/*
-	var ssheet = "#greyOut { background-color: black; opacity: .6; width: 100%; height: 100%; z-index: 1000; position: fixed; top: 0px; left: 0px; } " + 
-				"#mBox { background-color: white; width: 400px; } #pBox { vertical-align: middle; overflow: hidden; width: 400px; } " +
-				".rBox { float: right; background-color: #F0F7F9; text-align: center; } .wBBord { border-bottom: 1px solid #6B90DA; } " +
-				".confLbl { font-size: small; display: inline; } .opli { display: inline; } .confTab { margin: 0px; padding: 2px 4px; border: 1px solid black; } " +
-				"#confWel { border-bottom: 1px solid black; font-size: 22pt; font-family: \"Times New Roman\", serif; text-align: center; background-color: #F0F7F9; } " +
-				"#slOpts { margin: 6px 0px; border-bottom: 1px solid grey; } #confWrap { height: 432px; border-bottom: 1px solid black; margin-bottom: 2px; } " +
-				"#confTabs { height: 16px; position: relative; margin-bottom: 3px; } .conf_Tab { padding: 0px 0.5em .25em .5em; " + 
-				"margin-top: 4px; background-color: #F0F7F9;  border-bottom: 1px solid black; border-right: 1px solid black; display: inline; z-index: 10001; cursor: pointer;} " +
-				".selected_tab { border-bottom-style: none; background-color: white;} .confTabOn { margin: .7em; } .confTabOn label { margin: .2em 0px; } .confTabOn button { margin: .5em 0px; } " + 
-				"#t_AbtConf { display: block; position: absolute; top: -4px; right: 0px; width: 146px; text-align: right; border-right-style: none; z-index: 10000; } " +
-				"#AbtConf p { margin-top: 0px; } #setShow, .blocked, .imgLink { display: block; } " +
-				"#confGoogBump { position: fixed; left: 50%; top: 50%; width: 500px; height: 520px; margin-left: -250px; margin-top: -260px; z-index: 9999; background-color: white; border: 1px solid black; } " +
-				"#deapallFault, #sNc { margin-left 1em; } .playimg { max-width: 400px; max-height: 345px; border-style: none; } " + 
-				"#videoList { width: 180px; } #imageList { width: 220px; } #wikLink { float: left; display: inline; } #ssb { position: relative; height: 25px; } " +
-				"#resStat { display: inline; position: absolute; top: 1px; right: 0px; } #newVer { float: right; margin-top: -1.4em; font-size: 85%; background-color: #CCCCFF; padding: 1px; } " + 
-				".rl-videofrom { display: none; } #resOL { margin: 0px 2% 0px .1em; } .toLI { display: list-item; } .reAddAd { width: 100px; } .g { margin-top: 0px; min-width: 540px; } " +
-				"#dymTxt { margin: 0px; float: left; } #ssb { position: relative; height: 25px; } #rsStats { display: inline; position: absolute; top: 3px; right: 0px; } " + 
-				"#prs { display: inline; } .vidRes { width: 145px; display: block; } .vidRes .g { margin: 0px;  min-width: 0px;  margin-left: 1em; } " + 
-				".vidRes img { width: 137px; height: 97px; } .vrTitle { margin-bottom: 30px; } #exvidlist { width: 170px; } " + 
-				".rl-item img { width: 160px; height: 120px; } .rl-item { display: inline; } #ssb { margin-bottom: 0px; padding-bottom: 0px; } " +
-				".rl-special, .rl-watchon, .rl-snippet-grid-view, .rl-details, .rl-short-snippet, .rl-snippet { display: none; }" + 
-				"#slideShow { position: fixed; text-align: center; padding: 15px; top: 50%; left: 50%; z-index: 9998; background-color: white; " + 
-				"border: 1px solid black; } .sldImgs { max-width: " + maxwidth + "px; max-height: " + maxheight + "px; } " +
-				"#sldLink { text-align: center; } #next{ float: right; } #prev { float: left; } #res { padding-right: 0px; margin-top: 0px; }" + 
-				"#wikiHeader { font-size: 115%; background-color: #F0F7F9; padding-left: .2em; }" +
-				"#wikiDesc { font-size: 75%; margin: 0px; padding: .2em; text-indent: 3em; border: 2px solid #F0F7F9; }" +
-				"#wikiDiv { width: 580px; margin-top: -1px; margin-bottom: .5em; } " +
-				".ts td { padding: 0px 0px 0px 17px; } ";
-	if (sideads || sugges) {
-		ssheet += ".hd, ";
+	
+	if(document.getElementsByClassName("g")[0]) {
+		var lists = document.getElementsByClassName("g")[0].parentNode;
+		lists.id = "resOL";
+		dockShow = lists;
 	}
-	if (margs) {
-		ssheet += ".e, ";
-	}
-	ssheet += ".removed { display: none; }";
-				
-	GM_addStyle(ssheet);
-	*/
+	
 	if (options.styl == "media" && (options.imgs || options.vids)) {
 		// var mediaSS = "a, img { border-style: none; } " +
 						// "#res { /*background: #1e68ef url(http://uwdcb.doesntexist.com/gbback.jpg) repeat-x scroll top left; */padding-top: 7px; } " +
@@ -84,8 +52,8 @@ function allStyles () {
 						// ".rl-res, #imageList img { padding: 1%; background-color: #FFFFFF; border: 1px solid black; } ";
 		
 		GM_addStyle(ssStore.media_stylesheet);
-		//$("resOL").parentNode.id = "resBox";
-		//$("resOL").parentNode.appendChild($("nav"));
+		$("resOL").parentNode.className = "resBox";
+		$("resOL").parentNode.appendChild($("nav"));
 		
 	} else if (options.styl == "dock") {
 		// var dockSS = "body { margin-bottom: 50px; } " +
@@ -128,12 +96,14 @@ function allStyles () {
 		});
 		icon.appendChild(alink);
 		icon.addEventListener("click",function (e) {
-			if ($('resOL').parentNode.className == "removed") {
-				$('resOL').parentNode.className = "";
+			if ($('resOL').className == "removed") {
+				$('resOL').className = "";
 				dockShow.className = "removed";
 				$("nav").className = "";
-				dockShow = $('resOL').parentNode;
+				dockShow = $('resOL');
 			}
+			e.stopPropagation();
+			e.preventDefault();
 		}, false);
 		dock.appendChild(icon);
 		
@@ -155,6 +125,8 @@ function allStyles () {
 					$("nav").className = "removed";
 					dockShow = $('wikiDiv');
 				}
+				e.stopPropagation();
+				e.preventDefault();
 			}, false);
 			dock.appendChild(icon);
 		}
@@ -177,6 +149,8 @@ function allStyles () {
 					$("nav").className = "removed";
 					dockShow = $('videoList');
 				}
+				e.stopPropagation();
+				e.preventDefault();
 			}, false);
 			dock.appendChild(icon);
 		}
@@ -199,6 +173,8 @@ function allStyles () {
 					$("nav").className = "removed";
 					dockShow = $('imageList');
 				}
+				e.stopPropagation();
+				e.preventDefault();
 			}, false);
 			dock.appendChild(icon);
 		}
@@ -328,29 +304,7 @@ function allStyles () {
 	
 	GM_addStyle(ssStore.multisearch_stylesheet);
 	
-	// var clrSS = "\
-		// .colorContainer { \
-			// position: fixed; \
-			// z-index: 10001; \
-			// background-color: #FFFFFF; \
-			// padding: 8px; \
-			// border: 1px solid #000000; \
-			// -moz-border-radius: 3px; \
-		// } \
-		// .configColorBox { \
-			// width: 15px; \
-			// height: 15px; \
-			// border: 1px solid #000000; \
-			// -moz-border-radius: 3px; \
-		// } \
-		// ";
 	GM_addStyle(ssStore.clrpicker_stylesheet);
-	
-	if(document.getElementsByClassName("g")[0]) {
-		var lists = document.getElementsByClassName("g")[0].parentNode;
-		lists.id = "resOL";
-		dockShow = lists.parentNode;
-	}
 }
 // Creates a basic right floating box of given id
 function rightBox(idName) {
@@ -412,11 +366,30 @@ function logoToTrans() {
 	var imgd = ctx.getImageData(0, 0, 137, 49);
 	var pix = imgd.data
 	for (var i = 0, n = pix.length; i < n; i += 4) {
-		if (pix[i] == pix[i+1] && pix[i+1] == pix[i+2]) {
-			pix[i+3] = (255-pix[i]);
-		} else {
-			pix[i+3] = 255 - Math.min(pix[i],Math.min(pix[i+1],pix[i+2]));
-		}
+		pix[i+3] = 255 - Math.min(pix[i],Math.min(pix[i+1],pix[i+2]));
+	}
+	ctx.putImageData(imgd, 0, 0);
+	
+	removeAllChildren($('logo'));
+	$('logo').appendChild(canvas);
+}
+//
+function iconSheetTrans() {
+	var img = new Image();
+	img.src = "/images/srpr/nav_logo13.png";
+	
+	var canvas = $create('canvas', {
+		id : 'transLogo',
+		width: 167,
+		height: 222
+	});
+	var ctx = canvas.getContext('2d');
+	ctx.drawImage(img, 0, 0,167,222);
+	
+	var imgd = ctx.getImageData(0, 0, 167, 222);
+	var pix = imgd.data
+	for (var i = 0, n = pix.length; i < n; i += 4) {
+		pix[i+3] = 255 - Math.min(pix[i],Math.min(pix[i+1],pix[i+2]));
 	}
 	ctx.putImageData(imgd, 0, 0);
 	

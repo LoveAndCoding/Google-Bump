@@ -125,7 +125,7 @@ function getAttribute(node, attName) {
 function checknonreload() {
 	// Check that original page is still the page that is loaded
 	if(currUrl != location.href) {
-		if($('res')) {
+		if($('ires')) {
 			// Restart process if it is not
 			resetPg();
 			userInput = setupText();

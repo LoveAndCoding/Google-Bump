@@ -34,10 +34,6 @@ function showvids(response) {
 	
 	// Sorts through the video results and puts them in a list
 	var box = rightBox("videoList");
-	var littlep = $create("p");
-	littlep.textContent = "Videos";
-	littlep.id = "vidTag";
-	box.appendChild(littlep);
 	
 	var rlitems = code.getElementsByClassName("rl-item");
 	var rlress = code.getElementsByClassName("rl-res");

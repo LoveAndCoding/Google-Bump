@@ -49,6 +49,7 @@ function optionlist() {
 	this.DEFAULT_GLBARCLR = '255,255,255';
 	this.DEFAULT_ADDEDCLR = '240,247,249';
 	this.DEFAULT_PLYBLCLR = '255,255,255';
+	this.DEFAULT_OVRLYCLR = '0,0,0';
 			// Text Colors
 	this.DEFAULT_RESTXTCLR = '0,0,0';
 	this.DEFAULT_LNKTXTCLR = '17,17,204';
@@ -103,5 +104,20 @@ function optionlist() {
 	this.delay = parseInt(GM_getValue("delay", this.DEFAULT_DELAY));
 	
 		// Color vars
-	this.genbgclr = parseInt(GM_getValue("genbgclr", this.DEFAULT_GENBGCLR));
+	this.genbgclr = GM_getValue("genbgclr", this.DEFAULT_GENBGCLR);
+	this.resltclr = GM_getValue("resltclr", this.DEFAULT_RESLTCLR);
+	this.glbarclr = GM_getValue("glbarclr", this.DEFAULT_GLBARCLR);
+	this.addedclr = GM_getValue("addedclr", this.DEFAULT_ADDEDCLR);
+	this.plyblclr = GM_getValue("plyblclr", this.DEFAULT_PLYBLCLR);
+	this.ovrlyclr = GM_getValue("ovrlyclr", this.DEFAULT_OVRLYCLR);
+		// Text Color vars
+	this.restxtclr = GM_getValue("restxtclr", this.DEFAULT_RESTXTCLR);
+	this.lnktxtclr = GM_getValue("lnktxtclr", this.DEFAULT_LNKTXTCLR);
+	this.urltxtclr = GM_getValue("urltxtclr", this.DEFAULT_URLTXTCLR);
+	this.simtxtclr = GM_getValue("simtxtclr", this.DEFAULT_SIMTXTCLR);
+	this.mdatxtclr = GM_getValue("mdatxtclr", this.DEFAULT_MDATXTCLR);
+	this.plytxtclr = GM_getValue("plytxtclr", this.DEFAULT_PLYTXTCLR);
+	this.pbltxtclr = GM_getValue("pbltxtclr", this.DEFAULT_PBLTXTCLR);
 }
+
+var options = new optionlist();

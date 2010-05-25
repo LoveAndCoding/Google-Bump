@@ -1,8 +1,46 @@
+		body { \
+			background-color: rgb(" + options.genbgclr + "); \
+			color: rgb(" + options.restxtclr + "); \
+			margin: 0px; \
+		} \
+		#gbar, #guser { \
+			background-color: rgb(" + options.glbarclr + "); \
+			padding-top: 3px !important; \
+		} \
+		#guser { \
+			margin-right: 0px; \
+			padding-right: 8px; \
+		} \
+		#cnt, #leftnav, #tbd, #atd, #tsf, #hidden_modes, #hmp { \
+			background-color: rgb(" + options.resltclr + "); \
+		} \
+		#wikiHeader, #mBox { \
+			background-color: rgb(" + options.addedclr + "); \
+			color: rgb(" + options.mdatxtclr + "); \
+		} \
+		#wikiDesc { \
+			border-color: rgb(" + options.addedclr + "); \
+		} \
+		.embeddable { \
+			background-color: rgb(" + options.plyblclr + "); \
+		} \
+		.embeddable a { \
+			color: rgb(" + options.pbltxtclr + ") !important; \
+		} \
+		a:link, .w, .q:active, .q:visited, .tbotu { \
+			color: rgb(" + options.lnktxtclr + "); \
+		} \
+		li.g span cite { \
+			color: rgb(" + options.urltxtclr + "); \
+		} \
+		.gl, .f, .m, .c h2, #mbEnd h2, #tads h2, .descbox { \
+			color: rgb(" + options.simtxtclr + "); \
+		} \
 		.removed { \
 			display: none !important; \
 		} \
 		#greyOut { \
-			background-color: black; \
+			background-color: rgb(" + options.ovrlyclr + "); \
 			opacity: .6; \
 			width: 100%; \
 			height: 100%; \
@@ -56,21 +94,11 @@
 			border-bottom: 1px solid black; \
 			margin-bottom: 2px; \
 		} \
-		.colorToneToBlack { \
-			width: 255px; \
-		} \
-		.colorBar { \
-			width: 40px; \
-		} \
-		.colorToneToBlack, .colorBar { \
-			position: relative; \
-			height: 255px; \
+		.config_option { \
+			margin: 2px; \
 		} \
 		.sldImgs { \
 			display: block; \
-		} \
-		 .embeddable { \
-			background-color: #FFFFFF; \
 		} \
 		 .keycuts { \
 			width: 100%; \
@@ -164,6 +192,7 @@
 			background-color: white; \
 			border: 1px solid black; \
 			-moz-border-radius: 5px; \
+			color: #000000 !important; \
 		} \
 		#res { \
 			margin: 0px 8px; \

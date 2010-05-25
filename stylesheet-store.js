@@ -20,6 +20,7 @@
   *	@depends multisearch-styles.css
   */
   
-  }
+}
   
-  var ssStore = new stylesheet_store();
+var ssStore = new stylesheet_store();
+  

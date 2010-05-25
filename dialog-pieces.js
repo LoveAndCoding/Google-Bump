@@ -109,7 +109,7 @@ function config_section(title) {
 		}
 		for (var soo = 0; soo < this.sectionOptions.length; soo++) {
 			this.sectionOptions[soo].draw(sect);
-			if(this.sectionOptions[soo].box) {
+			if(this.sectionOptions[soo].cbox) {
 				this.checkboxes++;
 			} else {
 				this.selectboxes++;
@@ -120,16 +120,16 @@ function config_section(title) {
 	
 	this.SelectAll = function () {
 		for (var so = 0; so < this.sectionOptions.length; so++) {
-			if(this.sectionOptions[so].box) {
-				this.sectionOptions[so].box.checked = true;
+			if(this.sectionOptions[so].cbox) {
+				this.sectionOptions[so].cbox.checked = true;
 			}
 		}
 	};
 	
 	this.DeselectAll = function () {
 		for (var so = 0; so < this.sectionOptions.length; so++) {
-			if(this.sectionOptions[so].box) {
-				this.sectionOptions[so].box.checked = false;
+			if(this.sectionOptions[so].cbox) {
+				this.sectionOptions[so].cbox.checked = false;
 			}
 		}
 	};
@@ -180,33 +180,37 @@ function config_checkBox(label, id, dflt) {
 	this.id = id;
 	this.value = GM_getValue(id, dflt);
 	this.defaultVal = dflt;
-	this.box;
+	this.cbox;
 	
 	this.draw = function (parentNode) {
 		var lbl = $create("label", {
 			textContent : this.label + ": ",
 			"for" : this.id
 		});
-		this.box = $create("input",{
+		this.cbox = $create("input",{
 			type : "checkbox",
 			name : this.id,
 			id : this.id
 		});
 		if (this.value) {
-			this.box.checked = true;
+			this.cbox.checked = true;
 		}
-		this.box.addEventListener("change", function(event) {
+		this.cbox.addEventListener("change", function(event) {
 			GM_setValue(event.target.id, event.target.checked); 
 		}, true);
 		
-		parentNode.appendChild(lbl);
-		parentNode.appendChild(this.box);
-		parentNode.appendChild($create("br"));
+		var hldr = $create('div', {
+			className : 'config_option'
+		});
+		
+		hldr.appendChild(lbl);
+		hldr.appendChild(this.cbox);
+		parentNode.appendChild(hldr);
 	};
 	
 	this.setDefault = function () {
-		if (this.box) {
-			this.box.checked = this.defaultVal;
+		if (this.cbox) {
+			this.cbox.checked = this.defaultVal;
 			GM_setValue(this.id, this.defaultVal);
 		}
 	};
@@ -248,9 +252,13 @@ function config_selectionBox(label, id, op_labels, op_values, dflt) {
 			this.list.appendChild(op);
 		}
 		
-		parentNode.appendChild(disp);
-		parentNode.appendChild(this.list);
-		parentNode.appendChild($create("br"));
+		var hldr = $create('div', {
+			className : 'config_option'
+		});
+		
+		hldr.appendChild(disp);
+		hldr.appendChild(this.list);
+		parentNode.appendChild(hldr);
 	};
 	
 	this.setDefault = function () {
@@ -319,9 +327,13 @@ function config_colorBox(label, id, dflt) {
 			popupManager.closeColor();
 		});
 		
-		parentNode.appendChild(disp);
-		parentNode.appendChild(this.box);
-		parentNode.appendChild($create("br"));
+		var hldr = $create('div', {
+			className : 'config_option'
+		});
+		
+		hldr.appendChild(disp);
+		hldr.appendChild(this.box);
+		parentNode.appendChild(hldr);
 	};
 	
 	this.setDefault = function () {

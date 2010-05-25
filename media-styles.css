@@ -7,7 +7,7 @@
 		#videoList { \
 			border: 1px solid black;  \
 			overflow: auto; \
-			width: 55%; \
+			width: " + ( !options.imgs ? '100%' : '55%' ) + "; \
 			height: auto; \
 			margin-top: 1%; \
 		} \
@@ -16,17 +16,28 @@
 			margin-bottom: 5px; \
 			text-decoration: underline; \
 		} \
+		#resOL { \
+			position: absolute; \
+			right: 0px; \
+			top: 7px; \
+			width: 44%; \
+			overflow: auto; \
+			height: " + (!options.vids || !options.imgs ? '500px' : '300px') + "; \
+		} \
 		#imageList { \
 			border: 1px solid black; \
 			overflow: auto; \
-			width: 44%; \
-			height: auto; \
-			position: absolute; \
+			width: " + (!options.vids ? '100%' : '44%') + "; \
+			height: " + (!options.vids ? '190px' : 'auto') + "; \
+			position: " + (!options.vids ? 'static' : 'absolute') + "; \
 			top: 312px; \
 			right: 0px; \
+			margin-top: " + (!options.vids ? '4px' : '1%') + "; \
+			text-align: center; \
 		} \
 		#imageList img { \
-			margin: 1.4%; \
+			margin: " + (!options.vids ? '4px' : '1.4%') + "; \
+			padding: " + (!options.vids ? '4px' : '0px') + "; \
 		} \
 		#pBox { \
 			border: 1px solid black; \
@@ -34,10 +45,23 @@
 			text-align: center; \
 			width: 55%; \
 		} \
-		#pBox img { \
+		#embedArea img { \
 			max-width: 95%; \
 			max-height: 95%; \
 			margin-top: 1%; \
+		} \
+		#playerTag { \
+			font-size: 16px; \
+			height: 16px; \
+		} \
+		#controlArea { \
+			height: 16px; \
+		} \
+		.controlIcon { \
+			padding: 0px; \
+		} \
+		#embedArea { \
+			height: " + ("468") + "px; \
 		} \
 		#hidePly { \
 			display: none !important; \
@@ -52,7 +76,6 @@
 		} \
 		#wikiHeader { \
 			font-size: 115%; \
-			background-color: #D8E2F5; \
 			padding-left: .2em; \
 		} \
 		#wikiDesc { \
@@ -60,8 +83,6 @@
 			margin: 0px; \
 			padding: .2em; \
 			text-indent: 3em; \
-			border: 2px solid #D8E2F5; \
-			background-color: #FFFFFF; \
 		} \
 		#wikiDiv { \
 			width: 100%; \
@@ -87,40 +108,4 @@
 		.rl-metadata, .rl-thumbnail { \
 			display: block; \
 			font-size: small; \
-		} \
-		#sldLink { \
-			text-align: center; \
-			display: block; \
-		} \
-		#slideShow { \
-			position: fixed; \
-			text-align: center; \
-			padding: 15px; \
-			top: 50%; \
-			left: 50%; \
-			z-index: 9998; \
-			background-color: white; \
-			border: 1px solid black; \
-		} \
-		.sldImgs { \
-			max-width: " + maxwidth + "px; \
-			max-height: " + maxheight + "px; \
-		} \
-		#greyOut { \
-			background-color: black; \
-			opacity: .6; \
-			width: 100%; \
-			height: 100%; \
-			z-index: 1000; \
-			position: fixed; \
-			top: 0px; \
-			left: 0px; \
-		} \
-		#pBox, #imageList, #videoList { \
-			background-color: #D8E2F5; \
-		} \
-		.rl-res, #imageList img { \
-			padding: 1%; \
-			background-color: #FFFFFF; \
-			border: 1px solid black; \
 		} /* "; /* End Stylesheet */

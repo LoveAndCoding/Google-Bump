@@ -44,6 +44,17 @@ var image_store = {
 						"MkUH8CZFzYRmwthACDAAJ6pRbpH2M60AAAA" +
 						"AElFTkSuQmCC",
 	
+	vid_noembed :		"data:image/png;base64,iVBORw0KGgoAA" +
+						"AANSUhEUgAAABAAAAAQCAYAAAAf8%2F9hAA" +
+						"AAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZ" +
+						"VJlYWR5ccllPAAAAIdJREFUeNpi%2FP%2F%" +
+						"2FPwMlgImBQkCxASwgImXKF3RxkL8YCYnNy" +
+						"eHB6gJ8gfKfkBdgChixaGbEZggLLs1zciU3" +
+						"QPkBQLwhZfLzAKjcf2TvMBFh8waoIVhdgi8" +
+						"WAtAMwRuN2PyHbjNWr7KgOQ3uP6if0V2C4V" +
+						"UmYkIaXzgx4YkuBmLkGId%2BZgIIMAA%2Fg" +
+						"yWd%2ForwUQAAAABJRU5ErkJggg%3D%3D",
+	
 	media_close :		"data:image/png;base64,iVBORw0KGgoAA" +
 						"AANSUhEUgAAABAAAAAQCAYAAAAf8%2F9hAA" +
 						"AAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZ" +

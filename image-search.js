@@ -30,7 +30,8 @@ function indiv_img_result(src, link, title, num) {
 			var img = $create("img", {
 				src : this.src,
 				alt : this.title,
-				title : this.title
+				title : this.title,
+				className : 'imgSize' + options.imgSize
 			});
 			link.appendChild(img);
 			
@@ -125,6 +126,11 @@ function Image_Search(query) {
 		this.nextBtn.draw(this.div);
 		this.nextBtn.btn.disabled = true;
 		
+		if(options.styl == 'dock') {
+			this.nextBtn.undraw();
+			this.prevBtn.undraw();
+		}
+		
 		parentNode.appendChild(this.div);
 		
 		this.search();
@@ -180,10 +186,11 @@ function Image_Search(query) {
 	
 	this.buildSets = function () {
 		for(var setCreator = 0; setCreator < this.imgs.length; setCreator++) {
-			if(setCreator % 7 == 0) {
+			if((setCreator % 7 == 0 && options.styl != 'dock') || setCreator == 0) {
 				this.sets.push(new img_set());
 			}
-			this.sets[Math.floor(setCreator / 7)].addImg(this.imgs[setCreator]);
+			var dockWorker = options.styl == 'dock' ? 0 : Math.floor(setCreator / 7);
+			this.sets[dockWorker].addImg(this.imgs[setCreator]);
 		}
 	};
 	

@@ -65,11 +65,12 @@ function Media_Embed () {
 	this.controls;
 	this.imgRes;
 	this.vidRes;
+	this.defaultMessage = "Select an item to view it here.";
 	
 	this.draw = function (parentNode) {
 		this.player = rightBox("pBox");
 		
-		this.clearEmbed("Select an item below to view it here.");
+		this.clearEmbed(this.defaultMessage);
 		
 		var hidePlayer = $create("div", {
 			id : "hidePly",
@@ -110,8 +111,13 @@ function Media_Embed () {
 		this.player.className = "rBox imgShowing";
 	};
 	
-	this.addVideoEmbed = function (title, controls, embed) {
-		this.clearEmbed(title);
+	this.addVideoEmbed = function (vid, controls, embed) {
+		this.vidRes = vid;
+		this.clearEmbed(vid.name);
+		
+		if(controls) {
+			this.drawVideoControls();
+		}
 		
 		this.embedArea.appendChild(embed);
 		this.player.className = "rBox playing";
@@ -171,7 +177,14 @@ function Media_Embed () {
 		// Reusable Var
 		var icn;
 		
+		var SR = this;
 		
+		icn = new Control_Icon(image_store.vid_noembed, "No Embed", function () {
+			GM_openInTab(SR.vidRes.link);
+			SR.clearEmbed(SR.defaultMessage);
+			SR.player.className = "rBox";
+		});
+		icn.draw(this.controlsArea);
 		
 	};
 }
