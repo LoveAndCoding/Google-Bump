@@ -104,7 +104,7 @@ function clickd() {
 		// Makes sure it is a left click
 		if (event.button === 0 && !event.ctrlKey && !event.altKey && !event.shiftKey) {
 			// Opens all links that are external links in tabs if the tab feature is turned on
-			if (checkallparentsforit(event, "resOL")) {
+			if (checkallparentsforit(event.target, "resOL")) {
 				if (event.target.href) {
 					event.stopPropagation();
 					event.preventDefault();
