@@ -51,10 +51,17 @@
 			margin: 1px 2%; \
 			text-align: center; \
 		}  \
+		.vid_result img { \
+			max-height: 120px; \
+			max-width: 90px; \
+			display: block; \
+			margin: 5px auto; \
+		} \
 		#vBox { \
 			height: 480px; \
 		}  \
-		#vidTag { \
+		.playing #embedArea { \
+			height: 400px; \
 		}  \
 		#videoList, #imageList { \
 			border-top-style: none; \
@@ -80,19 +87,25 @@
 			display: block; \
 			margin: 5px auto; \
 		}  \
-		.imgShowing { \
+		.imgShowing, .playing { \
+			display: block !important; \
 			text-align: center; \
+		} \
+		.imgShowing img{ \
+			max-height: 400px; \
+			max-width: 85%; \
 		}  \
 		.imgLink { \
-			display: inline-block; \
 			margin: 1%; \
 			vertical-align: middle; \
 		}  \
 		.imgLink img { \
-			height: auto; \
 			padding: 2px; \
 			background-color: #555555; \
 		}  \
+		.imgDetails { \
+			display: inline-block !important; \
+		} \
 		.aset { \
 			display: inline !important; \
 		} /* "; /* End Stylesheet */

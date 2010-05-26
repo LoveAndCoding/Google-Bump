@@ -25,7 +25,7 @@
 		.wBBord { \
 			border-bottom: 1px solid #6B90DA; \
 		} \
-		#setShow, .blocked, .imgLink { \
+		#setShow, .blocked { \
 			display: block; \
 		} \
 		#vidTag, #imageTag { \

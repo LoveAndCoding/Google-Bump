@@ -98,4 +98,24 @@ function multiSearchSetup() {
 	multiBox = new multisearcher();
 	multiBox.draw();
 }
+//
+function clickd() {
+	document.addEventListener("click", function(event) {
+		// Makes sure it is a left click
+		if (event.button === 0 && !event.ctrlKey && !event.altKey && !event.shiftKey) {
+			// Opens all links that are external links in tabs if the tab feature is turned on
+			if (checkallparentsforit(event, "resOL")) {
+				if (event.target.href) {
+					event.stopPropagation();
+					event.preventDefault();
+					linkit(event.target.href, false, true);
+				} else if (event.target.parentNode.href) {
+					event.stopPropagation();
+					event.preventDefault();
+					linkit(event.target.parentNode.href, false, true);
+				}
+			}
+		}
+	}, false);
+}
 	// End Text / Input Based Functions --------------------------------------------

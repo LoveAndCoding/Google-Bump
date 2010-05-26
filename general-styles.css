@@ -17,7 +17,7 @@
 		#cnt, #leftnav, #tbd, #atd, #tsf, #hidden_modes, #hmp { \
 			background-color: rgb(" + options.resltclr + "); \
 		} \
-		#wikiHeader a, #wikiHeader, #mBox { \
+		#wikiHeader a, #wikiHeader, #mBox, .detailedImgInfo { \
 			background-color: rgb(" + options.addedclr + "); \
 			color: rgb(" + options.mdatxtclr + "); \
 		} \
@@ -210,7 +210,34 @@
 		#wikLink { \
 			float: left; \
 		} \
-		 .conf_subsect { \
+		.imgSizelarge { \
+			max-width: 130px; \
+			max-height: 130px; \
+			display: block; \
+			margin: 5px auto; \
+		} \
+		.imgSizemedium { \
+			max-width: 90px; \
+			max-height: 90px; \
+			display: inline-block; \
+			margin: 5px; \
+		} \
+		.imgSizesmall { \
+			max-width: 50px; \
+			max-height: 50px; \
+			display: inline-block; \
+			margin: 5px; \
+		} \
+		.titleOnly, .imgDetails { \
+			display: block; \
+			font-size: 9pt; \
+			margin: 1em; \
+		} \
+		.detailedImgInfo { \
+			display: block; \
+			text-decoration: none; \
+		} \
+		.conf_subsect { \
 			margin-bottom: 10px; \
 		} \
 		.error { \

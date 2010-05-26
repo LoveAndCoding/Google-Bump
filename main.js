@@ -36,7 +36,9 @@ function runThrough() {
 		document.body.appendChild(pdiv);
 	}
 	setupConf();
-	//clickd();
+	if(options.tabs) {
+		clickd();
+	}
 	if(options.keyd) {
 		keycuts();
 	}
@@ -44,8 +46,6 @@ function runThrough() {
 	
 	// Setup for first loading.
 	if (GM_getValue("loadBefore", false)) {
-		//$('gsr').removeChild(filler);
-		//$('gsr').removeChild(centDivConf);
 		conf.undraw();
 	} else {
 		GM_setValue("loadBefore", true);
@@ -110,8 +110,6 @@ function runThrough() {
 		// New google search code doesn't reload page. This checks for changes and redoes all actions
 		var checkpage = setInterval(checknonreload, options.delay);
 	}
-	
-	//document.addEventListener("unload", function (event) { clearTimeout(checkpage); if(sldTmr) { clearTimeout(sldTmr); } }, false);
 	
 	// Checks for script updates
 	scriptPage();

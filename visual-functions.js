@@ -33,12 +33,6 @@ function showSideAds() {
 }
 // Removes everything except the search results (Removes Suggestions)
 function noSuggestions() {
-	/*
-	var lis = $cl("ts");
-	for (var i = 0; i < lis.length; i++) {
-		lis[i].parentNode.className = lis[i].parentNode.className + " removed";
-	}
-	*/
 	var lis = $cl("g");
 	for (var k = 0; k < lis.length; k++) {
 		if (lis[k].className.indexOf("videobox") >= 0 || lis[k].id == "imagebox") {
@@ -69,12 +63,9 @@ function didyoumean() {
 		var p1 = dym[0].parentNode;
 		var p2 = dym[2].parentNode;
 		var thebar = $('leftnav');
-		//var seconditem = thebar.childNodes[1];
-		//var resultsstats = thebar.childNodes[thebar.childNodes.length - 1];
 		p2.className = "removed";
 		p1.id = "dymTxt";
 		thebar.insertBefore(p1, thebar.childNodes[0]);
-		//resultsstats.id = "rsStats";
 	}
 }
 	// End Visual Functions ------------------------------------------------------------

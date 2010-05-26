@@ -78,8 +78,7 @@ function Media_Embed () {
 		});
 		var SR = this;
 		hidePlayer.addEventListener("click", function (event) {
-			removeAllChildren(SR.player);
-			SR.player.className = "rBox closed";
+			SR.clearEmbed();
 		}, false);
 		this.player.appendChild(hidePlayer);
 		
@@ -130,7 +129,7 @@ function Media_Embed () {
 			});
 			this.player.appendChild(this.labelArea);
 		}
-		this.labelArea.innerHTML = label;
+		this.labelArea.innerHTML = label || '';
 		
 		if(!this.controlsArea) {
 			this.controlsArea = $create("div", {
@@ -147,6 +146,8 @@ function Media_Embed () {
 			this.player.appendChild(this.embedArea);
 		}
 		removeAllChildren(this.embedArea);
+		
+		this.player.className = "rBox";
 	};
 	
 	this.drawImageControls = function () {

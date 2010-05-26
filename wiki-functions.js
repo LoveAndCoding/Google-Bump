@@ -99,13 +99,13 @@ function foundwikilink(response) {
 		var wikiExp = $create("div");
 		wikiExp.id = "wikiExp";
 		defdiv.className = "removed";
-		wikiExp.innerHTML = "E<br />x<br />p<br />a<br />n<br />d<br />&raquo;";
+		wikiExp.innerHTML = "E<br />x<br />p<br />a<br />n<br />d<br />&laquo;";
 		wikiExp.addEventListener("click", function (event) {
 			$("wikiDiv").className = ($("wikiDiv").className == "removed") ? "" : "removed";
-			wikiExp.innerHTML = (wikiExp.style.left == "0px" || wikiExp.style.left == "") ? "C<br />o<br />l<br />l<br />a<br />p<br />s<br />e<br />&laquo;" : "E<br />x<br />p<br />a<br />n<br />d<br />&raquo;";
-			wikiExp.style.left = (wikiExp.style.left == "200px") ? "0px" : "200px";
+			wikiExp.innerHTML = (wikiExp.style.left == "-22px" || wikiExp.style.left == "") ? "C<br />o<br />l<br />l<br />a<br />p<br />s<br />e<br />&raquo;" : "E<br />x<br />p<br />a<br />n<br />d<br />&laquo;";
+			wikiExp.style.left = (wikiExp.style.left == "-223px") ? "-22px" : "-223px";
 		}, false);
-		document.body.appendChild(wikiExp);
+		defdiv.parentNode.appendChild(wikiExp);
 	}
 }
 // Handles case when there is no imediate available wikipedia page

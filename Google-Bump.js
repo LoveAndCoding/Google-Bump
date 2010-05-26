@@ -498,8 +498,7 @@ function Media_Embed () {
 		});
 		var SR = this;
 		hidePlayer.addEventListener("click", function (event) {
-			removeAllChildren(SR.player);
-			SR.player.className = "rBox closed";
+			SR.clearEmbed();
 		}, false);
 		this.player.appendChild(hidePlayer);
 		
@@ -550,7 +549,7 @@ function Media_Embed () {
 			});
 			this.player.appendChild(this.labelArea);
 		}
-		this.labelArea.innerHTML = label;
+		this.labelArea.innerHTML = label || '';
 		
 		if(!this.controlsArea) {
 			this.controlsArea = $create("div", {
@@ -567,6 +566,8 @@ function Media_Embed () {
 			this.player.appendChild(this.embedArea);
 		}
 		removeAllChildren(this.embedArea);
+		
+		this.player.className = "rBox";
 	};
 	
 	this.drawImageControls = function () {
@@ -619,18 +620,21 @@ function stylesheet_store () {
 		body { \
 			width: 760px; \
 			margin: 0px auto !important; \
-			padding-top: 3px; \
 			border: 1px solid #000000; \
 			border-top-style: none; \
 		} \
-		html { \
-			background-color: #DDDDFF; \
+		#guser { \
+			padding-top: 3px; \
 		} \
 		#tsf { \
 			position: relative; \
 		} \
 		#cnt { \
 			min-width: 0px !important; \
+		} \
+		#fll { \
+			margin: 0px auto !important; \
+			padding: 19px 0px; \
 		} \
 		.gbh { \
 			left: auto !important; \
@@ -643,20 +647,20 @@ function stylesheet_store () {
 		} \
 		#mBox { \
 			position: relative; \
-			height: 220px; \
+			height: 238px; \
 			overflow: hidden; \
 			border-bottom: 1px solid #6B90DA; \
 			border-top: 1px solid #6B90DA; \
 		} \
 		#wikiDiv { \
 			min-height: 122px; \
-			z-index: 1003; \
+			z-index: 999; \
 			border-bottom: 1px solid #000000; \
-			border-right: 1px solid #000000; \
+			border-left: 1px solid #000000; \
+			border-top: 1px solid #000000; \
 			position: absolute; \
 			top: 0px; \
-			left: 0px; \
-			background-color: #FFFFFF; \
+			left: -202px; \
 			width: 200px; \
 		} \
 		#wikiHeader { \
@@ -675,14 +679,16 @@ function stylesheet_store () {
 		} \
 		#wikiExp { \
 			min-height: 120px; \
-			z-index: 1002; \
+			z-index: 998; \
 			text-align: center; \
 			font-size: 75%; \
 			position: absolute; \
 			top: 0px; \
-			left: 0px; \
+			left: -22px; \
+			width: 12px; \
 			background-color: #FFFFFF; \
-			border-right: 1px solid #000000; \
+			border-top: 1px solid #000000; \
+			border-left: 1px solid #000000; \
 			border-bottom: 1px solid #000000; \
 			cursor: pointer; \
 			color: #0077CC; \
@@ -690,13 +696,13 @@ function stylesheet_store () {
 		} \
 		#pBox { \
 			text-align: center; \
-			height: 220px; \
-			background-color: #FFFFFF; \
+			height: 238px; \
+			display: none; \
 		} \
 		#videoList { \
 			float: left; \
-			height: 220px; \
-			width: 290px; \
+			height: 238px; \
+			width: 270px; \
 			overflow-y: auto; \
 			overflow-x: hidden; \
 			border-right: 1px solid #6B90DA; \
@@ -705,8 +711,13 @@ function stylesheet_store () {
 			text-align: center; \
 			margin: 0px; \
 			padding: 0px 8px; \
-			background-color: #F0F7F9; \
-			border-bottom: 1px solid #6B90DA; \
+			font-size: 14px; \
+		} \
+		#playerTag, #controlArea { \
+			height: 16px; \
+		} \
+		#embedArea { \
+			height: 206px; \
 		} \
 		.rl-item { \
 			max-width: 100px; \
@@ -725,8 +736,8 @@ function stylesheet_store () {
 		} \
 		#imageList { \
 			text-align: center; \
-			height: 220px; \
-			width: 290px; \
+			height: 238px; \
+			width: 270px; \
 			float: right; \
 			z-index: 1001; \
 			overflow-y: auto; \
@@ -752,7 +763,6 @@ function stylesheet_store () {
 			display: block; \
 		} \
 		#vBox { \
-			background-color: #FFFFFF; \
 		} \
 		#resOL { \
 			padding-left: 4px; \
@@ -792,7 +802,7 @@ function stylesheet_store () {
 		.wBBord { \
 			border-bottom: 1px solid #6B90DA; \
 		} \
-		#setShow, .blocked, .imgLink { \
+		#setShow, .blocked { \
 			display: block; \
 		} \
 		#vidTag, #imageTag { \
@@ -1031,10 +1041,17 @@ function stylesheet_store () {
 			margin: 1px 2%; \
 			text-align: center; \
 		}  \
+		.vid_result img { \
+			max-height: 120px; \
+			max-width: 90px; \
+			display: block; \
+			margin: 5px auto; \
+		} \
 		#vBox { \
 			height: 480px; \
 		}  \
-		#vidTag { \
+		.playing #embedArea { \
+			height: 400px; \
 		}  \
 		#videoList, #imageList { \
 			border-top-style: none; \
@@ -1060,19 +1077,25 @@ function stylesheet_store () {
 			display: block; \
 			margin: 5px auto; \
 		}  \
-		.imgShowing { \
+		.imgShowing, .playing { \
+			display: block !important; \
 			text-align: center; \
+		} \
+		.imgShowing img{ \
+			max-height: 400px; \
+			max-width: 85%; \
 		}  \
 		.imgLink { \
-			display: inline-block; \
 			margin: 1%; \
 			vertical-align: middle; \
 		}  \
 		.imgLink img { \
-			height: auto; \
 			padding: 2px; \
 			background-color: #555555; \
 		}  \
+		.imgDetails { \
+			display: inline-block !important; \
+		} \
 		.aset { \
 			display: inline !important; \
 		} /* "; /* End Stylesheet */
@@ -1097,7 +1120,7 @@ function stylesheet_store () {
 		#cnt, #leftnav, #tbd, #atd, #tsf, #hidden_modes, #hmp { \
 			background-color: rgb(" + options.resltclr + "); \
 		} \
-		#wikiHeader a, #wikiHeader, #mBox { \
+		#wikiHeader a, #wikiHeader, #mBox, .detailedImgInfo { \
 			background-color: rgb(" + options.addedclr + "); \
 			color: rgb(" + options.mdatxtclr + "); \
 		} \
@@ -1290,7 +1313,34 @@ function stylesheet_store () {
 		#wikLink { \
 			float: left; \
 		} \
-		 .conf_subsect { \
+		.imgSizelarge { \
+			max-width: 130px; \
+			max-height: 130px; \
+			display: block; \
+			margin: 5px auto; \
+		} \
+		.imgSizemedium { \
+			max-width: 90px; \
+			max-height: 90px; \
+			display: inline-block; \
+			margin: 5px; \
+		} \
+		.imgSizesmall { \
+			max-width: 50px; \
+			max-height: 50px; \
+			display: inline-block; \
+			margin: 5px; \
+		} \
+		.titleOnly, .imgDetails { \
+			display: block; \
+			font-size: 9pt; \
+			margin: 1em; \
+		} \
+		.detailedImgInfo { \
+			display: block; \
+			text-decoration: none; \
+		} \
+		.conf_subsect { \
 			margin-bottom: 10px; \
 		} \
 		.error { \
@@ -2884,7 +2934,7 @@ function config_dialog(popup) {
 			// Genearl Settings
 		var vid_section = new config_section("Sidebar Options");
 		vid_section.sectionOptions.push(new config_checkBox("Search For Videos", "vids", options.DEFAULT_VIDS));
-		vid_section.sectionOptions.push(new config_checkBox("Remove Videos from Search Results", "exvids", options.DEFAULT_EXVIDS));
+		// vid_section.sectionOptions.push(new config_checkBox("Remove Videos from Search Results", "exvids", options.DEFAULT_EXVIDS));
 		vid_set_window.sections.push(vid_section);
 			// Embed Settings
 		var emd_section = new config_section("Embed Options");
@@ -3661,6 +3711,26 @@ function multiSearchSetup() {
 	multiBox = new multisearcher();
 	multiBox.draw();
 }
+//
+function clickd() {
+	document.addEventListener("click", function(event) {
+		// Makes sure it is a left click
+		if (event.button === 0 && !event.ctrlKey && !event.altKey && !event.shiftKey) {
+			// Opens all links that are external links in tabs if the tab feature is turned on
+			if (checkallparentsforit(event, "resOL")) {
+				if (event.target.href) {
+					event.stopPropagation();
+					event.preventDefault();
+					linkit(event.target.href, false, true);
+				} else if (event.target.parentNode.href) {
+					event.stopPropagation();
+					event.preventDefault();
+					linkit(event.target.parentNode.href, false, true);
+				}
+			}
+		}
+	}, false);
+}
 	// End Text / Input Based Functions --------------------------------------------
 
 	// Start Visual Functions ----------------------------------------------------------
@@ -3698,12 +3768,6 @@ function showSideAds() {
 }
 // Removes everything except the search results (Removes Suggestions)
 function noSuggestions() {
-	/*
-	var lis = $cl("ts");
-	for (var i = 0; i < lis.length; i++) {
-		lis[i].parentNode.className = lis[i].parentNode.className + " removed";
-	}
-	*/
 	var lis = $cl("g");
 	for (var k = 0; k < lis.length; k++) {
 		if (lis[k].className.indexOf("videobox") >= 0 || lis[k].id == "imagebox") {
@@ -3734,12 +3798,9 @@ function didyoumean() {
 		var p1 = dym[0].parentNode;
 		var p2 = dym[2].parentNode;
 		var thebar = $('leftnav');
-		//var seconditem = thebar.childNodes[1];
-		//var resultsstats = thebar.childNodes[thebar.childNodes.length - 1];
 		p2.className = "removed";
 		p1.id = "dymTxt";
 		thebar.insertBefore(p1, thebar.childNodes[0]);
-		//resultsstats.id = "rsStats";
 	}
 }
 	// End Visual Functions ------------------------------------------------------------
@@ -4035,17 +4096,6 @@ function novids(response) {
 function showvids(response) {
 	var code = stringtohtml(response.responseText);
 	
-	// Creates a Temporary box with the other pages data so I can use DOM functions on it
-	// var boxTemp = $create("table");
-	// boxTemp.className = "removed";
-	// var viddivs = code.getElementsByTagName("div");
-	// for (var vdn = 0; viddivs && vdn < viddivs.length; vdn++) {
-		// if (viddivs[vdn].id == "search-results") {
-			// boxTemp.innerHTML = viddivs[vdn].innerHTML;
-		// }
-	// }
-	// $("gsr").appendChild(boxTemp);
-	
 	// Sorts through the video results and puts them in a list
 	var box = rightBox("videoList");
 	
@@ -4078,31 +4128,6 @@ function showvids(response) {
 			}
 		}
 		
-		// 
-		// while((proc < limit || limit == -1) && rlitems.length > 0) {
-			// proc++;
-			// vidclicksetup(rlitems[0]);
-			// box.appendChild(rlitems[0]);
-		// }
-		
-		// var thbs = code.getElementsByClassName("thumbnail-img");
-		// alert(thbs[0].parentNode.href);
-		// for (var tmbo = 0; tmbo < thbs.length; tmbo++) {
-			// var sorc = thbs[0].src;
-			// var pnt = thbs[0].parentNode;
-			// pnt.removeChild(thbs[0]);
-			// pnt.appendChild($create("img", {
-					// className : 'thumbnail-img',
-					// src : sorc
-				// }));
-		// }
-		/*
-		for (var vi = rlitems.length - 1; vi >= 0; vi--) {
-			vidclicksetup(rlitems[vi]);
-			box.appendChild(rlitems[vi]);
-			//alert(rlitems[vi].id);
-		}
-		*/
 		if ($("imageList")) {
 			$("mBox").insertBefore(box, $("imageList"));
 		} else {
@@ -4114,65 +4139,9 @@ function showvids(response) {
 			$("vidDock").className = "";
 		}
 		
-		/*
-		var thumbs = $cl("rl-thumbnail-inner");
-		for (var vt = 0; vt < thumbs.length && vt < 4; vt++) {
-			thumbs[vt].childNodes[0].href = "#mBox";
-		}
-		thumbs = $cl("rl-thumbnail");
-		for (var vt = 0; vt < thumbs.length && vt < 4; vt++) {
-			thumbs[vt].childNodes[0].href = "#mBox";
-		}
-		var titles = $cl("rl-title");
-		for (var vl = 0; vl < thumbs.length && vl < 4; vl++) {
-			titles[vl].childNodes[0].href = titles[vl].parentNode.parentNode.getAttribute('srcurl');
-		}*/
 	} else {
 		novids();
 	}
-	// Removes the Temporary Dom Box
-	//$("gsr").removeChild(boxTemp);
-	
-	/*
-	
-	if (vids && checkallparentsforit(event, "rl-item")) {
-		event.stopPropagation();
-		event.preventDefault();
-		$("pBox").className += " playing";
-		var src = findrightnode(event, "rl-res", "srcurl");
-		// Finds if video is hosted on supported site, and takes the appropriate action
-		var regexUtube = new RegExp("^http:\/\/w{3}\.youtube\.com\/watch");
-		var regexGoogl = new RegExp("^http:\/\/video\.google\.com\/videoplay");
-		var regexMetaCaf = new RegExp("^http:\/\/w{3}\.metacafe\.com\/watch\/");
-		var regexLiveVideo = new RegExp("^http:\/\/w{3}\.livevideo\.com\/video\/");
-		if (regexUtube.test(src)) {
-			src = src.replace(regexUtube, "");
-			src = "http://www.youtube.com/v/" + src.substr(3);
-			$("pBox").innerHTML = '<object width="100%" height="100%"><param name="movie" value="' + src + 
-					'&ap=%2526fmt%3D18"></param><param name="allowFullScreen" value="true"></param><embed src="' + src + 
-					'&ap=%2526fmt%3D18" type="application/x-shockwave-flash" allowfullscreen="true" width="100%" height="100%"></embed></object>';
-		} else if (regexGoogl.test(src)) {
-			src = src.replace(regexGoogl, "");
-			src = "http://video.google.com/googleplayer.swf?hl=en&fs=true&" + src.substr(1);
-			$("pBox").innerHTML = '<embed id="VideoPlayback" src="' + src + 
-					'" style="width:100%;height:100%" allowFullScreen="true" allowScriptAccess="always"' +
-					'type="application/x-shockwave-flash"> </embed>';
-		} else if (regexMetaCaf.test(src)) {
-			src = src.replace(regexMetaCaf,"http://www.metacafe.com/fplayer/");
-			src = src.substring(0,src.length - 1) + ".swf";
-			$("pBox").innerHTML = '<embed src="'+ src +
-					'" width="100%" height="100%" wmode="transparent" pluginspage="http://www.macromedia.com/go/getflashplayer" ' +
-					'type="application/x-shockwave-flash"> </embed>';
-		} else if (regexLiveVideo.test(src)) {
-			src = src.replace(regexGoogl, "");
-			src = "http://www.livevideo.com/flvplayer/embed/" + src.split("/")[4];
-			$("pBox").innerHTML = '<embed src="' + src + '" type="application/x-shockwave-flash" ' +
-					'quality="high" WIDTH="100%" HEIGHT="100%" wmode="transparent">';
-		} else {
-			linkit(src);
-		}
-		
-	*/
 }
 // Searches for videos based on what the user is searching for
 function menutogglevids(theSearch) {
@@ -4185,12 +4154,14 @@ function menutogglevids(theSearch) {
   *	=================================================================
   */
 
-function indiv_img_result(src, link, title, num) {
+function indiv_img_result(src, link, title, sizeInfo, type, num) {
 	
 	this.src = src;
 	this.link = decodeURI(link);
 	this.title = title;
 	this.locNum = num;
+	this.size = sizeInfo;
+	this.frmt = type;
 	
 	this.draw = function (parentNode) {
 		var link = $create("a", {
@@ -4204,8 +4175,23 @@ function indiv_img_result(src, link, title, num) {
 			
 		} else if(options.imgSize == "details") {
 			
-			link.innerHTML = this.title;
-			link.className += " titleOnly";
+			if(options.styl == 'dock') {
+				var img = $create("img", {
+					src : this.src,
+					alt : this.title,
+					title : this.title,
+					className : 'imgSizemedium'
+				});
+				link.appendChild(img);
+			} else {
+				link.innerHTML = this.title;
+			}
+			link.className += " imgDetails";
+			var info = $create("span", {
+				innerHTML : this.size + ' ' + this.frmt,
+				className : 'detailedImgInfo'
+			});
+			link.appendChild(info);
 			
 		} else {
 			
@@ -4367,18 +4353,30 @@ function Image_Search(query) {
 	};
 	
 	this.buildSets = function () {
+		var perSet;
+		if (options.imgSize == 'large') {
+			perSet = 7;
+		} else if (options.imgSize == 'medium') {
+			perSet = 14;
+		} else if (options.imgSize == 'small') {
+			perSet = 28;
+		} else if (options.imgSize == 'title') {
+			perSet = 21;
+		} else { // Details
+			perSet = 14;
+		}
 		for(var setCreator = 0; setCreator < this.imgs.length; setCreator++) {
-			if((setCreator % 7 == 0 && options.styl != 'dock') || setCreator == 0) {
+			if((setCreator % perSet == 0 && options.styl != 'dock') || setCreator == 0) {
 				this.sets.push(new img_set());
 			}
-			var dockWorker = options.styl == 'dock' ? 0 : Math.floor(setCreator / 7);
+			var dockWorker = options.styl == 'dock' ? 0 : Math.floor(setCreator / perSet);
 			this.sets[dockWorker].addImg(this.imgs[setCreator]);
 		}
 	};
 	
 	this.processPage = function (response) {
 		var na;
-		eval("na = new Array" + response.responseText.match(/dyn\.setResults\(\[\[[^]*]\);/)[0].substring(14));
+		eval("na = " + response.responseText.match(/dyn\.setResults\(\[\[[^]*]\);/)[0].substring(14));
 		
 		/*
 			var link = $create("a");
@@ -4392,8 +4390,8 @@ function Image_Search(query) {
 		*/
 		
 		if(na[0]) {
-			for(var nao = 0; nao < na[0].length; nao++) {
-				var img = new indiv_img_result(na[0][nao][14] + "?q=tbn:" + na[0][nao][2] + na[0][nao][3], na[0][nao][3], na[0][nao][6], this.imgs.length);
+			for(var nao = 0; nao < na.length; nao++) {
+				var img = new indiv_img_result(na[nao][14] + "?q=tbn:" + na[nao][2] + na[nao][3], na[nao][3], na[nao][6], na[nao][9], na[nao][10], this.imgs.length);
 				this.imgs.push(img);
 				this.slideshow.dialog.add_image(img);
 			}
@@ -4768,13 +4766,13 @@ function foundwikilink(response) {
 		var wikiExp = $create("div");
 		wikiExp.id = "wikiExp";
 		defdiv.className = "removed";
-		wikiExp.innerHTML = "E<br />x<br />p<br />a<br />n<br />d<br />&raquo;";
+		wikiExp.innerHTML = "E<br />x<br />p<br />a<br />n<br />d<br />&laquo;";
 		wikiExp.addEventListener("click", function (event) {
 			$("wikiDiv").className = ($("wikiDiv").className == "removed") ? "" : "removed";
-			wikiExp.innerHTML = (wikiExp.style.left == "0px" || wikiExp.style.left == "") ? "C<br />o<br />l<br />l<br />a<br />p<br />s<br />e<br />&laquo;" : "E<br />x<br />p<br />a<br />n<br />d<br />&raquo;";
-			wikiExp.style.left = (wikiExp.style.left == "200px") ? "0px" : "200px";
+			wikiExp.innerHTML = (wikiExp.style.left == "-22px" || wikiExp.style.left == "") ? "C<br />o<br />l<br />l<br />a<br />p<br />s<br />e<br />&raquo;" : "E<br />x<br />p<br />a<br />n<br />d<br />&laquo;";
+			wikiExp.style.left = (wikiExp.style.left == "-223px") ? "-22px" : "-223px";
 		}, false);
-		document.body.appendChild(wikiExp);
+		defdiv.parentNode.appendChild(wikiExp);
 	}
 }
 // Handles case when there is no imediate available wikipedia page
@@ -4838,7 +4836,9 @@ function runThrough() {
 		document.body.appendChild(pdiv);
 	}
 	setupConf();
-	//clickd();
+	if(options.tabs) {
+		clickd();
+	}
 	if(options.keyd) {
 		keycuts();
 	}
@@ -4846,8 +4846,6 @@ function runThrough() {
 	
 	// Setup for first loading.
 	if (GM_getValue("loadBefore", false)) {
-		//$('gsr').removeChild(filler);
-		//$('gsr').removeChild(centDivConf);
 		conf.undraw();
 	} else {
 		GM_setValue("loadBefore", true);
@@ -4912,8 +4910,6 @@ function runThrough() {
 		// New google search code doesn't reload page. This checks for changes and redoes all actions
 		var checkpage = setInterval(checknonreload, options.delay);
 	}
-	
-	//document.addEventListener("unload", function (event) { clearTimeout(checkpage); if(sldTmr) { clearTimeout(sldTmr); } }, false);
 	
 	// Checks for script updates
 	scriptPage();

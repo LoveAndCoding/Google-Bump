@@ -3,12 +3,14 @@
   *	=================================================================
   */
 
-function indiv_img_result(src, link, title, num) {
+function indiv_img_result(src, link, title, sizeInfo, type, num) {
 	
 	this.src = src;
 	this.link = decodeURI(link);
 	this.title = title;
 	this.locNum = num;
+	this.size = sizeInfo;
+	this.frmt = type;
 	
 	this.draw = function (parentNode) {
 		var link = $create("a", {
@@ -22,8 +24,23 @@ function indiv_img_result(src, link, title, num) {
 			
 		} else if(options.imgSize == "details") {
 			
-			link.innerHTML = this.title;
-			link.className += " titleOnly";
+			if(options.styl == 'dock') {
+				var img = $create("img", {
+					src : this.src,
+					alt : this.title,
+					title : this.title,
+					className : 'imgSizemedium'
+				});
+				link.appendChild(img);
+			} else {
+				link.innerHTML = this.title;
+			}
+			link.className += " imgDetails";
+			var info = $create("span", {
+				innerHTML : this.size + ' ' + this.frmt,
+				className : 'detailedImgInfo'
+			});
+			link.appendChild(info);
 			
 		} else {
 			
@@ -185,18 +202,30 @@ function Image_Search(query) {
 	};
 	
 	this.buildSets = function () {
+		var perSet;
+		if (options.imgSize == 'large') {
+			perSet = 7;
+		} else if (options.imgSize == 'medium') {
+			perSet = 14;
+		} else if (options.imgSize == 'small') {
+			perSet = 28;
+		} else if (options.imgSize == 'title') {
+			perSet = 21;
+		} else { // Details
+			perSet = 14;
+		}
 		for(var setCreator = 0; setCreator < this.imgs.length; setCreator++) {
-			if((setCreator % 7 == 0 && options.styl != 'dock') || setCreator == 0) {
+			if((setCreator % perSet == 0 && options.styl != 'dock') || setCreator == 0) {
 				this.sets.push(new img_set());
 			}
-			var dockWorker = options.styl == 'dock' ? 0 : Math.floor(setCreator / 7);
+			var dockWorker = options.styl == 'dock' ? 0 : Math.floor(setCreator / perSet);
 			this.sets[dockWorker].addImg(this.imgs[setCreator]);
 		}
 	};
 	
 	this.processPage = function (response) {
 		var na;
-		eval("na = new Array" + response.responseText.match(/dyn\.setResults\(\[\[[^]*]\);/)[0].substring(14));
+		eval("na = " + response.responseText.match(/dyn\.setResults\(\[\[[^]*]\);/)[0].substring(14));
 		
 		/*
 			var link = $create("a");
@@ -210,8 +239,8 @@ function Image_Search(query) {
 		*/
 		
 		if(na[0]) {
-			for(var nao = 0; nao < na[0].length; nao++) {
-				var img = new indiv_img_result(na[0][nao][14] + "?q=tbn:" + na[0][nao][2] + na[0][nao][3], na[0][nao][3], na[0][nao][6], this.imgs.length);
+			for(var nao = 0; nao < na.length; nao++) {
+				var img = new indiv_img_result(na[nao][14] + "?q=tbn:" + na[nao][2] + na[nao][3], na[nao][3], na[nao][6], na[nao][9], na[nao][10], this.imgs.length);
 				this.imgs.push(img);
 				this.slideshow.dialog.add_image(img);
 			}
