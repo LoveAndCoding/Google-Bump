@@ -1397,6 +1397,9 @@ function stylesheet_store () {
 		#res {  \
 			padding-top: 7px;  \
 		} \
+		#center_col { \
+			margin-right: 0px; \
+		} \
 		#videoList { \
 			border: 1px solid black;  \
 			overflow: auto; \
