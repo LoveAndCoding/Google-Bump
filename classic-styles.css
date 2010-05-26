@@ -48,10 +48,6 @@
 		#imageList { \
 			width: 220px; \
 		} \
-		#wikLink { \
-			float: left; \
-			display: inline; \
-		} \
 		#ssb { \
 			position: relative; \
 			height: 25px; \

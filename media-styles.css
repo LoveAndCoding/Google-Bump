@@ -66,9 +66,6 @@
 		#hidePly { \
 			display: none !important; \
 		} \
-		#wikLink { \
-			float: left; \
-		} \
 		.removed, .rl-details, .rl-snippet, \
 		.rl-short-snippet, .rl-snippet-grid-view, \
 		.rl-watch-on, .rl-special, .rl-cannot-play-here { \

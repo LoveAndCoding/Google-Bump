@@ -869,10 +869,6 @@ function stylesheet_store () {
 		#imageList { \
 			width: 220px; \
 		} \
-		#wikLink { \
-			float: left; \
-			display: inline; \
-		} \
 		#ssb { \
 			position: relative; \
 			height: 25px; \
@@ -1357,9 +1353,6 @@ function stylesheet_store () {
 			height: auto; \
 			overflow: hidden; \
 		} \
-		#wikLink { \
-			float: left; \
-		} \
 		.imgSizelarge { \
 			max-width: 130px; \
 			max-height: 130px; \
@@ -1465,9 +1458,6 @@ function stylesheet_store () {
 		} \
 		#hidePly { \
 			display: none !important; \
-		} \
-		#wikLink { \
-			float: left; \
 		} \
 		.removed, .rl-details, .rl-snippet, \
 		.rl-short-snippet, .rl-snippet-grid-view, \

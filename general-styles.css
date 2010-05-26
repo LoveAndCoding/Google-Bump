@@ -210,9 +210,6 @@
 			height: auto; \
 			overflow: hidden; \
 		} \
-		#wikLink { \
-			float: left; \
-		} \
 		.imgSizelarge { \
 			max-width: 130px; \
 			max-height: 130px; \
