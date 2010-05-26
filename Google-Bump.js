@@ -772,7 +772,6 @@ function stylesheet_store () {
 			clear: both; \
 		} \
 		#mBox { \
-			background-color: white; \
 			width: 400px; \
 		} \
 		#pBox { \
@@ -885,7 +884,6 @@ function stylesheet_store () {
 			padding: 0px 10px; \
 			border-style: none; \
 			border-bottom: 1px solid #000000; \
-			background-color: #000000; \
 		} \
 		.vid_result { \
 			font-size: 11pt; \
@@ -909,8 +907,8 @@ function stylesheet_store () {
 			top: 50%; \
 			left: 50%; \
 			z-index: 9998; \
-			background-color: white; \
-			border: 1px solid black; \
+			background-color: #FFFFFF; \
+			border: 1px solid #000000; \
 		} \
 		.sldImgs { \
 			max-width: " + maxwidth + "px; \
@@ -931,7 +929,6 @@ function stylesheet_store () {
 		} \
 		#wikiHeader { \
 			font-size: 115%; \
-			background-color: #F0F7F9; \
 			padding-left: .2em; \
 		} \
 		#wikiDesc { \
@@ -939,7 +936,8 @@ function stylesheet_store () {
 			margin: 0px; \
 			padding: .2em; \
 			text-indent: 3em; \
-			border: 2px solid #F0F7F9; \
+			border-width: 1px; \
+			border-style: solid; \
 		} \
 		#wikiDiv { \
 			width: 580px; \
@@ -1080,10 +1078,13 @@ function stylesheet_store () {
 		} /* "; /* End Stylesheet */
 
 	this.gen_stylesheet = " \
-		body { \
+		html, body { \
 			background-color: rgb(" + options.genbgclr + "); \
 			color: rgb(" + options.restxtclr + "); \
 			margin: 0px; \
+		} \
+		.csb, .ss, #logo span, .play_icon, .mini_play_icon, .micon, .close_btn, #tbp, .mbi { \
+			background-image: url(" + iconSheetTrans() + "); \
 		} \
 		#gbar, #guser { \
 			background-color: rgb(" + options.glbarclr + "); \
@@ -1096,7 +1097,7 @@ function stylesheet_store () {
 		#cnt, #leftnav, #tbd, #atd, #tsf, #hidden_modes, #hmp { \
 			background-color: rgb(" + options.resltclr + "); \
 		} \
-		#wikiHeader, #mBox { \
+		#wikiHeader a, #wikiHeader, #mBox { \
 			background-color: rgb(" + options.addedclr + "); \
 			color: rgb(" + options.mdatxtclr + "); \
 		} \
@@ -1109,14 +1110,14 @@ function stylesheet_store () {
 		.embeddable a { \
 			color: rgb(" + options.pbltxtclr + ") !important; \
 		} \
-		a:link, .w, .q:active, .q:visited, .tbotu { \
+		a:link, .w, .q:active, .q:visited, .tbotu, #fll a, #bfl a { \
 			color: rgb(" + options.lnktxtclr + "); \
 		} \
 		li.g span cite { \
 			color: rgb(" + options.urltxtclr + "); \
 		} \
-		.gl, .f, .m, .c h2, #mbEnd h2, #tads h2, .descbox { \
-			color: rgb(" + options.simtxtclr + "); \
+		.gl, .f, .m, .c h2, #mbEnd h2, #tads h2, .descbox, .fl, .fl a, .flt, .gl a:link, a.mblink, .mblink b { \
+			color: rgb(" + options.simtxtclr + ") !important; \
 		} \
 		.removed { \
 			display: none !important; \
@@ -1420,11 +1421,8 @@ function stylesheet_store () {
 			white-space: nowrap; \
 		} \
 		#allSearches { \
-			border: 1px solid #0077CC; \
-			margin-top: 10px; \
 			background-color: #FFFFFF; \
 			z-index: 1000; \
-			float: left; \
 		} \
 		#expand, #collapse { \
 			cursor: pointer; \
@@ -1470,8 +1468,8 @@ function stylesheet_store () {
 			vertical-align: top; \
 			margin-left: .8em; \
 		} \
-		#expandedMulti hr { \
-			margin: 1px; \
+		#expandedMulti { \
+			padding-top: 10px; \
 		} \
 		#adding { \
 			margin-left: 3em; \
@@ -1915,8 +1913,7 @@ function iconSheetTrans() {
 	}
 	ctx.putImageData(imgd, 0, 0);
 	
-	removeAllChildren($('logo'));
-	$('logo').appendChild(canvas);
+	return canvas.toDataURL("image/png");
 }
 	// End Display Functions -----------------------------------------------------------
 
@@ -2411,16 +2408,15 @@ function config_colorBox(label, id, dflt) {
 			
 			popupManager.closeColor();
 			SR.popout.draw(SR.box);
-			SR.popout.container.style.top = (offTop - 1) + "px";
-			SR.popout.container.style.left = (offLeft - 1) + "px";
+			SR.popout.container.style.top = Math.min(window.innerHeight - 276, (offTop - 1)) + "px";
+			SR.popout.container.style.left = Math.min(window.innerWidth - 313, (offLeft - 1)) + "px";
 			
 			document.addEventListener('click', function (e) {
-				if(!checkallparentsforit(this, "colorContainer")) {
-					e.stopPropagation();
-					e.preventDefault();
-					
+				if(e.target.className != 'colorContainer' && (e.target.parentNode && e.target.parentNode.className != 'colorContainer')) {
 					popupManager.closeColor();
 					document.removeEventListener('click', arguments.callee, false);
+				} else {
+					e.stopPropagation();
 				}
 			}, false);
 			event.stopPropagation();
@@ -2919,7 +2915,7 @@ function config_dialog(popup) {
 		var gen_section = new config_section("Functionality");
 		gen_section.sectionOptions.push(new config_checkBox("Open All Links in New Tabs", "tabs", options.DEFAULT_TABS));
 		gen_section.sectionOptions.push(new config_checkBox("Use MultiSearch", "scuts", options.DEFAULT_SCUTS));
-		gen_section.sectionOptions.push(new config_checkBox("Use Old Button Size", "oldSize", options.DEFAULT_OLDSIZE));
+		// gen_section.sectionOptions.push(new config_checkBox("Use Old Button Size", "oldSize", options.DEFAULT_OLDSIZE));
 		gen_section.sectionOptions.push(new config_checkBox("Enable Keyboard Shorcuts", "keyd", options.DEFAULT_KEYD));
 		gen_set_window.sections.push(gen_section);
 			// Keyboard Shortcut list
@@ -3306,167 +3302,112 @@ function multisearcher() {
 					"Y5%2Bk2Ib1C%2BEAAAAASUVORK5CYII%3D";
 	
 	this.draw = function () {
-		// this.wrapper = $create("div", {
-			// id : "allSearches"
-		// });
-		
-		// var fullorig = findrightnode(this.original, "ts");
-		
-		// var topHat = $('sff');
-		// var newHolder = $create("div", {
-			// id : "otherSearchContent"
-		// });
-		// for (var ci = 0; ci < topHat.childNodes.length;) {
-			// newHolder.appendChild(topHat.childNodes[ci]);
-		// }
-		// topHat.appendChild(newHolder);
-		
-		// topHat.insertBefore(this.wrapper, topHat.childNodes[0]);
-		// this.wrapper.appendChild(fullorig);
-		// fullorig.id = "currentSearch";
-		
-		// var expand = $create("img", {
-			// src : 'data:image/png;base64,' + this.downArrow,
-			// id : 'expand',
-			// alt : 'expand'
-		// });
-		// this.wrapper.appendChild(expand);
-		
-		// this.multiwrapper = $create("div");
-		// this.multiwrapper.id = "expandedMulti";
-		// var tabhead1 = $create("h3");
-		// tabhead1.textContent = "Current Tab";
-		// tabhead1.className = "TabHead";
-		// var tabhead2 = $create("h3");
-		// tabhead2.textContent = "New Tab(s)";
-		// tabhead2.className = "TabHead";
-		
-		// this.multiwrapper.appendChild(tabhead1);
-		// this.multiwrapper.appendChild(new multisearchbox(null).optionList("Orig"));
-		// this.multiwrapper.appendChild($create("hr"));
-		// this.multiwrapper.appendChild(tabhead2);
-		// this.multiwrapper.appendChild($create("br"));
-		
-		// this.newSearchWrapper = $create("div", {
-			// id : 'newSearchBoxes'
-		// });
-		
-		// for (var nm = GM_getValue("numMulti",2); nm > 0 ; nm--) {
-			// var msb = new multisearchbox(this);
-			// msb.draw(this.newSearchWrapper);
-			// this.boxes.push(msb);
-		// }
-		
-		// this.multiwrapper.appendChild(this.newSearchWrapper);
-		
-		// var adder = $create("div");
-		// adder.id = "adding";
-		// adder.textContent = "Add more...";
-		// this.multiwrapper.appendChild(adder);
-		
-		// var srchAll = $create("button", {
-			// textContent : "Search All",
-			// id : "searchAll"
-		// });
-		// this.multiwrapper.appendChild(srchAll);
-		
-		// var srchNew = $create("button", {
-			// textContent : "Search New",
-			// id : "searchNew"
-		// });
-		// this.multiwrapper.appendChild(srchNew);
-		
-		// var fillOutAll = $create('button', {
-			// textContent : 'Set All from Original',
-			// id : 'setBoxes'
-		// });
-		// this.multiwrapper.appendChild(fillOutAll);
-		
-		// var SR = this;
-		// adder.addEventListener("click", function (event) {
-			// var newl = $cl("SBoxes").length;
-			// GM_setValue("numMulti",newl + 1);
-			// newSB(newl, multi);
-			// multi.removeChild(adder);
-			// multi.removeChild(srchAll);
-			// multi.removeChild(srchNew);
-			// multi.appendChild(adder);
-			// multi.appendChild(srchAll);
-			// multi.appendChild(srchNew);
-			// SR.addBox();
-		// }, false);
-		
-		// expand.addEventListener("click", function (event) {
-			// SR.expandCollapse();
-		// }, false);
-		
-		// $("tsf").addEventListener("submit", function (event) {
-			// if (SR.expanded) {
-				// event.stopPropagation();
-				// event.preventDefault();
-				// var siteto = $("searchListOrig").value;
-				// var srchval;
-				// var inputs = $tag("input");
-				// for (var i = 0; i < inputs.length; i++) {
-					// if(inputs[i].name == "q") {
-						// srchval = inputs[i].value;
-						// break;
-					// }
-				// }
-				// redirgo([siteto, srchval], false);
-			// }
-		// }, false);
-		
-		// srchAll.addEventListener("click", function (event) {
-			// event.stopPropagation();
-			// event.preventDefault();
-			// var curtabThis;
-			// var inputs = $tag("input");
-			// for (var i = 0; i < inputs.length; i++) {
-				// if(inputs[i].name == "q") {
-					// curtabThis = inputs[i].value;
-					// break;
-				// }
-			// }
-			// var tablist = [];
-			// for (i = $cl("SBoxes").length - 1; i >= 0; i--) {
-				// tablist.push($("searchList" + i).value);
-				// tablist.push($("searchText" + i).value);
-			// }
-			// tablist.push($("searchListOrig").value);
-			// tablist.push(curtabThis);
-			// redirgo(tablist, false);
-		// }, false);
-		
-		// srchNew.addEventListener("click", function (event) {
-			// event.stopPropagation();
-			// event.preventDefault();
-			// var tablist = [];
-			// for (i = $cl("SBoxes").length - 1; i >= 0; i--) {
-				// tablist.push($("searchList" + i).value);
-				// tablist.push($("searchText" + i).value);
-			// }
-			// redirgo(tablist, true);
-		// }, false);
-		
-		// fillOutAll.addEventListener("click", function (event) {
-			// event.stopPropagation();
-			// event.preventDefault();
-			// var sbs = $cl('searchBoxes');
-			// for (sb in sbs) {
-				// sbs[sb].value = queryBox.value;
-			// }
-		// }, false);
 		
 		var theirButton = $cl('lsb')[0];
-		var myButton = $create('input', {
+		this.myButton = $create('input', {
 			type : 'button',
 			className : 'lsb',
 			value : 'More Options',
 			style : 'border-left: 1px solid #CCCCCC;'
 		});
 		
-		theirButton.parentNode.appendChild(myButton);
+		theirButton.parentNode.appendChild(this.myButton);
+		
+		var SR = this;
+		this.myButton.addEventListener('click', function (e) {
+			SR.expandCollapse();
+		}, false);
+		
+		this.wrapper = $create("div", {
+			id : "allSearches"
+		});
+		
+		this.multiwrapper = $create("div");
+		this.multiwrapper.id = "expandedMulti";
+		var tabhead1 = $create("h3");
+		tabhead1.textContent = "Current Tab";
+		tabhead1.className = "TabHead";
+		var tabhead2 = $create("h3");
+		tabhead2.textContent = "New Tab(s)";
+		tabhead2.className = "TabHead";
+		
+		this.origOptionBox = new multisearchbox(null).optionList("Orig");
+		
+		this.multiwrapper.appendChild(tabhead1);
+		this.multiwrapper.appendChild(this.origOptionBox);
+		this.multiwrapper.appendChild(tabhead2);
+		this.multiwrapper.appendChild($create("br"));
+		
+		this.newSearchWrapper = $create("div", {
+			id : 'newSearchBoxes'
+		});
+		
+		for (var nm = GM_getValue("numMulti", 2); nm > 0 ; nm--) {
+			var msb = new multisearchbox(this);
+			msb.draw(this.newSearchWrapper);
+			this.boxes.push(msb);
+		}
+		
+		this.multiwrapper.appendChild(this.newSearchWrapper);
+		
+		var adder = $create("div");
+		adder.id = "adding";
+		adder.textContent = "Add more...";
+		this.multiwrapper.appendChild(adder);
+		
+		var srchAll = $create("button", {
+			textContent : "Search All",
+			id : "searchAll"
+		});
+		this.multiwrapper.appendChild(srchAll);
+		
+		var srchNew = $create("button", {
+			textContent : "Search New",
+			id : "searchNew"
+		});
+		this.multiwrapper.appendChild(srchNew);
+		
+		var fillOutAll = $create('button', {
+			textContent : 'Set All from Original',
+			id : 'setBoxes'
+		});
+		this.multiwrapper.appendChild(fillOutAll);
+		
+		adder.addEventListener("click", function (event) {
+			SR.addBox();
+		}, false);
+		
+		$("tsf").addEventListener("submit", function (event) {
+			if (SR.expanded) {
+				event.stopPropagation();
+				event.preventDefault();
+				redirgo([this.origOptionBox.value, $cl('lst')[0].value], false);
+			}
+		}, false);
+		
+		srchAll.addEventListener("click", function (event) {
+			event.stopPropagation();
+			event.preventDefault();
+			SR.searchAll();
+		}, false);
+		
+		srchNew.addEventListener("click", function (event) {
+			event.stopPropagation();
+			event.preventDefault();
+			SR.searchNew();
+		}, false);
+		
+		fillOutAll.addEventListener("click", function (event) {
+			event.stopPropagation();
+			event.preventDefault();
+			var sbs = SR.boxes;
+			var val = $cl('lst')[0].value;
+			for (sb in sbs) {
+				sbs[sb].setValue(val);
+			}
+		}, false);
+		
+		$cl('tsf-p')[0].appendChild(this.wrapper);
 		
 	};
 	
@@ -3480,29 +3421,32 @@ function multisearcher() {
 	this.expandCollapse = function () {
 		if (!this.expanded) {
 			this.wrapper.appendChild(this.multiwrapper);
+			this.myButton.value = "Less Options";
 		} else {
 			this.wrapper.removeChild(this.multiwrapper);
+			this.myButton.value = "More Options";
 		}
-		$('expand').src = "data:image/png;base64," + (this.expanded ? this.downArrow : this.upArrow);
 		this.expanded = !this.expanded;
 	};
 	
 	this.searchAll = function () {
-		
+		var tablist = this.getAllVals();
+		redirgo(tablist, false);
 	};
 	
 	this.searchNew = function () {
-		
+		var tablist = this.getNewVals();
+		redirgo(tablist, true);
 	};
 	
 	this.getAllVals = function () {
 		var newVals = this.getNewVals();
-		
+		return newVals.concat([this.origOptionBox.value, $cl('lst')[0].value]);
 	};
 	
 	this.getNewVals = function () {
-		var tablist = new array();
-		for (i = this.boxes.length - 1; i >= 0; i--) {
+		var tablist = [];
+		for (var i = 0, len = this.boxes.length; i < len; i++) {
 			this.boxes[i].addCode(tablist);
 		}
 		return tablist;
@@ -3557,7 +3501,6 @@ function multisearchbox (parentObj) {
 			GM_setValue("numMulti", parseInt(GM_getValue("numMulti", 2)) - 1);
 		}, false);
 		
-		//this.wrapping.appendChild($create("br"));
 		parentNode.appendChild(this.wrapping);
 	};
 	
@@ -3590,7 +3533,7 @@ function multisearchbox (parentObj) {
 	};
 	
 	this.setValue = function (value) {
-		this.srchBox = value;
+		this.srchBox.value = value;
 		// TODO: Setup undo ability
 	};
 	
@@ -3633,38 +3576,38 @@ function redirgo(theList, tablast) {
 		var putintabs = (theList.length !== 2);
 		for (var x = 0; x < theList.length; x += 2) {
 			if (x == theList.length - 2) {
-				putintabs = false || tablast;
+				putintabs = tablast || false;
 			}	
 			if (theList[x] == "quote") {
-				linkit("http://en.wikiquote.org/wiki/Special:Search?go=Go&search=" + theList[x + 1], putintabs, false);
+				linkit("http://en.wikiquote.org/wiki/Special:Search?go=Go&search=" + theList[x + 1], putintabs);
 			} else if (theList[x] == "howto") {
-				linkit("http://www.wikihow.com/Special:LSearch?fulltext=Search&search=" + theList[x + 1], putintabs, false);
+				linkit("http://www.wikihow.com/Special:LSearch?fulltext=Search&search=" + theList[x + 1], putintabs);
 			} else if (theList[x] == "defin") {
-				linkit("http://en.wiktionary.org/wiki/Special:Search?go=Go&search=" + theList[x + 1], putintabs, false);
+				linkit("http://en.wiktionary.org/wiki/Special:Search?go=Go&search=" + theList[x + 1], putintabs);
 			} else if (theList[x] == "anidb") {
-				linkit("http://anidb.net/perl-bin/animedb.pl?show=animelist&do.search=Search&adb.search=" + theList[x + 1], putintabs, false);
+				linkit("http://anidb.net/perl-bin/animedb.pl?show=animelist&do.search=Search&adb.search=" + theList[x + 1], putintabs);
 			} else if (theList[x] == "imdb") {
-				linkit("http://www.imdb.com/find?s=all&x=22&y=12&q=" + theList[x + 1], putintabs, false);
+				linkit("http://www.imdb.com/find?s=all&x=22&y=12&q=" + theList[x + 1], putintabs);
 			} else if (theList[x] == "gamefaq") {
-				linkit("http://www.gamefaqs.com/search/index.html?platform=0&game=" + theList[x + 1], putintabs, false);
+				linkit("http://www.gamefaqs.com/search/index.html?platform=0&game=" + theList[x + 1], putintabs);
 			} else if (theList[x] == "diggs") {
-				linkit("http://digg.com/search?section=all&s=" + theList[x + 1], putintabs, false);
+				linkit("http://digg.com/search?section=all&s=" + theList[x + 1], putintabs);
 			} else if (theList[x] == "utube") {
-				linkit("http://www.youtube.com/results?search_type=&aq=f&search_query=" + theList[x + 1], putintabs, false);
+				linkit("http://www.youtube.com/results?search_type=&aq=f&search_query=" + theList[x + 1], putintabs);
 			} else if (theList[x] == "wikipda") {
-				linkit("http://en.wikipedia.org/wiki/Special:Search?go=Go&search=" + theList[x + 1], putintabs, false);
+				linkit("http://en.wikipedia.org/wiki/Special:Search?go=Go&search=" + theList[x + 1], putintabs);
 			} else if (theList[x] == "googl") {
-				linkit("http://google.com/search?q=" + theList[x + 1], putintabs, false);
+				linkit("http://google.com/search?q=" + theList[x + 1], putintabs);
 			} else if (theList[x] == "flckr") {
-				linkit("http://www.flickr.com/search/?q=" + theList[x + 1], putintabs, false);
+				linkit("http://www.flickr.com/search/?q=" + theList[x + 1], putintabs);
 			} else if (theList[x] == "cnns") {
-				linkit("http://search.cnn.com/search.jsp?type=web&sortBy=date&intl=false&query=" + theList[x + 1], putintabs, false);
+				linkit("http://search.cnn.com/search.jsp?type=web&sortBy=date&intl=false&query=" + theList[x + 1], putintabs);
 			} else if (theList[x] == "opnsrc") {
-				linkit("http://sourceforge.net/search/?type_of_search=soft&words=" + theList[x + 1], putintabs, false);
+				linkit("http://sourceforge.net/search/?type_of_search=soft&words=" + theList[x + 1], putintabs);
 			} else if (theList[x] == "eby") {
-				linkit("http://shop.ebay.com/items/?_nkw=" + theList[x + 1], putintabs, false);
+				linkit("http://shop.ebay.com/items/?_nkw=" + theList[x + 1], putintabs);
 			} else if (theList[x] == "espns") {
-				linkit("http://search.espn.go.com/" + theList[x + 1].split(" ").join("-"), putintabs, false);
+				linkit("http://search.espn.go.com/" + theList[x + 1].split(" ").join("-"), putintabs);
 			}
 		}
 	}
@@ -3676,15 +3619,6 @@ function setupText(preset) {
 	if (!location.href.match("/search?[^#]*q=")) {
 		params = location.hash.split("&").join("#").split("#");
 	} else {
-		/*
-		// Finds then breaks on the search box, saving its value
-		for (var i = 0; i < theInput.length; i++) {
-			if (theInput[i].getAttribute("type") == "text") {
-				search = theInput[i].value;
-				break;
-			}
-		}
-		*/
 		// Extracts the search value from the URL
 		params = location.search.split("&").join("?").split("?");
 	}
@@ -3726,53 +3660,6 @@ function setupText(preset) {
 function multiSearchSetup() {
 	multiBox = new multisearcher();
 	multiBox.draw();
-}
-// Creates the list of options for the multisearch
-function optionList(id) {
-	var sel = $create("select");
-	sel.id = "searchList" + id;
-	sel.className = "siteSelector";
-	// quote|howto|defin|anidb|imdb|gamefaq|diggs|utube|wikipda|googl|flckr|cnns|opnsrc|eby|espns
-	var valList = ["quote", "howto", "defin", "anidb", "imdb", "gamefaq", "diggs", "utube", "wikipda", "flckr", "cnns", "opnsrc", "eby", "espns", "googl"];
-	var showList = ["WikiQuote", "Wiki How to", "Wiktionary", "AnimeDB", "IMDB", "GameFAQs", "Digg", "Youtube", "Wikipedia", "Flickr", "CNN", "Source Forge", "Ebay", "ESPN", "Google"];
-	for (var i = showList.length - 1; i >= 0;i--) {
-		var opt = $create("option");
-		opt.value = valList[i];
-		opt.textContent = showList[i];
-		sel.appendChild(opt);
-	}
-	return sel;
-}
-// Removes one of the multisearch boxes and saves the new number of boxes
-function removeSB(event) {
-	GM_setValue("numMulti", $cl("SBoxes").length - 1);
-	var numTo = this.id.substr(8);
-	$("wrapperSB" + numTo).parentNode.removeChild($("wrapperSB" + numTo));
-}
-// Creates a new multisearch box
-function newSB(nm, parent) {
-	var wrapper = $create("div");
-	wrapper.className = "SBoxes";
-	wrapper.id = "wrapperSB" + nm;
-	
-	wrapper.appendChild(optionList(nm));
-	
-	var textLine = $create("input");
-	textLine.type = "text";
-	textLine.className = "searchBoxes";
-	textLine.id = "searchText" + nm;
-	wrapper.appendChild(textLine);
-	
-	var close = $create("p");
-	close.className = "closeBtn";
-	close.id = "closebtn" + nm;
-	close.textContent = "X";
-	wrapper.appendChild(close);
-	
-	close.addEventListener("click", removeSB, false);
-	
-	wrapper.appendChild($create("br"));
-	parent.appendChild(wrapper);
 }
 	// End Text / Input Based Functions --------------------------------------------
 

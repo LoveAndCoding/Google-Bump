@@ -1,7 +1,10 @@
-		body { \
+		html, body { \
 			background-color: rgb(" + options.genbgclr + "); \
 			color: rgb(" + options.restxtclr + "); \
 			margin: 0px; \
+		} \
+		.csb, .ss, #logo span, .play_icon, .mini_play_icon, .micon, .close_btn, #tbp, .mbi { \
+			background-image: url(" + iconSheetTrans() + "); \
 		} \
 		#gbar, #guser { \
 			background-color: rgb(" + options.glbarclr + "); \
@@ -14,7 +17,7 @@
 		#cnt, #leftnav, #tbd, #atd, #tsf, #hidden_modes, #hmp { \
 			background-color: rgb(" + options.resltclr + "); \
 		} \
-		#wikiHeader, #mBox { \
+		#wikiHeader a, #wikiHeader, #mBox { \
 			background-color: rgb(" + options.addedclr + "); \
 			color: rgb(" + options.mdatxtclr + "); \
 		} \
@@ -27,14 +30,14 @@
 		.embeddable a { \
 			color: rgb(" + options.pbltxtclr + ") !important; \
 		} \
-		a:link, .w, .q:active, .q:visited, .tbotu { \
+		a:link, .w, .q:active, .q:visited, .tbotu, #fll a, #bfl a { \
 			color: rgb(" + options.lnktxtclr + "); \
 		} \
 		li.g span cite { \
 			color: rgb(" + options.urltxtclr + "); \
 		} \
-		.gl, .f, .m, .c h2, #mbEnd h2, #tads h2, .descbox { \
-			color: rgb(" + options.simtxtclr + "); \
+		.gl, .f, .m, .c h2, #mbEnd h2, #tads h2, .descbox, .fl, .fl a, .flt, .gl a:link, a.mblink, .mblink b { \
+			color: rgb(" + options.simtxtclr + ") !important; \
 		} \
 		.removed { \
 			display: none !important; \

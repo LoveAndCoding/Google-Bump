@@ -307,16 +307,15 @@ function config_colorBox(label, id, dflt) {
 			
 			popupManager.closeColor();
 			SR.popout.draw(SR.box);
-			SR.popout.container.style.top = (offTop - 1) + "px";
-			SR.popout.container.style.left = (offLeft - 1) + "px";
+			SR.popout.container.style.top = Math.min(window.innerHeight - 276, (offTop - 1)) + "px";
+			SR.popout.container.style.left = Math.min(window.innerWidth - 313, (offLeft - 1)) + "px";
 			
 			document.addEventListener('click', function (e) {
-				if(!checkallparentsforit(this, "colorContainer")) {
-					e.stopPropagation();
-					e.preventDefault();
-					
+				if(e.target.className != 'colorContainer' && (e.target.parentNode && e.target.parentNode.className != 'colorContainer')) {
 					popupManager.closeColor();
 					document.removeEventListener('click', arguments.callee, false);
+				} else {
+					e.stopPropagation();
 				}
 			}, false);
 			event.stopPropagation();

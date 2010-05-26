@@ -5,11 +5,8 @@
 			white-space: nowrap; \
 		} \
 		#allSearches { \
-			border: 1px solid #0077CC; \
-			margin-top: 10px; \
 			background-color: #FFFFFF; \
 			z-index: 1000; \
-			float: left; \
 		} \
 		#expand, #collapse { \
 			cursor: pointer; \
@@ -55,8 +52,8 @@
 			vertical-align: top; \
 			margin-left: .8em; \
 		} \
-		#expandedMulti hr { \
-			margin: 1px; \
+		#expandedMulti { \
+			padding-top: 10px; \
 		} \
 		#adding { \
 			margin-left: 3em; \

@@ -393,7 +393,6 @@ function iconSheetTrans() {
 	}
 	ctx.putImageData(imgd, 0, 0);
 	
-	removeAllChildren($('logo'));
-	$('logo').appendChild(canvas);
+	return canvas.toDataURL("image/png");
 }
 	// End Display Functions -----------------------------------------------------------
