@@ -1,3 +1,30 @@
+/**	=================================================================
+  *	Media Embedding
+  *	=================================================================
+  */
+
+/**	Control_Icon
+  *	Control Icon Object
+  *	
+  *	Construction Parameters
+  *		icon		The src of the image
+  *		title		The title of the icon
+  *		handle		A handler for clicks
+  *	
+  *	Functions
+  *		draw
+  *			Draw the icon
+  *	
+  *		handleClick
+  *			Handles clicking on the given icon by delegating to assigned clickers
+  *	
+  *		addClicker
+  *			Add a click handler funciton
+  *	
+  *		removeClicker
+  *			Remove a click handler function
+  *	
+  */
 function Control_Icon (icon, title, handle) {
 	this.img = icon;
 	this.title = title;
@@ -39,22 +66,29 @@ function Control_Icon (icon, title, handle) {
 	};
 };
 
-function Image_Toolbar (img) {
-	this.res = img;
-	
-	this.draw = function (parentNode) {
-		
-	};
-}
-
-function Video_Toolbar (vid) {
-	this.res = vid;
-	
-	this.draw = function (parentNode) {
-		
-	};
-}
-
+/**	Media_Embed
+  *	Media Embed Object
+  *	
+  *	Functions
+  *		draw
+  *			Draw the icon
+  *	
+  *		addImageEmbed
+  *			Embed an image in the embed area
+  *	
+  *		addVideoEmbed
+  *			Embed an video in the embed area
+  *	
+  *		clearEmbed
+  *			Clean the embed area
+  *	
+  *		drawImageControls
+  *			Draw the controls for images
+  *	
+  *		drawVideoControls
+  *			Draw the controls for videos
+  *	
+  */
 function Media_Embed () {
 	
 	this.player;
@@ -129,7 +163,7 @@ function Media_Embed () {
 			});
 			this.player.appendChild(this.labelArea);
 		}
-		this.labelArea.innerHTML = label || '';
+		this.labelArea.innerHTML = label || this.defaultMessage;
 		
 		if(!this.controlsArea) {
 			this.controlsArea = $create("div", {
@@ -189,3 +223,8 @@ function Media_Embed () {
 		
 	};
 }
+
+/**	=================================================================
+  *	End Media Embedding
+  *	=================================================================
+  */

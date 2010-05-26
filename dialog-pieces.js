@@ -3,7 +3,10 @@
   *	
   *	@depends color-picker.js
   */
-  
+
+/**
+  *	Configuration tab
+  */
 function config_tab(title, id, on) {
 	
 	this.title = title;
@@ -41,6 +44,9 @@ function config_tab(title, id, on) {
 	};
 }
 
+/**
+  *	Configuration window
+  */
 function config_window(tab, id) {
 	
 	this.tab = tab;
@@ -89,6 +95,9 @@ function config_window(tab, id) {
 	};
 }
 
+/**
+  *	Configuration section
+  */
 function config_section(title) {
 	
 	this.title = title ? title : "";
@@ -140,7 +149,10 @@ function config_section(title) {
 		}
 	};
 }
-	
+
+/**
+  *	Configuration descriptoin area
+  */  
 function config_desc_section(title, content) {
 	
 	this.title = title ? title : "";
@@ -174,6 +186,9 @@ function config_desc_section(title, content) {
 	};
 }
 
+/**
+  *	Configuration boolean check box
+  */
 function config_checkBox(label, id, dflt) {
 	
 	this.label = label;
@@ -216,6 +231,9 @@ function config_checkBox(label, id, dflt) {
 	};
 }
 
+/**
+  *	Configuration list selection box
+  */
 function config_selectionBox(label, id, op_labels, op_values, dflt) {
 	
 	this.label = label;
@@ -269,6 +287,9 @@ function config_selectionBox(label, id, op_labels, op_values, dflt) {
 	};
 }
 
+/**
+  *	Configuration color selector
+  */
 function config_colorBox(label, id, dflt) {
 	
 	this.label = label;
@@ -343,6 +364,9 @@ function config_colorBox(label, id, dflt) {
 	};
 }
 
+/**
+  *	General purpose button object
+  */
 function button(value, action) {
 	
 	this.val = value;
@@ -365,6 +389,6 @@ function button(value, action) {
 	
 	this.undraw = function () {
 		$remove(this.btn);
-		this.btn = SET_UNDEFINED;
+		this.btn = undefined;
 	}
 }

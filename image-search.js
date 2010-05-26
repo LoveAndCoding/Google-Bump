@@ -3,6 +3,28 @@
   *	=================================================================
   */
 
+/**	Image_Search
+  *	Image Search Object
+  *	
+  *	Construction Parameters
+  *		src			The src for the image
+  *		link		The link to the image
+  *		title		The title of the image
+  *		sizeInfo	Information string on the size
+  *		type		Type of the image
+  *		num			The number of the image in the results
+  *	
+  *	Functions
+  *		draw
+  *			Draw the image
+  *	
+  *		clicked
+  *			Handles actions if an image is clicked
+  *	
+  *		buildImage
+  *			<= Return Image => Builds the image HTML Ojbect for the given settings
+  *	
+  */
 function indiv_img_result(src, link, title, sizeInfo, type, num) {
 	
 	this.src = src;
@@ -80,6 +102,20 @@ function indiv_img_result(src, link, title, sizeInfo, type, num) {
 	
 }
 
+/**	img_set
+  *	Image Set Object
+  *	
+  *	Functions
+  *		draw
+  *			Draw the set
+  *	
+  *		undraw
+  *			Undraw the set
+  *	
+  *		addImg
+  *			Add an image to the set
+  *	
+  */
 function img_set() {
 	
 	this.imgs = [];
@@ -108,6 +144,41 @@ function img_set() {
 	};
 }
 
+/**	Image_Search
+  *	Image Search Object
+  *	
+  *	Construction Parameters
+  *		query		The search query
+  *	
+  *	Functions
+  *		draw
+  *			Draw and perform intiate search
+  *	
+  *		next
+  *			Show the next set
+  *	
+  *		prev
+  *			Show the previous set
+  *	
+  *		clickImage
+  *			Simulate clicking on an image
+  *	
+  *		startSlides
+  *			Start the slideshow
+  *	
+  *		buildSets
+  *			Build the sets of images
+  *	
+  *		processPage
+  *			Add the images from a given page
+  *	
+  *		errorPage
+  *			Handles error pages (dummy function at the moment)
+  *	
+  *		search
+  *			Perform a search
+  *	
+  */
 function Image_Search(query) {
 	
 	this.query = query;

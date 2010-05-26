@@ -166,8 +166,6 @@ function removeAllChildren(node) {
 }
 // Closes all features that display on top with a grey background
 function closeEx() {
-	conf.undraw();
-	stylr.undraw();
-	sldObj.undraw();
+	popupManager.closeAll();
 }
 	// End Helper Functions ------------------------------------------------------------

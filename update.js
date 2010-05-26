@@ -27,13 +27,18 @@ function verNotice() {
 		id : "newVer"
 	});
 	
+	divHolder.appendChild($create("span", {
+		textContent : "A newer version of Google Bump is available.",
+		className : "newVerAvailable"
+	}));
+	
 	var uplink = $create("a", {
 		href : "http://userscripts.org/scripts/source/33449.user.js",
 		textContent : "Update Google Bump"
 	});
 	divHolder.appendChild(uplink);
 	
-	divHolder.appendChild($create("textNode", " | "));
+	// divHolder.appendChild($create("textNode", " | "));
 	
 	uplink = $create("a", {
 		href : "http://userscripts.org/scripts/show/33449#full_description",
@@ -41,6 +46,6 @@ function verNotice() {
 	});
 	divHolder.appendChild(uplink);
 	
-	$("tsf").appendChild(divHolder);
+	$("leftnav").insertBefore(divHolder, $('leftnav').childNodes[0]);
 }
 	// End Update Script -----------------------------------------------------------------

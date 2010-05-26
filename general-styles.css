@@ -17,7 +17,7 @@
 		#cnt, #leftnav, #tbd, #atd, #tsf, #hidden_modes, #hmp { \
 			background-color: rgb(" + options.resltclr + "); \
 		} \
-		#wikiHeader a, #wikiHeader, #mBox, .detailedImgInfo { \
+		#wikiHeader a, #wikiHeader, #mBox, .detailedImgInfo, #newVer { \
 			background-color: rgb(" + options.addedclr + "); \
 			color: rgb(" + options.mdatxtclr + "); \
 		} \
@@ -30,7 +30,7 @@
 		.embeddable a { \
 			color: rgb(" + options.pbltxtclr + ") !important; \
 		} \
-		a:link, .w, .q:active, .q:visited, .tbotu, #fll a, #bfl a { \
+		a:link, .w, .q:active, .q:visited, .tbotu, #fll a, #bfl a, #newVer a { \
 			color: rgb(" + options.lnktxtclr + "); \
 		} \
 		li.g span cite { \
@@ -175,13 +175,16 @@
 			margin-left: .2em; \
 		} \
 		#newVer { \
-			width: 200px; \
-			height: 1.3em; \
-			margin: -1.8em 0px 0px 8px; \
 			text-align: center; \
-			font-size: 85%; \
-			background-color: #CCCCFF; \
+			font-size: 90%; \
 			padding: 1px; \
+		} \
+		#newVer a  { \
+			display: block; \
+		} \
+		.newVerAvailable { \
+			font-weight: bold; \
+			font-size: 120%; \
 		} \
 		.GB_dialog_popup { \
 			position: fixed; \

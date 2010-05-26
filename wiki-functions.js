@@ -1,7 +1,7 @@
 	// Start Wiki Based Functions --------------------------------------------------
 // Creates and inserts the link to a wikipedia and wiktionary search
 function lookup(lookingFor) {
-	// var logoBox = $("ssb");
+	var logoBox = $("leftnav");
 	var p = $create("p", {
 		textContent : "Find " + lookingFor +  " on ",
 		className : 'added',
@@ -22,11 +22,9 @@ function lookup(lookingFor) {
 	} else {
 		$('leftnav').insertBefore(p, $('leftnav').childNodes[0]);
 	}
-	// p.className = "added";
-	// p.id = "wikLink";
-	// logoBox.insertBefore(p,logoBox.childNodes[1]);
-	// var resultsstats = logoBox.childNodes[logoBox.childNodes.length - 1];
-	// resultsstats.id = "resStat";
+	p.className = "added";
+	p.id = "wikLink";
+	logoBox.insertBefore(p,logoBox.childNodes[0]);
 }
 // Handles the case of a wikipedia page being found
 function foundwikilink(response) {

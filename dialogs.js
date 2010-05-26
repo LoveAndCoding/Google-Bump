@@ -8,6 +8,35 @@
   *	=================================================================
   */
 
+/**	popup_manager
+  *	Popup Dialog Manager Object
+  *	
+  *	Functions
+  *		newSlideShow
+  *			<= Return popup_dialog => Creates a new slideshow
+  *		
+  *		newStyler
+  *			<= Return popup_dialog => Creates a new styler dialog
+  *		
+  *		newConfig
+  *			<= Return popup_dialog => Creates a new configuration dialog
+  *		
+  *		newColor
+  *			<= Return popup_dialog => Creates a new color popup
+  *		
+  *		newPopup
+  *			<= Return popup_dialog => Creates a new popup of a given type
+  *		
+  *		closeAll
+  *			Closes any open popups
+  *		
+  *		closeColor
+  *			Closes any open color popups
+  *		
+  *		readySwitch
+  *			Prepares the page for switching dialogs
+  *	
+  */
 function popup_manager () {
 	
 	this.popup = [];
@@ -163,7 +192,7 @@ function popup_dialog(box_type) {
 		}
 		
 		$remove(this.shader);
-		this.shader = SET_UNDEFINED;
+		this.shader = undefined;
 	};
 	
 	this.is_drawn = function () {
@@ -171,6 +200,23 @@ function popup_dialog(box_type) {
 	};
 };
 
+/**	style_dialog
+  *	Style Dialog Object
+  *	
+  *	Construction Parameters
+  *		popup		The popup_dialog object it was created with
+  *	
+  *	Functions
+  *		draw
+  *			Draw the dialog on the page
+  *	
+  *		undraw
+  *			Undraw the dialog
+  *	
+  *		setDefaults
+  *			Set the defaults for all of the options
+  *	
+  */
 function style_dialog(popup) {
 	
 	this.dialog;
@@ -203,50 +249,24 @@ function style_dialog(popup) {
 		
 		// Creates and appends the navigation tabs
 		var genTab = new config_tab("General", "t_GenStyl");
+		var bgcTab = new config_tab("Backgrounds", "t_BgColrs", genTab);
+		var txcTab = new config_tab("Fonts", "t_TxColrs", genTab);
 		var clcTab = new config_tab("Classic", "t_ClscStyl", genTab);
 		var mdaTab = new config_tab("Media", "t_MdaStyl", genTab);
 		var dckTab = new config_tab("Dock", "t_DockStyl", genTab);
 		var cntTab = new config_tab("Center", "t_CentStyl", genTab);
 		
 		genTab.draw(tabHead);
+		bgcTab.draw(tabHead);
+		txcTab.draw(tabHead);
 		clcTab.draw(tabHead);
 		mdaTab.draw(tabHead);
 		dckTab.draw(tabHead);
 		cntTab.draw(tabHead);
 		
-		// Appearance Settings
-		var app_set_window = new config_window(clcTab, "ClscStyl");
-			// Settings
-		var app_section = new config_section();
-		app_section.sectionOptions.push(new config_desc_section('Coming Soon', 'This section is still under construction. Please excuse our mess.'));
-		app_set_window.sections.push(app_section);
-		
-		// Image Search Settings
-		var img_set_window = new config_window(mdaTab, "MdaStyl");
-			// Genearl Settings
-		var img_section = new config_section();
-		img_section.sectionOptions.push(new config_desc_section('Coming Soon', 'This section is still under construction. Please excuse our mess.'));
-		img_set_window.sections.push(img_section);
-		
-		// Video Search Settings
-		var vid_set_window = new config_window(dckTab, "DockStyl");
-			// Genearl Settings
-		var vid_section = new config_section();
-		vid_section.sectionOptions.push(new config_desc_section('Coming Soon', 'This section is still under construction. Please excuse our mess.'));
-		vid_set_window.sections.push(vid_section);
-		
-		// Other Settings
-		var other_set_window = new config_window(cntTab, "CentStyl");
-			// Advanced
-		var adv_section = new config_section();
-		adv_section.sectionOptions.push(new config_desc_section('Coming Soon', 'This section is still under construction. Please excuse our mess.'));
-		other_set_window.sections.push(adv_section);
-		
-		// General Settings
-		var gen_set_window = new config_window(genTab, "GenStyl");
-			// Searches
-		var otr_section = new config_section("Style");
-		otr_section.sectionOptions.push(new config_selectionBox("Layout Style", "style", ["Classic", "Media", "Dock",/* "Columns",*/ "Centered"], ["classic", "media", "dock",/* "column",*/ "center"], options.DEFAULT_STYL));
+		// Background Settings
+		var bgc_set_window = new config_window(bgcTab, 'BgColrs');
+			// Colors
 		var bgc_section = new config_section("Background Colors");
 		bgc_section.sectionOptions.push(new config_colorBox('Body (Mostly for Center Style)', 'genbgclr', options.DEFAULT_GENBGCLR));
 		bgc_section.sectionOptions.push(new config_colorBox('Main Area', 'resltclr', options.DEFAULT_RESLTCLR));
@@ -254,6 +274,11 @@ function style_dialog(popup) {
 		bgc_section.sectionOptions.push(new config_colorBox('Added Items', 'addedclr', options.DEFAULT_ADDEDCLR));
 		bgc_section.sectionOptions.push(new config_colorBox('Embedable Videos', 'plyblclr', options.DEFAULT_PLYBLCLR));
 		bgc_section.sectionOptions.push(new config_colorBox('Overlay', 'ovrlyclr', options.DEFAULT_OVRLYCLR));
+		bgc_set_window.sections.push(bgc_section);
+		
+		// Font Settings
+		var txc_set_window = new config_window(txcTab, 'TxColrs');
+			// Colors
 		var txc_section = new config_section("Text Colors");
 		txc_section.sectionOptions.push(new config_colorBox('General', 'restxtclr', options.DEFAULT_RESTXTCLR));
 		txc_section.sectionOptions.push(new config_colorBox('Links', 'lnktxtclr', options.DEFAULT_LNKTXTCLR));
@@ -262,22 +287,59 @@ function style_dialog(popup) {
 		txc_section.sectionOptions.push(new config_colorBox('Added Items', 'mdatxtclr', options.DEFAULT_MDATXTCLR));
 		txc_section.sectionOptions.push(new config_colorBox('Embed Area Text', 'plytxtclr', options.DEFAULT_PLYTXTCLR));
 		txc_section.sectionOptions.push(new config_colorBox('Embedable Videos', 'pbltxtclr', options.DEFAULT_PBLTXTCLR));
-		gen_set_window.sections.push(otr_section);
-		gen_set_window.sections.push(bgc_section);
-		gen_set_window.sections.push(txc_section);
+		txc_set_window.sections.push(txc_section);
+		
+		// Classic Settings
+		var classic_set_window = new config_window(clcTab, "ClscStyl");
+			// General Settings
+		var classic_section = new config_section();
+		classic_section.sectionOptions.push(new config_desc_section('Coming Soon', 'This section is still under construction. Please excuse our mess.'));
+		classic_set_window.sections.push(classic_section);
+		
+		// Media Settings
+		var media_set_window = new config_window(mdaTab, "MdaStyl");
+			// General Settings
+		var media_section = new config_section();
+		media_section.sectionOptions.push(new config_desc_section('Coming Soon', 'This section is still under construction. Please excuse our mess.'));
+		media_set_window.sections.push(media_section);
+		
+		// Dock Settings
+		var dock_set_window = new config_window(dckTab, "DockStyl");
+			// General Settings
+		var dock_section = new config_section();
+		dock_section.sectionOptions.push(new config_desc_section('Coming Soon', 'This section is still under construction. Please excuse our mess.'));
+		dock_set_window.sections.push(dock_section);
+		
+		// Center Settings
+		var center_set_window = new config_window(cntTab, "CentStyl");
+			// General Settings
+		var center_section = new config_section();
+		center_section.sectionOptions.push(new config_desc_section('Coming Soon', 'This section is still under construction. Please excuse our mess.'));
+		center_set_window.sections.push(center_section);
+		
+		// General Settings
+		var gen_set_window = new config_window(genTab, "GenStyl");
+			// Styles
+		var gen_section = new config_section("Style");
+		gen_section.sectionOptions.push(new config_selectionBox("Layout Style", "style", ["Classic", "Media", "Dock",/* "Columns",*/ "Centered"], ["classic", "media", "dock",/* "column",*/ "center"], options.DEFAULT_STYL));
+		gen_set_window.sections.push(gen_section);
 		
 		// Draw the windows
-		app_set_window.draw(wrapper);
-		img_set_window.draw(wrapper);
-		vid_set_window.draw(wrapper);
-		other_set_window.draw(wrapper);
+		bgc_set_window.draw(wrapper);
+		txc_set_window.draw(wrapper);
+		classic_set_window.draw(wrapper);
+		media_set_window.draw(wrapper);
+		dock_set_window.draw(wrapper);
+		center_set_window.draw(wrapper);
 		gen_set_window.draw(wrapper);
 		
 		// Push them to the windows array
-		this.windows.push(app_set_window);
-		this.windows.push(img_set_window);
-		this.windows.push(vid_set_window);
-		this.windows.push(other_set_window);
+		this.windows.push(bgc_set_window);
+		this.windows.push(txc_set_window);
+		this.windows.push(classic_set_window);
+		this.windows.push(media_set_window);
+		this.windows.push(dock_set_window);
+		this.windows.push(center_set_window);
 		this.windows.push(gen_set_window);
 		
 		// Save and default buttons
@@ -313,6 +375,23 @@ function style_dialog(popup) {
 	
 }
 
+/**	config_dialog
+  *	Configuration Dialog Object
+  *	
+  *	Construction Parameters
+  *		popup		The popup_dialog object it was created with
+  *	
+  *	Functions
+  *		draw
+  *			Draw the dialog on the page
+  *	
+  *		undraw
+  *			Undraw the dialog
+  *	
+  *		setDefaults
+  *			Set the defaults for all of the options
+  *		
+  */
 function config_dialog(popup) {
 	
 	this.dialog;
@@ -383,7 +462,7 @@ function config_dialog(popup) {
 		var app_set_window = new config_window(appTab, "AppConf");
 			// Settings
 		var app_section = new config_section("Features");
-		app_section.sectionOptions.push(new config_checkBox("Add Margins", "margs", options.DEFAULT_MARGS));
+		// app_section.sectionOptions.push(new config_checkBox("Add Margins", "margs", options.DEFAULT_MARGS));
 		app_section.sectionOptions.push(new config_checkBox("Remove Suggestions", "sugges", options.DEFAULT_SUGGES));
 		app_section.sectionOptions.push(new config_checkBox("Move \"Did you mean\" text", "dym", options.DEFAULT_DYM));
 		app_section.sectionOptions.push(new config_checkBox("Remove Sidebar Ads", "sideads", options.DEFAULT_SIDEADS));
@@ -518,6 +597,38 @@ function config_dialog(popup) {
 	};
 }
 
+/**	slideshow_dialog
+  *	Slideshow Dialog Object
+  *	
+  *	Construction Parameters
+  *		popup		The popup_dialog object it was created with
+  *	
+  *	Functions
+  *		add_image
+  *			Add an image to the slideshow slidedeck
+  *	
+  *		draw
+  *			Draw the dialog on the page
+  *	
+  *		undraw
+  *			Undraw the dialog
+  *	
+  *		keyboardControls
+  *			Handling of keyboard controls for the slideshow
+  *	
+  *		nextImage
+  *			Go to the next image
+  *	
+  *		prevImage
+  *			Go to the previous image
+  *	
+  *		pause
+  *			Pause the slideshow
+  *	
+  *		play
+  *			Play the slideshow
+  *		
+  */
 function slideshow_dialog(popup) {
 	
 	this.dialog;

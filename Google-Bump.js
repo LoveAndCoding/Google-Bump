@@ -2,7 +2,7 @@
 // @name			Google Bump
 // @namespace		http://userscripts.org/scripts/show/33449
 // @description		Adds some functionality to the Google web search. Main features include Multisearch, Video result extraction, Wikipedia definitions and links, and some clutter cleanup by. All options can be turned off.
-// @version			2.0.0.0a
+// @version			2.0.20100526
 // @include			http://www.google.tld/
 // @include			http://www.google.tld/#*
 // @include			http://www.google.tld/search?*
@@ -12,14 +12,16 @@
 
 /*
 	Author: KTaShes
-	Date: May 20 2010
+	Date: May 26 2010
 	
 	Code can now be found on GitHub @ http://github.com/ktsashes/Google-Bump
 	
 	This code uses juicer to compile from several different javascript files.
 	Juicer (C) Christian Johansen - http://cjohansen.no/en/ruby/juicer_a_css_and_javascript_packaging_tool
 */
-var version = "1.19";
+var version = "2.00";
+
+
 var image_store = {
 	
 	multi_upArrow : 	"data:image/png;base64,iVBORw0KGgoAA" +
@@ -412,12 +414,37 @@ function removeAllChildren(node) {
 }
 // Closes all features that display on top with a grey background
 function closeEx() {
-	conf.undraw();
-	stylr.undraw();
-	sldObj.undraw();
+	popupManager.closeAll();
 }
 	// End Helper Functions ------------------------------------------------------------
 
+/**	=================================================================
+  *	Media Embedding
+  *	=================================================================
+  */
+
+/**	Control_Icon
+  *	Control Icon Object
+  *	
+  *	Construction Parameters
+  *		icon		The src of the image
+  *		title		The title of the icon
+  *		handle		A handler for clicks
+  *	
+  *	Functions
+  *		draw
+  *			Draw the icon
+  *	
+  *		handleClick
+  *			Handles clicking on the given icon by delegating to assigned clickers
+  *	
+  *		addClicker
+  *			Add a click handler funciton
+  *	
+  *		removeClicker
+  *			Remove a click handler function
+  *	
+  */
 function Control_Icon (icon, title, handle) {
 	this.img = icon;
 	this.title = title;
@@ -459,22 +486,29 @@ function Control_Icon (icon, title, handle) {
 	};
 };
 
-function Image_Toolbar (img) {
-	this.res = img;
-	
-	this.draw = function (parentNode) {
-		
-	};
-}
-
-function Video_Toolbar (vid) {
-	this.res = vid;
-	
-	this.draw = function (parentNode) {
-		
-	};
-}
-
+/**	Media_Embed
+  *	Media Embed Object
+  *	
+  *	Functions
+  *		draw
+  *			Draw the icon
+  *	
+  *		addImageEmbed
+  *			Embed an image in the embed area
+  *	
+  *		addVideoEmbed
+  *			Embed an video in the embed area
+  *	
+  *		clearEmbed
+  *			Clean the embed area
+  *	
+  *		drawImageControls
+  *			Draw the controls for images
+  *	
+  *		drawVideoControls
+  *			Draw the controls for videos
+  *	
+  */
 function Media_Embed () {
 	
 	this.player;
@@ -549,7 +583,7 @@ function Media_Embed () {
 			});
 			this.player.appendChild(this.labelArea);
 		}
-		this.labelArea.innerHTML = label || '';
+		this.labelArea.innerHTML = label || this.defaultMessage;
 		
 		if(!this.controlsArea) {
 			this.controlsArea = $create("div", {
@@ -609,6 +643,16 @@ function Media_Embed () {
 		
 	};
 }
+
+/**	=================================================================
+  *	End Media Embedding
+  *	=================================================================
+  */
+
+/**	=================================================================
+  *	Style Store
+  *	=================================================================
+  */
 
 function stylesheet_store () {
 
@@ -1120,7 +1164,7 @@ function stylesheet_store () {
 		#cnt, #leftnav, #tbd, #atd, #tsf, #hidden_modes, #hmp { \
 			background-color: rgb(" + options.resltclr + "); \
 		} \
-		#wikiHeader a, #wikiHeader, #mBox, .detailedImgInfo { \
+		#wikiHeader a, #wikiHeader, #mBox, .detailedImgInfo, #newVer { \
 			background-color: rgb(" + options.addedclr + "); \
 			color: rgb(" + options.mdatxtclr + "); \
 		} \
@@ -1133,7 +1177,7 @@ function stylesheet_store () {
 		.embeddable a { \
 			color: rgb(" + options.pbltxtclr + ") !important; \
 		} \
-		a:link, .w, .q:active, .q:visited, .tbotu, #fll a, #bfl a { \
+		a:link, .w, .q:active, .q:visited, .tbotu, #fll a, #bfl a, #newVer a { \
 			color: rgb(" + options.lnktxtclr + "); \
 		} \
 		li.g span cite { \
@@ -1278,13 +1322,16 @@ function stylesheet_store () {
 			margin-left: .2em; \
 		} \
 		#newVer { \
-			width: 200px; \
-			height: 1.3em; \
-			margin: -1.8em 0px 0px 8px; \
 			text-align: center; \
-			font-size: 85%; \
-			background-color: #CCCCFF; \
+			font-size: 90%; \
 			padding: 1px; \
+		} \
+		#newVer a  { \
+			display: block; \
+		} \
+		.newVerAvailable { \
+			font-weight: bold; \
+			font-size: 120%; \
 		} \
 		.GB_dialog_popup { \
 			position: fixed; \
@@ -1567,7 +1614,12 @@ function stylesheet_store () {
 }
   
 var ssStore = new stylesheet_store();
-  
+
+/**	=================================================================
+  *	End Style Store
+  *	=================================================================
+  */
+
 /**
   *	Import Dependencies
   *	
@@ -1587,71 +1639,13 @@ function allStyles () {
 	}
 	
 	if (options.styl == "media" && (options.imgs || options.vids)) {
-		// var mediaSS = "a, img { border-style: none; } " +
-						// "#res { /*background: #1e68ef url(http://uwdcb.doesntexist.com/gbback.jpg) repeat-x scroll top left; */padding-top: 7px; } " +
-						// "#resOL { position: absolute; right: 0px; top: 7px;";
-		// if (options.vids && options.imgs) {
-			// mediaSS += "height: 300px;";
-		// } else if (options.imgs) {
-			// mediaSS += "height: 500px; } #imageList img { margin: 4px !important; padding: 4px !important; } #imageList { margin-top: 1% !important; width: 100% !important; height: 150px !important; position: static !important; } #resOL {";
-		// } else {
-			// mediaSS += "height: 500px; } #videoList { width: 100% !important; } #resOL {";
-		// }
-		// mediaSS += " width: 44%; overflow: auto; border: 1px solid black; background-color: #FFFFFF; } "+
-						// "#videoList { border: 1px solid black; overflow: auto; width: 55%; height: auto; margin-top: 1%; } "+
-						// "#videoList p { margin-top: 0px; margin-bottom: 5px; text-decoration: underline; } " +
-						// "#imageList { border: 1px solid black; overflow: auto; width: 44%; height: auto; position: absolute; top: 312px; right: 0px; } "+
-						// "#imageList img { margin: 1.4%; } " +
-						// "#pBox { border: 1px solid black; height: 500px; text-align: center; width: 55%; }" +
-						// "#pBox img { max-width: 95%; max-height: 95%; margin-top: 1%;} " +
-						// "#hidePly { display: none !important; } " +
-						// "#wikLink { float: left; } " +
-						// ".removed, .rl-details, .rl-snippet, .rl-short-snippet, .rl-snippet-grid-view, .rl-watch-on, .rl-special, .rl-cannot-play-here { display: none; } " +
-						// "#wikiHeader { font-size: 115%; background-color: #D8E2F5; padding-left: .2em; }" +
-						// "#wikiDesc { font-size: 75%; margin: 0px; padding: .2em; text-indent: 3em; border: 2px solid #D8E2F5; background-color: #FFFFFF; }" +
-						// "#wikiDiv { width: 100%; margin-bottom: .5em; margin-top: 1%; } " +
-						// "#res { padding-right: 0px; position: relative; } " +
-						// ".vid_result, .rl-res { width: 102px; margin-left: 2%; margin-right: 2%; display: inline-table; height: auto; text-align: center; } " +
-						// ".thumbnail-img { width: 100px; height: 80px; } " +
-						// ".rl-metadata, .rl-thumbnail { display: block; font-size: small; } " +
-						// "#sldLink { text-align: center; display: block;}" +
-						// "#slideShow { position: fixed; text-align: center; padding: 15px; top: 50%; left: 50%; z-index: 9998; background-color: white; border: 1px solid black; } " +
-						// ".sldImgs { max-width: " + maxwidth + "px; max-height: " + maxheight + "px; } " +
-						// "#greyOut { background-color: black; opacity: .6; width: 100%; height: 100%; z-index: 1000; position: fixed; top: 0px; left: 0px; } " +
-						// "#pBox, #imageList, #videoList { background-color: #D8E2F5; } " +
-						// ".rl-res, #imageList img { padding: 1%; background-color: #FFFFFF; border: 1px solid black; } ";
-		
 		GM_addStyle(ssStore.media_stylesheet);
 		$("resOL").parentNode.className = "resBox";
 		$("resOL").parentNode.appendChild($("nav"));
 		
 	} else if (options.styl == "dock") {
-		// var dockSS = "body { margin-bottom: 50px; } " +
-						// "a img { border-style: none; } " +
-						// ".closed { display: none; } " +
-						// "#dock { position: fixed; height: 40px; width: 260px; border: 1px solid #000000; border-bottom-style: none; bottom: 0px; right: 50%; margin-right: -130px; text-align: center; background-color: #F0F7F9; } " +
-						// ".dockLink { padding: 1em 1.25em; display: inline; cursor: pointer; float: left; } " +
-						// "#wikiHeader { font-size: 18pt; padding-left: .5em; } " +
-						// ".wiki_p { text-indent: 1.5em; } " +
-						// "#playerTag { text-align: center; margin-top: 0px; } " +
-						// "#pBox { position: relative; } " +
-						// "#pBox, #videoList, .imgLink img, #imageList { border: 1px solid #000000; } " +
-						// "#playerTag, #vidTag, #imageTag { background-color: #000000; color: #FFFFFF; text-shadow: -1px 0px #888888; } " +
-						// "#videoList .rl-item { display: -moz-stack; width: 16%; margin: 1px 2%; text-align: center; } " +
-						// "#vBox { height: 480px; } " +
-						// "#vidTag { border-bottom: 1px solid #000000; } " +
-						// "#videoList, #imageList { border-top-style: none; } " +
-						// ".rl-domain { display: block; } " +
-						// "#miniSldLink { cursor: pointer; float: right; font-size: small; padding: 2px 4px; margin-top: 1px; text-shadow: -1px 1px #666666; } " +
-						// "#miniSldLink:hover { background-color: #FFFFFF; color: #000000; text-shadow: -1px 1px #CCCCCC } " +
-						// "#imageList button, .rl-cannot-play-here, .rl-domain-below, .rl-watch-on, .rl-special, .rl-snippet { display: none; } " +
-						// ".imgShowing { text-align: center; } " +
-						// ".imgLink { display: inline-block;  margin: 1%; width: 9%; vertical-align: middle; } " +
-						// ".imgLink img { height: auto; padding: 2px; background-color: #555555; } " +
-						// ".aset { display: inline !important; } ";
 		GM_addStyle(ssStore.dock_stylesheet);
 		
-		//$("mBox").className = "removed";
 		var dock = $create("div", {
 			id : 'dock'
 		});
@@ -1751,126 +1745,12 @@ function allStyles () {
 		
 		document.body.appendChild(dock);
 	} else if (options.styl == "center") {
-		// var centerssheet = "body { width: 760px; margin: 0px auto !important; padding-top: 3px; border: 1px solid #000000; border-top-style: none; } " +
-							// "html { background-color: #DDDDFF; } " +
-							// "#tsf { position: relative; } " +
-							// ".gbh { left: auto !important; right: auto !important; width: 760px; } " +
-							// "#ssb { margin-bottom: 0px; padding-bottom: 0px; } " +
-							// "#mBox { position: relative; width: 600px; height: 220px; margin-left: -16px; overflow: hidden; border-bottom: 1px solid #6B90DA; border-top: 1px solid #6B90DA; } " +
-							// "#wikiDiv { min-height: 122px; z-index: 1003; border-bottom: 1px solid #000000; border-right: 1px solid #000000; position: absolute; top: 0px; left: 0px; background-color: #FFFFFF; width: 200px; } " +
-							// "#wikiHeader { font-size: 100%; text-align: center; border-bottom: 1px solid #000000; } " +
-							// "#wikiHeader a, #wikiHeader a:active { color: #0077CC; text-decoration: none; } " +
-							// "#wikiDesc { margin: 0px; padding: 5px 2px 2px 2px; font-size: 85%; } " +
-							// "#wikiExp { min-height: 120px; z-index: 1002; text-align: center; font-size: 75%; position: absolute; top: 0px; left: 0px; background-color: #FFFFFF; border-right: 1px solid #000000; border-bottom: 1px solid #000000; cursor: pointer; color: #0077CC; padding: 1px 4px; } " +
-							// "#pBox { width: 380px; text-align: center; height: 220px; background-color: #FFFFFF; } " +
-							// "#videoList { float: left; height: 220px; width: 299px; overflow-y: auto; overflow-x: hidden; border-right: 1px solid #6B90DA; } " + 
-							// "#vidTag, #imageTag, #playerTag { text-align: center; margin: 0px; padding: 0px 8px; background-color: #F0F7F9; border-bottom: 1px solid #6B90DA; } " +
-							// ".rl-item { max-width: 100px; float: left; padding: 5px 10px; } " +
-							// ".rl-thumbnail img { max-width: 100px; } " +
-							// ".rl-domain-below { overflow-x: hidden; width: 100px; } " +
-							// ".rl-details, .rl-snippet, .rl-snippet-grid-view, .rl-watch-on, .rl-cannot-play-here, .rl-special { display: none; } " +
-							// "#imageList { text-align: center; height: 220px; width: 299px; float: right; z-index: 1001; overflow-y: auto; overflow-x: hidden; } " +
-							// "#imageList img { max-width: 100px; } " +
-							// ".playing { display: block !important; z-index: 1004 !important; } " +
-							// ".imgShowing { display: block !important; z-index: 1004 !important; } " +
-							// ".imgShowing img { max-height: 190px; max-width: 380px; margin-top: 2px; } " +
-							// ".sldImgs { display: block; } " +
-							// "#vBox { background-color: #FFFFFF; } " +
-							// "#resOL { padding-left: 4px; } " +
-							// "#res { margin: 0px !important; } " +
-							// ".gac_m { left: 142px !important; margin: -25px 0px -100% 1px !important; float: left; } " +
-							// "#ssb { margin: 0px !important; } ";
-		// if (options.vids && options.imgs) {
-			// centerssheet += "#pBox { position: absolute; top: 0px; right: 0px; display: none; z-index: 1002; } .imgShowing { position: absolute; left: 0px; border-right: 1px solid #6B90DA; width: 379px; } .playing { position: absolute; right: 0px; } ";
-		// } else if (options.vids) {
-			// centerssheet += "#pBox { float: right; } ";
-		// } else {
-			// centerssheet += "#pBox { float: left; border-right: 1px solid #6B90DA; } ";
-		// }
 		GM_addStyle(ssStore.center_stylesheet);
-		
-		//var wikiExp = $create("div");
-		//documnet.body.appendChild(wikiExp);
 	} else {
-		// var ssheet = "#center_col { margin-right: 0px; } " +
-					// "#mBox { background-color: white; width: 400px; } #pBox { vertical-align: middle; overflow: hidden; width: 400px; } .playing, .imgShowing { position: relative; } " +
-					// ".playing #embedArea { height: 340px; } #foot { clear: both; } " +
-					// ".rBox { float: right; background-color: #F0F7F9; text-align: center; } .wBBord { border-bottom: 1px solid #6B90DA; } " +
-					// "#setShow, .blocked, .imgLink { display: block; } #vidTag, #imageTag { margin: 0px; } " +
-					// "#playerTag { background-color: #F0F7F9; height: 20px; } #vBox { height: 305px; } " +
-					// ".playimg { max-width: 400px; max-height: 345px; border-style: none; } " + 
-					// "#videoList { width: 180px; } #imageList { width: 220px; } #wikLink { float: left; display: inline; } #ssb { position: relative; height: 25px; } " +
-					// "#resStat { display: inline; position: absolute; top: 1px; right: 0px; } " + 
-					// "#resOL { margin: 0px 2% 0px .1em; } .toLI { display: list-item; } .reAddAd { width: 100px; } .g { margin-top: 0px; min-width: 540px; } " +
-					// "#ssb { position: relative; height: 25px; } #rsStats { display: inline; float: right; } " + 
-					// "#prs { display: inline; } .vidRes { width: 145px; display: block; } .vidRes .g { margin: 0px;  min-width: 0px;  margin-left: 1em; } " + 
-					// ".vidRes img { width: 137px; height: 97px; } .vrTitle { margin-bottom: 30px; } #exvidlist { width: 170px; } " + 
-					// ".vid_thumb { width: 140px; height: 100px; padding: 0px 10px; border-style: none; border-bottom: 1px solid #000000; background-color: #000000; } " +
-					// ".vid_result { font-size: 11pt; border: 1px solid #000000; margin: 9px; } .vid_result a { text-decoration: none; } " +
-					// "#ssb { margin-bottom: 0px; padding-bottom: 0px; } " +
-					// "#hidePly { display: none; } " +
-					// "#slideShow { position: fixed; text-align: center; padding: 15px; top: 50%; left: 50%; z-index: 9998; background-color: white; " + 
-					// "border: 1px solid black; } .sldImgs { max-width: " + maxwidth + "px; max-height: " + maxheight + "px; } " +
-					// "#sldLink { text-align: center; } #next{ float: right; } #prev { float: left; } #res { padding-right: 0px; margin-top: 0px; }" + 
-					// "#wikiHeader { font-size: 115%; background-color: #F0F7F9; padding-left: .2em; }" +
-					// "#wikiDesc { font-size: 75%; margin: 0px; padding: .2em; text-indent: 3em; border: 2px solid #F0F7F9; }" +
-					// "#wikiDiv { width: 580px; margin-top: -1px; margin-bottom: .5em; } " +
-					// ".ts td { padding: 0px 0px 0px 17px; } ";
 		GM_addStyle(ssStore.classic_stylesheet);
 	}
 	
-	// Applies css that is constant across all styles
-	// var genSS = "#greyOut { background-color: black; opacity: .6; width: 100%; height: 100%; z-index: 1000; position: fixed; top: 0px; left: 0px; } " + 
-					// "#gbLoader { position: absolute; top: 25px; right: 3px; } " +
-					// ".confLbl { font-size: small; display: inline; } .opli { display: inline; } .confTab { margin: 0px; padding: 2px 4px; border: 1px solid black; } " +
-					// "#confWel, #styleWel { border-bottom: 1px solid black; font-size: 22pt; font-family: \"Times New Roman\", serif; text-align: center; background-color: #F0F7F9; -moz-border-radius-topleft: 5px; -moz-border-radius-topright: 5px;} " +
-					// "#slideShow { position: fixed; text-align: center; padding: 15px; top: 50%; left: 50%; z-index: 9998; background-color: white; border: 1px solid black; } " +
-					// ".config_section_head { margin: 6px 0px; border-bottom: 1px solid grey; } #confWrap { height: 427px; border-bottom: 1px solid black; margin-bottom: 2px; } " +
-					// ".sldImgs { display: block; } .embeddable { background-color: #FFFFFF; } .keycuts { width: 100%; } .keycuts em { text-decoration: underline; font-weight: bold; } " +
-					// ".conf_Tab, #confTabs { background-color: #F0F7F9; } #t_AbtConf { background-color: #F0F7F9 !important; } " +
-					// "#hidePly { background-color: #FFFFFF; color: #FF0000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; font-size: 50%; position: absolute; top: 0px; right: 0px; width: 1.1em; height: 1.1em; cursor: pointer; } " +
-					// "#confTabs { height: 19px; border-bottom: 1px solid #000000; position: relative; margin-bottom: 3px; } .conf_Tab { padding: 0px 0.5em .25em .5em; " + 
-					// "margin-top: 4px; border-bottom: 1px solid black; border-right: 1px solid black; display: inline; z-index: 10001; cursor: pointer; line-height: 16px; } " +
-					// ".selected_tab { border-bottom-color: #FFFFFF; background-color: #FFFFFF; } .confTabOn { margin: .7em; } .confTabOn label { margin: .2em 0px; } .confTabOn button { margin: .5em 0px; } " + 
-					// "#t_AbtConf { border-color: #000000 !important; display: block; position: absolute; top: -4px; right: 0px; text-align: right; border-right-style: none; z-index: 10000; } " +
-					// "#AbtConf p { margin-top: 0px; } #deapallFault, #sNc { margin-left: .2em; } " +
-					// "#newVer { width: 200px; height: 1.3em; margin: -1.8em 0px 0px 8px; text-align: center; font-size: 85%; background-color: #CCCCFF; padding: 1px; } " +
-					// ".GB_dialog_popup { position: fixed; left: 50%; top: 50%; width: 500px; height: 520px; margin-left: -250px; margin-top: -260px; z-index: 9999; background-color: white; border: 1px solid black; -moz-border-radius: 5px; } " +
-					// "#res { margin: 0px 8px; } #cnt { max-width: 100%; } " +
-					// "#ssb { height: auto; overflow: hidden; } " +
-					// "#wikLink { float: left; } .conf_subsect { margin-bottom: 10px; } " +
-					// ".error { color:#FF0000; } " +
-					// ".controlIcon { cursor: pointer; } " +
-					// "#dymTxt, #wikiLink { margin: 5px; } ";
-	// if (options.oldSize) {
-		// genSS += "#sff .lst, #sff .lsb { font-size: small; height: auto; } ";
-	// }
-	// if (options.margs) {
-		// genSS += "#gbar { padding-left: 8px; } .e, ";
-	// }
-	// if (options.sideads || options.sugges) {
-		// genSS += "#rhs, ";
-	// }
-	// genSS += ".removed, #preload { display: none !important; }";
-	
 	GM_addStyle(ssStore.gen_stylesheet);
-	
-	// var msSS = "#currentSearch { margin-top: 0px !important; } " + 
-				// ".lsbb { white-space: nowrap; } " +
-				// "#allSearches { border: 1px solid #0077CC; margin-top: 10px; background-color: #FFFFFF; z-index: 1000; float: left; } " +
-				// "#expand, #collapse { cursor: pointer; font-family: sans-serif; float: right; color: #0077CC; margin-right: 3px; margin-bottom: 2px; } " +
-				// "#collapse { font-size: 60%; padding-left: .3em; padding-right: .35em; } " +
-				// "#expand { font-size: 50%; padding-left: .2em; padding-right: .25em;  } " +
-				// ".TabHead { font-size: 75%; color: #555555; margin: 0px; margin-left: 1em; display: inline; } " +
-				// ".siteSelector { display: inline; margin-left: 1em; margin-bottom: 1em; } " +
-				// ".searchBoxes { display: inline; margin-left: 1em; width: 50%; } " +
-				// ".closeBtn { color: red; display: inline; margin: 0px; cursor: pointer; font-size: 50%; vertical-align: top; margin-left: .8em; } " +
-				// "#expandedMulti hr { margin: 1px; } " +
-				// "#adding { margin-left: 3em; cursor: pointer; font-size: 85%; color: blue; margin-top: -1em; } " +
-				// "#searchAll { font-size: normal; } " +
-				// "#otherSearchContent { margin-bottom: 44px; } " +
-				// ".gac_m { z-index: 1500 !important; border: 1px solid #D0D0D0 !important; border-top-style: none !important; } " +
-				// ".ts td { padding-left: 4px !important; } ";
 	
 	GM_addStyle(ssStore.multisearch_stylesheet);
 	
@@ -1923,7 +1803,7 @@ function setupPlayer(label) {
 	player.appendChild(tagDiv);
 	player.appendChild(hidePlayer);
 }
-//
+// Change the Google logo to be transparent
 function logoToTrans() {
 	var currLogo = $('logo').childNodes[1];
 	
@@ -1943,7 +1823,7 @@ function logoToTrans() {
 	removeAllChildren($('logo'));
 	$('logo').appendChild(canvas);
 }
-//
+// Change the icon sheet from Google to be transparent
 function iconSheetTrans() {
 	var img = new Image();
 	img.src = "/images/srpr/nav_logo13.png";
@@ -1996,13 +1876,18 @@ function verNotice() {
 		id : "newVer"
 	});
 	
+	divHolder.appendChild($create("span", {
+		textContent : "A newer version of Google Bump is available.",
+		className : "newVerAvailable"
+	}));
+	
 	var uplink = $create("a", {
 		href : "http://userscripts.org/scripts/source/33449.user.js",
 		textContent : "Update Google Bump"
 	});
 	divHolder.appendChild(uplink);
 	
-	divHolder.appendChild($create("textNode", " | "));
+	// divHolder.appendChild($create("textNode", " | "));
 	
 	uplink = $create("a", {
 		href : "http://userscripts.org/scripts/show/33449#full_description",
@@ -2010,7 +1895,7 @@ function verNotice() {
 	});
 	divHolder.appendChild(uplink);
 	
-	$("tsf").appendChild(divHolder);
+	$("leftnav").insertBefore(divHolder, $('leftnav').childNodes[0]);
 }
 	// End Update Script -----------------------------------------------------------------
 
@@ -2154,7 +2039,10 @@ function color_picker(color) {
   *	
   *	@depends color-picker.js
   */
-  
+
+/**
+  *	Configuration tab
+  */
 function config_tab(title, id, on) {
 	
 	this.title = title;
@@ -2192,6 +2080,9 @@ function config_tab(title, id, on) {
 	};
 }
 
+/**
+  *	Configuration window
+  */
 function config_window(tab, id) {
 	
 	this.tab = tab;
@@ -2240,6 +2131,9 @@ function config_window(tab, id) {
 	};
 }
 
+/**
+  *	Configuration section
+  */
 function config_section(title) {
 	
 	this.title = title ? title : "";
@@ -2291,7 +2185,10 @@ function config_section(title) {
 		}
 	};
 }
-	
+
+/**
+  *	Configuration descriptoin area
+  */  
 function config_desc_section(title, content) {
 	
 	this.title = title ? title : "";
@@ -2325,6 +2222,9 @@ function config_desc_section(title, content) {
 	};
 }
 
+/**
+  *	Configuration boolean check box
+  */
 function config_checkBox(label, id, dflt) {
 	
 	this.label = label;
@@ -2367,6 +2267,9 @@ function config_checkBox(label, id, dflt) {
 	};
 }
 
+/**
+  *	Configuration list selection box
+  */
 function config_selectionBox(label, id, op_labels, op_values, dflt) {
 	
 	this.label = label;
@@ -2420,6 +2323,9 @@ function config_selectionBox(label, id, op_labels, op_values, dflt) {
 	};
 }
 
+/**
+  *	Configuration color selector
+  */
 function config_colorBox(label, id, dflt) {
 	
 	this.label = label;
@@ -2494,6 +2400,9 @@ function config_colorBox(label, id, dflt) {
 	};
 }
 
+/**
+  *	General purpose button object
+  */
 function button(value, action) {
 	
 	this.val = value;
@@ -2516,7 +2425,7 @@ function button(value, action) {
 	
 	this.undraw = function () {
 		$remove(this.btn);
-		this.btn = SET_UNDEFINED;
+		this.btn = undefined;
 	}
 }
 
@@ -2530,6 +2439,35 @@ function button(value, action) {
   *	=================================================================
   */
 
+/**	popup_manager
+  *	Popup Dialog Manager Object
+  *	
+  *	Functions
+  *		newSlideShow
+  *			<= Return popup_dialog => Creates a new slideshow
+  *		
+  *		newStyler
+  *			<= Return popup_dialog => Creates a new styler dialog
+  *		
+  *		newConfig
+  *			<= Return popup_dialog => Creates a new configuration dialog
+  *		
+  *		newColor
+  *			<= Return popup_dialog => Creates a new color popup
+  *		
+  *		newPopup
+  *			<= Return popup_dialog => Creates a new popup of a given type
+  *		
+  *		closeAll
+  *			Closes any open popups
+  *		
+  *		closeColor
+  *			Closes any open color popups
+  *		
+  *		readySwitch
+  *			Prepares the page for switching dialogs
+  *	
+  */
 function popup_manager () {
 	
 	this.popup = [];
@@ -2685,7 +2623,7 @@ function popup_dialog(box_type) {
 		}
 		
 		$remove(this.shader);
-		this.shader = SET_UNDEFINED;
+		this.shader = undefined;
 	};
 	
 	this.is_drawn = function () {
@@ -2693,6 +2631,23 @@ function popup_dialog(box_type) {
 	};
 };
 
+/**	style_dialog
+  *	Style Dialog Object
+  *	
+  *	Construction Parameters
+  *		popup		The popup_dialog object it was created with
+  *	
+  *	Functions
+  *		draw
+  *			Draw the dialog on the page
+  *	
+  *		undraw
+  *			Undraw the dialog
+  *	
+  *		setDefaults
+  *			Set the defaults for all of the options
+  *	
+  */
 function style_dialog(popup) {
 	
 	this.dialog;
@@ -2725,50 +2680,24 @@ function style_dialog(popup) {
 		
 		// Creates and appends the navigation tabs
 		var genTab = new config_tab("General", "t_GenStyl");
+		var bgcTab = new config_tab("Backgrounds", "t_BgColrs", genTab);
+		var txcTab = new config_tab("Fonts", "t_TxColrs", genTab);
 		var clcTab = new config_tab("Classic", "t_ClscStyl", genTab);
 		var mdaTab = new config_tab("Media", "t_MdaStyl", genTab);
 		var dckTab = new config_tab("Dock", "t_DockStyl", genTab);
 		var cntTab = new config_tab("Center", "t_CentStyl", genTab);
 		
 		genTab.draw(tabHead);
+		bgcTab.draw(tabHead);
+		txcTab.draw(tabHead);
 		clcTab.draw(tabHead);
 		mdaTab.draw(tabHead);
 		dckTab.draw(tabHead);
 		cntTab.draw(tabHead);
 		
-		// Appearance Settings
-		var app_set_window = new config_window(clcTab, "ClscStyl");
-			// Settings
-		var app_section = new config_section();
-		app_section.sectionOptions.push(new config_desc_section('Coming Soon', 'This section is still under construction. Please excuse our mess.'));
-		app_set_window.sections.push(app_section);
-		
-		// Image Search Settings
-		var img_set_window = new config_window(mdaTab, "MdaStyl");
-			// Genearl Settings
-		var img_section = new config_section();
-		img_section.sectionOptions.push(new config_desc_section('Coming Soon', 'This section is still under construction. Please excuse our mess.'));
-		img_set_window.sections.push(img_section);
-		
-		// Video Search Settings
-		var vid_set_window = new config_window(dckTab, "DockStyl");
-			// Genearl Settings
-		var vid_section = new config_section();
-		vid_section.sectionOptions.push(new config_desc_section('Coming Soon', 'This section is still under construction. Please excuse our mess.'));
-		vid_set_window.sections.push(vid_section);
-		
-		// Other Settings
-		var other_set_window = new config_window(cntTab, "CentStyl");
-			// Advanced
-		var adv_section = new config_section();
-		adv_section.sectionOptions.push(new config_desc_section('Coming Soon', 'This section is still under construction. Please excuse our mess.'));
-		other_set_window.sections.push(adv_section);
-		
-		// General Settings
-		var gen_set_window = new config_window(genTab, "GenStyl");
-			// Searches
-		var otr_section = new config_section("Style");
-		otr_section.sectionOptions.push(new config_selectionBox("Layout Style", "style", ["Classic", "Media", "Dock",/* "Columns",*/ "Centered"], ["classic", "media", "dock",/* "column",*/ "center"], options.DEFAULT_STYL));
+		// Background Settings
+		var bgc_set_window = new config_window(bgcTab, 'BgColrs');
+			// Colors
 		var bgc_section = new config_section("Background Colors");
 		bgc_section.sectionOptions.push(new config_colorBox('Body (Mostly for Center Style)', 'genbgclr', options.DEFAULT_GENBGCLR));
 		bgc_section.sectionOptions.push(new config_colorBox('Main Area', 'resltclr', options.DEFAULT_RESLTCLR));
@@ -2776,6 +2705,11 @@ function style_dialog(popup) {
 		bgc_section.sectionOptions.push(new config_colorBox('Added Items', 'addedclr', options.DEFAULT_ADDEDCLR));
 		bgc_section.sectionOptions.push(new config_colorBox('Embedable Videos', 'plyblclr', options.DEFAULT_PLYBLCLR));
 		bgc_section.sectionOptions.push(new config_colorBox('Overlay', 'ovrlyclr', options.DEFAULT_OVRLYCLR));
+		bgc_set_window.sections.push(bgc_section);
+		
+		// Font Settings
+		var txc_set_window = new config_window(txcTab, 'TxColrs');
+			// Colors
 		var txc_section = new config_section("Text Colors");
 		txc_section.sectionOptions.push(new config_colorBox('General', 'restxtclr', options.DEFAULT_RESTXTCLR));
 		txc_section.sectionOptions.push(new config_colorBox('Links', 'lnktxtclr', options.DEFAULT_LNKTXTCLR));
@@ -2784,22 +2718,59 @@ function style_dialog(popup) {
 		txc_section.sectionOptions.push(new config_colorBox('Added Items', 'mdatxtclr', options.DEFAULT_MDATXTCLR));
 		txc_section.sectionOptions.push(new config_colorBox('Embed Area Text', 'plytxtclr', options.DEFAULT_PLYTXTCLR));
 		txc_section.sectionOptions.push(new config_colorBox('Embedable Videos', 'pbltxtclr', options.DEFAULT_PBLTXTCLR));
-		gen_set_window.sections.push(otr_section);
-		gen_set_window.sections.push(bgc_section);
-		gen_set_window.sections.push(txc_section);
+		txc_set_window.sections.push(txc_section);
+		
+		// Classic Settings
+		var classic_set_window = new config_window(clcTab, "ClscStyl");
+			// General Settings
+		var classic_section = new config_section();
+		classic_section.sectionOptions.push(new config_desc_section('Coming Soon', 'This section is still under construction. Please excuse our mess.'));
+		classic_set_window.sections.push(classic_section);
+		
+		// Media Settings
+		var media_set_window = new config_window(mdaTab, "MdaStyl");
+			// General Settings
+		var media_section = new config_section();
+		media_section.sectionOptions.push(new config_desc_section('Coming Soon', 'This section is still under construction. Please excuse our mess.'));
+		media_set_window.sections.push(media_section);
+		
+		// Dock Settings
+		var dock_set_window = new config_window(dckTab, "DockStyl");
+			// General Settings
+		var dock_section = new config_section();
+		dock_section.sectionOptions.push(new config_desc_section('Coming Soon', 'This section is still under construction. Please excuse our mess.'));
+		dock_set_window.sections.push(dock_section);
+		
+		// Center Settings
+		var center_set_window = new config_window(cntTab, "CentStyl");
+			// General Settings
+		var center_section = new config_section();
+		center_section.sectionOptions.push(new config_desc_section('Coming Soon', 'This section is still under construction. Please excuse our mess.'));
+		center_set_window.sections.push(center_section);
+		
+		// General Settings
+		var gen_set_window = new config_window(genTab, "GenStyl");
+			// Styles
+		var gen_section = new config_section("Style");
+		gen_section.sectionOptions.push(new config_selectionBox("Layout Style", "style", ["Classic", "Media", "Dock",/* "Columns",*/ "Centered"], ["classic", "media", "dock",/* "column",*/ "center"], options.DEFAULT_STYL));
+		gen_set_window.sections.push(gen_section);
 		
 		// Draw the windows
-		app_set_window.draw(wrapper);
-		img_set_window.draw(wrapper);
-		vid_set_window.draw(wrapper);
-		other_set_window.draw(wrapper);
+		bgc_set_window.draw(wrapper);
+		txc_set_window.draw(wrapper);
+		classic_set_window.draw(wrapper);
+		media_set_window.draw(wrapper);
+		dock_set_window.draw(wrapper);
+		center_set_window.draw(wrapper);
 		gen_set_window.draw(wrapper);
 		
 		// Push them to the windows array
-		this.windows.push(app_set_window);
-		this.windows.push(img_set_window);
-		this.windows.push(vid_set_window);
-		this.windows.push(other_set_window);
+		this.windows.push(bgc_set_window);
+		this.windows.push(txc_set_window);
+		this.windows.push(classic_set_window);
+		this.windows.push(media_set_window);
+		this.windows.push(dock_set_window);
+		this.windows.push(center_set_window);
 		this.windows.push(gen_set_window);
 		
 		// Save and default buttons
@@ -2835,6 +2806,23 @@ function style_dialog(popup) {
 	
 }
 
+/**	config_dialog
+  *	Configuration Dialog Object
+  *	
+  *	Construction Parameters
+  *		popup		The popup_dialog object it was created with
+  *	
+  *	Functions
+  *		draw
+  *			Draw the dialog on the page
+  *	
+  *		undraw
+  *			Undraw the dialog
+  *	
+  *		setDefaults
+  *			Set the defaults for all of the options
+  *		
+  */
 function config_dialog(popup) {
 	
 	this.dialog;
@@ -2905,7 +2893,7 @@ function config_dialog(popup) {
 		var app_set_window = new config_window(appTab, "AppConf");
 			// Settings
 		var app_section = new config_section("Features");
-		app_section.sectionOptions.push(new config_checkBox("Add Margins", "margs", options.DEFAULT_MARGS));
+		// app_section.sectionOptions.push(new config_checkBox("Add Margins", "margs", options.DEFAULT_MARGS));
 		app_section.sectionOptions.push(new config_checkBox("Remove Suggestions", "sugges", options.DEFAULT_SUGGES));
 		app_section.sectionOptions.push(new config_checkBox("Move \"Did you mean\" text", "dym", options.DEFAULT_DYM));
 		app_section.sectionOptions.push(new config_checkBox("Remove Sidebar Ads", "sideads", options.DEFAULT_SIDEADS));
@@ -3040,6 +3028,38 @@ function config_dialog(popup) {
 	};
 }
 
+/**	slideshow_dialog
+  *	Slideshow Dialog Object
+  *	
+  *	Construction Parameters
+  *		popup		The popup_dialog object it was created with
+  *	
+  *	Functions
+  *		add_image
+  *			Add an image to the slideshow slidedeck
+  *	
+  *		draw
+  *			Draw the dialog on the page
+  *	
+  *		undraw
+  *			Undraw the dialog
+  *	
+  *		keyboardControls
+  *			Handling of keyboard controls for the slideshow
+  *	
+  *		nextImage
+  *			Go to the next image
+  *	
+  *		prevImage
+  *			Go to the previous image
+  *	
+  *		pause
+  *			Pause the slideshow
+  *	
+  *		play
+  *			Play the slideshow
+  *		
+  */
 function slideshow_dialog(popup) {
 	
 	this.dialog;
@@ -3260,7 +3280,7 @@ function configurations() {
 		conf.undraw();
 	}
 }
-//
+// Opens the style configuration page
 function styler() {
 	if (!stylr) {
 		stylr = popupManager.newStyler();
@@ -3274,7 +3294,7 @@ function styler() {
 }
 	// End Configuration Functions ----------------------------------------------------
 
-// 
+// Activate Keyboard Shortcuts for the script
 function keycuts() {
 	document.addEventListener("keypress", function (event) {
 		if(event.ctrlKey && event.shiftKey) {
@@ -3305,10 +3325,35 @@ function keycuts() {
 	}, false);
 }
 
+/**	=================================================================
+  *	Multisearch
+  *	=================================================================
+  */
+
 /**	multisearcher
   *	Multisearch Object
   *	
   *	Functions
+  *		draw
+  *			Draw the multisearch option
+  *	
+  *		addBox
+  *			Add a new search box
+  *	
+  *		expandCollapse
+  *			Expand or collapse the multisearch boxes
+  *	
+  *		searchAll
+  *			Search all boxes
+  *	
+  *		searchNew
+  *			Search only added boxes
+  *	
+  *		getAllVals
+  *			<= Return Array => Get an array of all the values and their search location
+  *	
+  *		getNewVals
+  *			<= Return Array => Get an array of only the new boxes values and their search location
   *	
   */
 function multisearcher() {
@@ -3320,36 +3365,6 @@ function multisearcher() {
 	this.multiwrapper;
 	this.newSearchWrapper;
 	this.origOptionBox;
-	
-	// Images
-	this.downArrow = "iVBORw0KGgoAAAANSUhEUgAAAA0AAAAICA" +
-					"YAAAAiJnXPAAAAGXRFWHRTb2Z0d2FyZQBBZ" +
-					"G9iZSBJbWFnZVJlYWR5ccllPAAAAOJJREFU" +
-					"eNpiZGBg4AJiAwbiwQUWkAbZ9FnN%2F%2F%" +
-					"2F8Yvr%2F6yfz%2F39%2FGP%2F%2F%2FcXE" +
-					"8B8owwhEzGz%2FGJlY%2FjOysf9lZGH793h" +
-					"mWi0jzCb57IWNPJq2lkBF3ECNDAz%2FgboY" +
-					"GRmAGhiAhnz9cv3w8YdT4%2BtBNjH%2BB0o" +
-					"yMjKCNSoXrWzg0nayZGLl5GGAWvXv9%2Fcv" +
-					"367uO363L7wBpAGo%2FhsTyJEgBkgAJMH58" +
-					"OhpfqYfX%2Fk5mBlANIiPrIEBqgGOoU61cu" +
-					"%2Fccch79buvIBrEB4mjqEPmIGv06d15BJs" +
-					"GrJqQNWLTAMIAAQYAJLynOOE%2FN%2BkAAA" +
-					"AASUVORK5CYII%3D";
-	this.upArrow = "iVBORw0KGgoAAAANSUhEUgAAAA0AAAAICAYA" +
-					"AAAiJnXPAAAAGXRFWHRTb2Z0d2FyZQBBZG9" +
-					"iZSBJbWFnZVJlYWR5ccllPAAAAOJJREFUeN" +
-					"pi%2BP%2F%2FPwM6BgIuILYC0VjlcWmQCG0" +
-					"4hksjdg1hjUdVG%2FZ%2FBdHYNDJCFTMwMj" +
-					"KCNBhIx%2FZ08GjZGTOxcXH9%2B%2FXt25d" +
-					"rh84%2BXVxSAZS7AFT7DawWrBOqQTZ1eguv" +
-					"tqMZEwcvN1AQ5AyGfz8%2Bf%2F18df%2Bpx" +
-					"7Mza2AaGaFOMpDPWdjIq%2B9mwczOy8PExM" +
-					"gAkgC54d%2B%2F%2Fwx%2Ff37%2B8vnirhM" +
-					"Pp8TXgzSC5KxUilc2sDEzM7KzMjNxADErCx" +
-					"MjM9D6v0Bjf%2F%2F59%2F%2FH77%2F%2Ff" +
-					"gLxr79%2F%2F9%2FpDW%2BA28RAPLgAEGAA" +
-					"Y5%2Bk2Ib1C%2BEAAAAASUVORK5CYII%3D";
 	
 	this.draw = function () {
 		
@@ -3381,7 +3396,7 @@ function multisearcher() {
 		tabhead2.textContent = "New Tab(s)";
 		tabhead2.className = "TabHead";
 		
-		this.origOptionBox = new multisearchbox(null).optionList("Orig");
+		this.origOptionBox = new multisearchbox(null).getOptBox();
 		
 		this.multiwrapper.appendChild(tabhead1);
 		this.multiwrapper.appendChild(this.origOptionBox);
@@ -3505,6 +3520,29 @@ function multisearcher() {
 }
 
 /**	multisearchbox
+  *	Multisearch Box Object
+  *	
+  *	Construction Parameters
+  *		parentObj		The multisearch object that it was created from
+  *	
+  *	Functions
+  *		draw
+  *			Draw the multisearch box
+  *	
+  *		undraw
+  *			Undraw the multisearch box
+  *	
+  *		getOptBox
+  *			<= Return HTML Object => Returns select box with the options
+  *	
+  *		addCode
+  *			Add the code for this box to the given array for multisearching
+  *	
+  *		setValue
+  *			Set the value for the box
+  *	
+  *		search
+  *			If it is active, search for it
   *	
   */
 function multisearchbox (parentObj) {
@@ -3521,9 +3559,7 @@ function multisearchbox (parentObj) {
 	// quote|howto|defin|anidb|imdb|gamefaq|diggs|utube|wikipda|googl|flckr|cnns|opnsrc|eby|espns
 	this.valList = ["quote", "howto", "defin", "anidb", "imdb", "gamefaq", "diggs", "utube", "wikipda", "flckr", "cnns", "opnsrc", "eby", "espns", "googl"];
 	this.showList = ["WikiQuote", "Wiki How to", "Wiktionary", "AnimeDB", "IMDB", "GameFAQs", "Digg", "Youtube", "Wikipedia", "Flickr", "CNN", "Source Forge", "Ebay", "ESPN", "Google"];
-	this.closeImg = "";
-	this.undoImg = "";
-	
+		
 	this.draw = function (parentNode) {
 		this.active = true;
 		
@@ -3595,22 +3631,13 @@ function multisearchbox (parentObj) {
 		}
 	};
 	
-	this.optionList = function (id) {
-		if (!this.optionBox) {
-			this.optionBox = $create("select", {
-				className : "siteSelector"
-			});
-			for (var i = this.showList.length - 1; i >= 0;i--) {
-				var opt = $create("option", {
-					value : this.valList[i],
-					textContent : this.showList[i]
-				});
-				this.optionBox.appendChild(opt);
-			}
-		}
-		return this.optionBox;
-	};
 }
+
+/**	=================================================================
+  *	End Multisearch
+  *	=================================================================
+  */
+
 /**
   *	Import Dependencies
   *	
@@ -3711,13 +3738,13 @@ function multiSearchSetup() {
 	multiBox = new multisearcher();
 	multiBox.draw();
 }
-//
+// Handles clicks for opening links in new tabs
 function clickd() {
 	document.addEventListener("click", function(event) {
 		// Makes sure it is a left click
-		if (event.button === 0 && !event.ctrlKey && !event.altKey && !event.shiftKey) {
+		if (event.button === 0 && !event.ctrlKey && !event.altKey && !event.shiftKey && options.tabs) {
 			// Opens all links that are external links in tabs if the tab feature is turned on
-			if (checkallparentsforit(event, "resOL")) {
+			if (checkallparentsforit(event.target, "resOL")) {
 				if (event.target.href) {
 					event.stopPropagation();
 					event.preventDefault();
@@ -4154,6 +4181,28 @@ function menutogglevids(theSearch) {
   *	=================================================================
   */
 
+/**	Image_Search
+  *	Image Search Object
+  *	
+  *	Construction Parameters
+  *		src			The src for the image
+  *		link		The link to the image
+  *		title		The title of the image
+  *		sizeInfo	Information string on the size
+  *		type		Type of the image
+  *		num			The number of the image in the results
+  *	
+  *	Functions
+  *		draw
+  *			Draw the image
+  *	
+  *		clicked
+  *			Handles actions if an image is clicked
+  *	
+  *		buildImage
+  *			<= Return Image => Builds the image HTML Ojbect for the given settings
+  *	
+  */
 function indiv_img_result(src, link, title, sizeInfo, type, num) {
 	
 	this.src = src;
@@ -4231,6 +4280,20 @@ function indiv_img_result(src, link, title, sizeInfo, type, num) {
 	
 }
 
+/**	img_set
+  *	Image Set Object
+  *	
+  *	Functions
+  *		draw
+  *			Draw the set
+  *	
+  *		undraw
+  *			Undraw the set
+  *	
+  *		addImg
+  *			Add an image to the set
+  *	
+  */
 function img_set() {
 	
 	this.imgs = [];
@@ -4259,6 +4322,41 @@ function img_set() {
 	};
 }
 
+/**	Image_Search
+  *	Image Search Object
+  *	
+  *	Construction Parameters
+  *		query		The search query
+  *	
+  *	Functions
+  *		draw
+  *			Draw and perform intiate search
+  *	
+  *		next
+  *			Show the next set
+  *	
+  *		prev
+  *			Show the previous set
+  *	
+  *		clickImage
+  *			Simulate clicking on an image
+  *	
+  *		startSlides
+  *			Start the slideshow
+  *	
+  *		buildSets
+  *			Build the sets of images
+  *	
+  *		processPage
+  *			Add the images from a given page
+  *	
+  *		errorPage
+  *			Handles error pages (dummy function at the moment)
+  *	
+  *		search
+  *			Perform a search
+  *	
+  */
 function Image_Search(query) {
 	
 	this.query = query;
@@ -4427,6 +4525,7 @@ function Image_Search(query) {
   *	End Image Search
   *	=================================================================
   */
+
 /**
   *	Import Dependencies
   *	
@@ -4435,226 +4534,12 @@ function Image_Search(query) {
 	// Start Image Search Functions ------------------------------------------------
 // Starts the slide show
 function startslides() {
-	// if (!$("plySld").disabled && !sldObj.is_drawn()) {
-		// if(conf.is_drawn()) {
-			// conf.undraw();
-		// }
-		// if(stylr && stylr.is_drawn()) {
-			// stylr.undraw();
-		// }
-		// sldObj.draw();
-	// } else if (sldObj && sldObj.is_drawn()) {
-		// sldObj.undraw();
-	// }
 	if(imgSearch) {
 		imgSearch.startSlides();
 	}
 }
-// Change the displayed set of images in the mediabox.
-function changeset(changeby) {
-	var sets = $cl("aset blocked");
-	var so = parseInt(sets[0].id.substr(6));
-	if (sets[0]) {
-		sets[0].className = "aset removed";
-		$("imgset" + (so + changeby)).className = "aset blocked";
-		if (changeby > 0) {
-			if (so === 0) {
-				$("prev").disabled = false;
-			}
-			if (so == $cl("aset removed").length - 1 || $("imgset" + (so + 2)).childNodes.length === 0) {
-				$("next").disabled = true;
-			}
-		} else if (changeby < 0) {
-			if (so == 1) {
-				$("prev").disabled = true;
-			}
-			if (so == $cl("aset removed").length || $("imgset" + (so + 1)).childNodes.length === 0) {
-				$("next").disabled = false;
-			}
-		}
-	}
-}
-// Displays a message that no images where found
-function noimages(response) {
-	var box = rightBox("imageList");
-	box.textContent = "No Images Found";
-	$("mBox").appendChild(box);
-	
-	if (options.styl == "dock") {
-		box.className = "removed";
-	}
-}
-// Show the loaded images
-function showimages(response) {
-	/*
-		http://tbn3.google.com/images?q=tbn:dBk3GpW1jNJbZM:http://1.bp.blogspot.com/_sUpF830t0gU/SWbJrRPrsaI/AAAAAAAAAJI/VjT3kh6cNEI/s320/Blah_Blah_Blah.jpg
-		14 + ?q=tbn: + 2 + 3 
-		6
-	*/
-	var na;
-	eval("na = new Array" + response.responseText.match(/dyn\.setResults\(\[\[[^]*]\);/)[0].substring(14));
-	
-	var done = !$("imageList");
-	var listdiv;
-	// If this is the first call to showimages, the imagelist will be setup
-	if (done) {
-		var realbox = rightBox("imageList");
-		var imgTag = $create("p");
-		imgTag.id = "imageTag";
-		imgTag.textContent = "Images";
-		realbox.appendChild(imgTag);
-		
-		if (options.styl == "dock") {
-			var sldSpan = $create("span");
-			sldSpan.textContent = "Play SlideShow";
-			sldSpan.id = "miniSldLink";
-			sldSpan.addEventListener("click", function (event) {
-				startslides();
-			}, false);
-			imgTag.appendChild(sldSpan);
-		}
-		
-		var bck = $create("button", {
-			textContent : "<<",
-			id : "prev",
-			disabled : true
-		});
-		bck.addEventListener("click", function (event) {
-			changeset(-1);
-		}, false);
-		
-		var fwrd = $create("button", {
-			textContent : ">>",
-			id : "next"
-		});
-		fwrd.addEventListener("click", function (event) {
-			changeset(1);
-		}, false);
-		realbox.appendChild(bck);
-		realbox.appendChild(fwrd);
-		
-		if (options.sldshw) {
-			var plyBtn = $create("button", {
-				textContent : "Play SlideShow",
-				id : "plySld",
-				disabled : true
-			});
-			plyBtn.addEventListener("click", function (event) {
-				startslides();
-			}, false);
-			realbox.appendChild(plyBtn);
-		}
-		
-		var ldng = $create('div', {
-			textContent : 'Loading images...',
-			id : 'imgLdTxt'
-		});
-		realbox.appendChild(ldng);
-		
-		var listerdiv = $create("div", {
-			id : "biglist",
-			className : "removed"
-		});
-		if (options.styl == "dock") {
-			realbox.className = "removed";
-		}
-	} else {
-		realbox = $("imageList");
-		listerdiv = $("biglist");
-	}
-	
-	if (na[0]) {
-		for (var i = 0; i < na[0].length; i++) {
-			var link = $create("a");
-			link.href = na[0][i][3];
-			link.className = "imgLink";
-			
-			var img = $create("img");
-			img.src = na[0][i][14] + "?q=tbn:" + na[0][i][2] + na[0][i][3];
-			img.alt = na[0][i][6];
-			img.title = na[0][i][6];
-			
-			link.appendChild(img);
-			listerdiv.appendChild(link);
-		}
-	} else {
-		realbox.textContent = "No Images Found";
-	}
-	//$('ires').removeChild(tempbox);
-	$("mBox").appendChild(realbox);
-	$("mBox").appendChild(listerdiv);
-	if (options.imgPgs > pon) {
-		menutoggleimages(userInput);
-	} else {
-		imagesorter(listerdiv);
-		$remove('imgLdTxt');
-		if (options.sldshw) {
-			$('plySld').disabled = false;
-		}
-	}
-}
-// Sorts the images into sets; Size based on number of images.
-function imagesorter(imgHolder) {
-	if (imgHolder) {
-		var numper;
-		if (options.styl == "dock") {
-			$("imgDock").className = "";
-			numper = 21;
-		} else if (imgHolder.childNodes.length % 6 === 0) {
-			numper = 6;
-		} else if (imgHolder.childNodes.length % 7 === 0) {
-			numper = 7;
-		} else {
-			numper = 5;
-		}
-		var seton = 0;
-		var ion = 0;
-		var imgdiv = setcreator(seton);
-		if(options.sldshw) {
-			sldObj = new popup_dialog(3);
-			sldObj.init();
-		}
-		
-		// Divides the images out, and creates a new set as necessary
-		for (var ic = 0; imgHolder.childNodes[ic] && ic < imgHolder.childNodes.length; ic++) {
-			//imgHolder.childNodes[ic].childNodes[0].childNodes[0].title = html_entity_decode(imgHolder.childNodes[ic].childNodes[0].childNodes[0].title);
-			if(options.sldshw) {
-				sldObj.dialog.add_image(imgHolder.childNodes[ic]);
-			}
-			imgdiv.appendChild(imgHolder.childNodes[ic]);
-			ic--;
-			if (!imgHolder.childNodes[ic + 1] || (ion + 1) % numper === 0) {
-				seton++;
-				$("imageList").appendChild(imgdiv);
-				imgdiv = setcreator(seton);
-			}
-			ion++;
-		}
-		$("mBox").removeChild(imgHolder);
-		
-		// Sets up the default state
-		if($("imgset0")) {
-			$("imgset0").className = "aset blocked";
-			if (!$('imgset1') || $('imgset1').childNodes.length === 0) {
-				$("next").disabled = true;
-			}
-		} else {
-			$("mBox").removeChild($("imageList"));
-			noimages("");
-		}
-	}
-}
-// Creates a set for the images to be put in with the given set number
-function setcreator(seton) {
-	var setdiv = $create("div");
-	setdiv.id = "imgset" + (seton);
-	setdiv.className = "aset removed";
-	return setdiv;
-}
 // Searches for images based on what the user is searching for
 function menutoggleimages(theSearch) {
-	// get("http://images.google.com/images?q=" + theSearch + "&gbv=2&start=" + (21 * pon), showimages, noimages);
-	// pon++;
 	imgSearch = new Image_Search(theSearch);
 	imgSearch.draw($("mBox"));
 	
@@ -4668,7 +4553,7 @@ function menutoggleimages(theSearch) {
 	// Start Wiki Based Functions --------------------------------------------------
 // Creates and inserts the link to a wikipedia and wiktionary search
 function lookup(lookingFor) {
-	// var logoBox = $("ssb");
+	var logoBox = $("leftnav");
 	var p = $create("p", {
 		textContent : "Find " + lookingFor +  " on ",
 		className : 'added',
@@ -4689,11 +4574,9 @@ function lookup(lookingFor) {
 	} else {
 		$('leftnav').insertBefore(p, $('leftnav').childNodes[0]);
 	}
-	// p.className = "added";
-	// p.id = "wikLink";
-	// logoBox.insertBefore(p,logoBox.childNodes[1]);
-	// var resultsstats = logoBox.childNodes[logoBox.childNodes.length - 1];
-	// resultsstats.id = "resStat";
+	p.className = "added";
+	p.id = "wikLink";
+	logoBox.insertBefore(p,logoBox.childNodes[0]);
 }
 // Handles the case of a wikipedia page being found
 function foundwikilink(response) {
@@ -4920,8 +4803,6 @@ function runThrough() {
 // Global Variables
 var filler, centDiv, centDivConf, conf, stylr, centDivSld, sldTmr, sldObj, dockShow, multiBox, multi, queryBox, imgSearch, embedder;
 var pon = 0;
-// The following is an undefined varialbe to allow the reset of all variables; Do not set
-var SET_UNDEFINED;
 
 GM_registerMenuCommand("Options", configurations, "o", "control shift");
 GM_registerMenuCommand("Styles", styler, "y", "control shift");

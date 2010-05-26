@@ -18,7 +18,7 @@ function configurations() {
 		conf.undraw();
 	}
 }
-//
+// Opens the style configuration page
 function styler() {
 	if (!stylr) {
 		stylr = popupManager.newStyler();

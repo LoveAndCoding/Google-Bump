@@ -1,7 +1,32 @@
+/**	=================================================================
+  *	Multisearch
+  *	=================================================================
+  */
+
 /**	multisearcher
   *	Multisearch Object
   *	
   *	Functions
+  *		draw
+  *			Draw the multisearch option
+  *	
+  *		addBox
+  *			Add a new search box
+  *	
+  *		expandCollapse
+  *			Expand or collapse the multisearch boxes
+  *	
+  *		searchAll
+  *			Search all boxes
+  *	
+  *		searchNew
+  *			Search only added boxes
+  *	
+  *		getAllVals
+  *			<= Return Array => Get an array of all the values and their search location
+  *	
+  *		getNewVals
+  *			<= Return Array => Get an array of only the new boxes values and their search location
   *	
   */
 function multisearcher() {
@@ -13,36 +38,6 @@ function multisearcher() {
 	this.multiwrapper;
 	this.newSearchWrapper;
 	this.origOptionBox;
-	
-	// Images
-	this.downArrow = "iVBORw0KGgoAAAANSUhEUgAAAA0AAAAICA" +
-					"YAAAAiJnXPAAAAGXRFWHRTb2Z0d2FyZQBBZ" +
-					"G9iZSBJbWFnZVJlYWR5ccllPAAAAOJJREFU" +
-					"eNpiZGBg4AJiAwbiwQUWkAbZ9FnN%2F%2F%" +
-					"2F8Yvr%2F6yfz%2F39%2FGP%2F%2F%2FcXE" +
-					"8B8owwhEzGz%2FGJlY%2FjOysf9lZGH793h" +
-					"mWi0jzCb57IWNPJq2lkBF3ECNDAz%2FgboY" +
-					"GRmAGhiAhnz9cv3w8YdT4%2BtBNjH%2BB0o" +
-					"yMjKCNSoXrWzg0nayZGLl5GGAWvXv9%2Fcv" +
-					"367uO363L7wBpAGo%2FhsTyJEgBkgAJMH58" +
-					"OhpfqYfX%2Fk5mBlANIiPrIEBqgGOoU61cu" +
-					"%2Fccch79buvIBrEB4mjqEPmIGv06d15BJs" +
-					"GrJqQNWLTAMIAAQYAJLynOOE%2FN%2BkAAA" +
-					"AASUVORK5CYII%3D";
-	this.upArrow = "iVBORw0KGgoAAAANSUhEUgAAAA0AAAAICAYA" +
-					"AAAiJnXPAAAAGXRFWHRTb2Z0d2FyZQBBZG9" +
-					"iZSBJbWFnZVJlYWR5ccllPAAAAOJJREFUeN" +
-					"pi%2BP%2F%2FPwM6BgIuILYC0VjlcWmQCG0" +
-					"4hksjdg1hjUdVG%2FZ%2FBdHYNDJCFTMwMj" +
-					"KCNBhIx%2FZ08GjZGTOxcXH9%2B%2FXt25d" +
-					"rh84%2BXVxSAZS7AFT7DawWrBOqQTZ1eguv" +
-					"tqMZEwcvN1AQ5AyGfz8%2Bf%2F18df%2Bpx" +
-					"7Mza2AaGaFOMpDPWdjIq%2B9mwczOy8PExM" +
-					"gAkgC54d%2B%2F%2Fwx%2Ff37%2B8vnirhM" +
-					"Pp8TXgzSC5KxUilc2sDEzM7KzMjNxADErCx" +
-					"MjM9D6v0Bjf%2F%2F59%2F%2FH77%2F%2Ff" +
-					"gLxr79%2F%2F9%2FpDW%2BA28RAPLgAEGAA" +
-					"Y5%2Bk2Ib1C%2BEAAAAASUVORK5CYII%3D";
 	
 	this.draw = function () {
 		
@@ -74,7 +69,7 @@ function multisearcher() {
 		tabhead2.textContent = "New Tab(s)";
 		tabhead2.className = "TabHead";
 		
-		this.origOptionBox = new multisearchbox(null).optionList("Orig");
+		this.origOptionBox = new multisearchbox(null).getOptBox();
 		
 		this.multiwrapper.appendChild(tabhead1);
 		this.multiwrapper.appendChild(this.origOptionBox);
@@ -198,6 +193,29 @@ function multisearcher() {
 }
 
 /**	multisearchbox
+  *	Multisearch Box Object
+  *	
+  *	Construction Parameters
+  *		parentObj		The multisearch object that it was created from
+  *	
+  *	Functions
+  *		draw
+  *			Draw the multisearch box
+  *	
+  *		undraw
+  *			Undraw the multisearch box
+  *	
+  *		getOptBox
+  *			<= Return HTML Object => Returns select box with the options
+  *	
+  *		addCode
+  *			Add the code for this box to the given array for multisearching
+  *	
+  *		setValue
+  *			Set the value for the box
+  *	
+  *		search
+  *			If it is active, search for it
   *	
   */
 function multisearchbox (parentObj) {
@@ -214,9 +232,7 @@ function multisearchbox (parentObj) {
 	// quote|howto|defin|anidb|imdb|gamefaq|diggs|utube|wikipda|googl|flckr|cnns|opnsrc|eby|espns
 	this.valList = ["quote", "howto", "defin", "anidb", "imdb", "gamefaq", "diggs", "utube", "wikipda", "flckr", "cnns", "opnsrc", "eby", "espns", "googl"];
 	this.showList = ["WikiQuote", "Wiki How to", "Wiktionary", "AnimeDB", "IMDB", "GameFAQs", "Digg", "Youtube", "Wikipedia", "Flickr", "CNN", "Source Forge", "Ebay", "ESPN", "Google"];
-	this.closeImg = "";
-	this.undoImg = "";
-	
+		
 	this.draw = function (parentNode) {
 		this.active = true;
 		
@@ -288,19 +304,9 @@ function multisearchbox (parentObj) {
 		}
 	};
 	
-	this.optionList = function (id) {
-		if (!this.optionBox) {
-			this.optionBox = $create("select", {
-				className : "siteSelector"
-			});
-			for (var i = this.showList.length - 1; i >= 0;i--) {
-				var opt = $create("option", {
-					value : this.valList[i],
-					textContent : this.showList[i]
-				});
-				this.optionBox.appendChild(opt);
-			}
-		}
-		return this.optionBox;
-	};
 }
+
+/**	=================================================================
+  *	End Multisearch
+  *	=================================================================
+  */

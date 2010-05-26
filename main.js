@@ -120,8 +120,6 @@ function runThrough() {
 // Global Variables
 var filler, centDiv, centDivConf, conf, stylr, centDivSld, sldTmr, sldObj, dockShow, multiBox, multi, queryBox, imgSearch, embedder;
 var pon = 0;
-// The following is an undefined varialbe to allow the reset of all variables; Do not set
-var SET_UNDEFINED;
 
 GM_registerMenuCommand("Options", configurations, "o", "control shift");
 GM_registerMenuCommand("Styles", styler, "y", "control shift");

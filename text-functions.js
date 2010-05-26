@@ -98,11 +98,11 @@ function multiSearchSetup() {
 	multiBox = new multisearcher();
 	multiBox.draw();
 }
-//
+// Handles clicks for opening links in new tabs
 function clickd() {
 	document.addEventListener("click", function(event) {
 		// Makes sure it is a left click
-		if (event.button === 0 && !event.ctrlKey && !event.altKey && !event.shiftKey) {
+		if (event.button === 0 && !event.ctrlKey && !event.altKey && !event.shiftKey && options.tabs) {
 			// Opens all links that are external links in tabs if the tab feature is turned on
 			if (checkallparentsforit(event.target, "resOL")) {
 				if (event.target.href) {

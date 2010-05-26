@@ -1,4 +1,4 @@
-// 
+// Activate Keyboard Shortcuts for the script
 function keycuts() {
 	document.addEventListener("keypress", function (event) {
 		if(event.ctrlKey && event.shiftKey) {
