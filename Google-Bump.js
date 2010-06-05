@@ -2,7 +2,7 @@
 // @name			Google Bump
 // @namespace		http://userscripts.org/scripts/show/33449
 // @description		Adds some functionality to the Google web search. Main features include Multisearch, Video result extraction, Wikipedia definitions and links, and some clutter cleanup by. All options can be turned off.
-// @version			2.0.20100526
+// @version			2.01.20100604
 // @include			http://www.google.tld/
 // @include			http://www.google.tld/#*
 // @include			http://www.google.tld/search?*
@@ -12,14 +12,14 @@
 
 /*
 	Author: KTaShes
-	Date: May 26 2010
+	Date: June 04 2010
 	
 	Code can now be found on GitHub @ http://github.com/ktsashes/Google-Bump
 	
 	This code uses juicer to compile from several different javascript files.
 	Juicer (C) Christian Johansen - http://cjohansen.no/en/ruby/juicer_a_css_and_javascript_packaging_tool
 */
-var version = "2.00";
+var version = "2.01";
 
 
 var image_store = {
@@ -121,6 +121,7 @@ var image_store = {
 						"oIcygUBkJDUM%2FuOyiIkSzaSGAVYvMg79z" +
 						"AQQYACovRIfeUjOIwAAAABJRU5ErkJggg%3" +
 						"D%3D"
+	
 }
 /**
   *	Options object to hold both default and user configured options.
@@ -251,6 +252,10 @@ var options = new optionlist();
 function $(id) {
 	return document.getElementById(id);
 }
+// Shortcut for either Id
+function $$(first, second) {
+	return $(first) || $(second);
+}
 // Shortcut for document.getElementsByClassName
 function $cl(cname) {
 	return document.getElementsByClassName(cname);
@@ -373,7 +378,7 @@ function getAttribute(node, attName) {
 function checknonreload() {
 	// Check that original page is still the page that is loaded
 	if(currUrl != location.href) {
-		if($('ires')) {
+		if($$(statId, dynaId)) {
 			// Restart process if it is not
 			resetPg();
 			userInput = setupText();
@@ -1407,6 +1412,10 @@ function stylesheet_store () {
 			height: auto; \
 			margin-top: 1%; \
 		} \
+		.vid_thumb { \
+			max-width: 120px; \
+			max-height: 120px; \
+		} \
 		#videoList p { \
 			margin-top: 0px; \
 			margin-bottom: 5px; \
@@ -1487,7 +1496,7 @@ function stylesheet_store () {
 			position: relative; \
 		} \
 		.vid_result, .rl-res { \
-			width: 102px; \
+			width: 120px; \
 			margin-left: 2%; \
 			margin-right: 2%; \
 			display: inline-table; \
@@ -1832,7 +1841,9 @@ function iconSheetTrans() {
 	var imgd = ctx.getImageData(0, 0, 167, 222);
 	var pix = imgd.data
 	for (var i = 0, n = pix.length; i < n; i += 4) {
-		pix[i+3] = 255 - Math.min(pix[i],Math.min(pix[i+1],pix[i+2]));
+		if(pix[i+3] != 0 && (Math.abs(pix[i] - pix[i+1]) < 75 && Math.abs(pix[i+1] - pix[i+2]) < 75) ) {
+			pix[i+3] = Math.sqrt(255) * Math.sqrt(255 - Math.min(pix[i],Math.min(pix[i+1],pix[i+2])));
+		}
 	}
 	ctx.putImageData(imgd, 0, 0);
 	
@@ -3872,7 +3883,7 @@ function extractVideos(userSearch) {
 			if(theList.childNodes.length < 1) {
 				box.className = "removed";
 			}
-			$('ires').insertBefore(box, $('ires').childNodes[0]);
+			$$(statId, dynaId).insertBefore(box, $$(statId, dynaId).childNodes[0]);
 		} else {
 			//
 		}
@@ -4615,9 +4626,9 @@ function foundwikilink(response) {
 	defdiv.appendChild(theHeading);
 	defdiv.appendChild(paranew);
 	if (options.vids || options.imgs || options.exvids) {
-		$('ires').insertBefore(defdiv,$('ires').childNodes[1]);
+		$$(statId, dynaId).insertBefore(defdiv,$$(statId, dynaId).childNodes[1]);
 	} else {
-		$('ires').insertBefore(defdiv,$('ires').childNodes[0]);
+		$$(statId, dynaId).insertBefore(defdiv,$$(statId, dynaId).childNodes[0]);
 	}
 	
 	// Reassignment of links to link to the right page
@@ -4744,10 +4755,10 @@ function runThrough() {
 	if (options.vids || options.imgs) {
 		
 		var mBox = rightBox("mBox");
-		if ($('ires').childNodes) {
-			$('ires').insertBefore(mBox, $('ires').childNodes[0]);
+		if ($$(statId, dynaId).childNodes) {
+			$$(statId, dynaId).insertBefore(mBox, $$(statId, dynaId).childNodes[0]);
 		} else {
-			$('ires').appendChild(mBox);
+			$$(statId, dynaId).appendChild(mBox);
 		}
 		
 		if (options.imgPlyr || options.embd) {
@@ -4807,8 +4818,11 @@ var userInput = setupText();
 var currUrl = location.href;
 var delayed = false;
 
+var dynaId = 'search';
+var statId = 'ires';
+
 // Starts the process
-if($('ires') && $('ires').children.length > 0) {
+if($$(statId, dynaId) && $$(statId, dynaId).children.length > 0) {
 	runThrough();
 } else {
 	delayed = true;
@@ -4816,7 +4830,7 @@ if($('ires') && $('ires').children.length > 0) {
 }
 
 function waitingForPage() {
-	if($('ires') && $('ires').children.length > 0) {
+	if($$(statId, dynaId) && $$(statId, dynaId).children.length > 0) {
 		userInput = setupText();
 		currUrl = location.href;
 		runThrough();
