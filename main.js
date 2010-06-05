@@ -68,10 +68,10 @@ function runThrough() {
 	if (options.vids || options.imgs) {
 		
 		var mBox = rightBox("mBox");
-		if ($('ires').childNodes) {
-			$('ires').insertBefore(mBox, $('ires').childNodes[0]);
+		if ($$(statId, dynaId).childNodes) {
+			$$(statId, dynaId).insertBefore(mBox, $$(statId, dynaId).childNodes[0]);
 		} else {
-			$('ires').appendChild(mBox);
+			$$(statId, dynaId).appendChild(mBox);
 		}
 		
 		if (options.imgPlyr || options.embd) {
@@ -131,8 +131,11 @@ var userInput = setupText();
 var currUrl = location.href;
 var delayed = false;
 
+var dynaId = 'search';
+var statId = 'ires';
+
 // Starts the process
-if($('ires') && $('ires').children.length > 0) {
+if($$(statId, dynaId) && $$(statId, dynaId).children.length > 0) {
 	runThrough();
 } else {
 	delayed = true;
@@ -140,7 +143,7 @@ if($('ires') && $('ires').children.length > 0) {
 }
 
 function waitingForPage() {
-	if($('ires') && $('ires').children.length > 0) {
+	if($$(statId, dynaId) && $$(statId, dynaId).children.length > 0) {
 		userInput = setupText();
 		currUrl = location.href;
 		runThrough();

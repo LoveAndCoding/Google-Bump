@@ -45,7 +45,7 @@ function extractVideos(userSearch) {
 			if(theList.childNodes.length < 1) {
 				box.className = "removed";
 			}
-			$('ires').insertBefore(box, $('ires').childNodes[0]);
+			$$(statId, dynaId).insertBefore(box, $$(statId, dynaId).childNodes[0]);
 		} else {
 			//
 		}

@@ -70,9 +70,9 @@ function foundwikilink(response) {
 	defdiv.appendChild(theHeading);
 	defdiv.appendChild(paranew);
 	if (options.vids || options.imgs || options.exvids) {
-		$('ires').insertBefore(defdiv,$('ires').childNodes[1]);
+		$$(statId, dynaId).insertBefore(defdiv,$$(statId, dynaId).childNodes[1]);
 	} else {
-		$('ires').insertBefore(defdiv,$('ires').childNodes[0]);
+		$$(statId, dynaId).insertBefore(defdiv,$$(statId, dynaId).childNodes[0]);
 	}
 	
 	// Reassignment of links to link to the right page

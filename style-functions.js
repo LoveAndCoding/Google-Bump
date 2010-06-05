@@ -217,7 +217,9 @@ function iconSheetTrans() {
 	var imgd = ctx.getImageData(0, 0, 167, 222);
 	var pix = imgd.data
 	for (var i = 0, n = pix.length; i < n; i += 4) {
-		pix[i+3] = 255 - Math.min(pix[i],Math.min(pix[i+1],pix[i+2]));
+		if(pix[i+3] != 0 && (Math.abs(pix[i] - pix[i+1]) < 75 && Math.abs(pix[i+1] - pix[i+2]) < 75) ) {
+			pix[i+3] = Math.sqrt(255) * Math.sqrt(255 - Math.min(pix[i],Math.min(pix[i+1],pix[i+2])));
+		}
 	}
 	ctx.putImageData(imgd, 0, 0);
 	

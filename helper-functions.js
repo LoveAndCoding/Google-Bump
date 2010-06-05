@@ -3,6 +3,10 @@
 function $(id) {
 	return document.getElementById(id);
 }
+// Shortcut for either Id
+function $$(first, second) {
+	return $(first) || $(second);
+}
 // Shortcut for document.getElementsByClassName
 function $cl(cname) {
 	return document.getElementsByClassName(cname);
@@ -125,7 +129,7 @@ function getAttribute(node, attName) {
 function checknonreload() {
 	// Check that original page is still the page that is loaded
 	if(currUrl != location.href) {
-		if($('ires')) {
+		if($$(statId, dynaId)) {
 			// Restart process if it is not
 			resetPg();
 			userInput = setupText();

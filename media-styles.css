@@ -14,6 +14,10 @@
 			height: auto; \
 			margin-top: 1%; \
 		} \
+		.vid_thumb { \
+			max-width: 120px; \
+			max-height: 120px; \
+		} \
 		#videoList p { \
 			margin-top: 0px; \
 			margin-bottom: 5px; \
@@ -94,7 +98,7 @@
 			position: relative; \
 		} \
 		.vid_result, .rl-res { \
-			width: 102px; \
+			width: 120px; \
 			margin-left: 2%; \
 			margin-right: 2%; \
 			display: inline-table; \
