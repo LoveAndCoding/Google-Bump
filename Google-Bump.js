@@ -133,6 +133,7 @@ function optionlist() {
 	this.DEFAULT_SUGGES = true;
 	this.DEFAULT_DYM = true;
 	this.DEFAULT_SIDEADS = true;
+	this.DEFAULT_MOVETOP = false;
 		// Wiki default
 	this.DEFAULT_WIKI = true;
 		// Shortcut defaults
@@ -190,6 +191,7 @@ function optionlist() {
 	this.sugges = GM_getValue("sugges", this.DEFAULT_SUGGES);
 	this.dym = GM_getValue("dym", this.DEFAULT_DYM);
 	this.sideads = GM_getValue("sideads", this.DEFAULT_SIDEADS);
+	this.moveTop = GM_getValue("moveTop", this.DEFAULT_MOVETOP);
 		// Wiki var
 	this.wiki = GM_getValue("wiki", this.DEFAULT_WIKI);
 		// Shortcut vars
@@ -381,8 +383,12 @@ function checknonreload() {
 		if($$(statId, dynaId)) {
 			// Restart process if it is not
 			resetPg();
-			userInput = setupText();
-			runThrough();
+			if(!/.*#.*&tbs=/.test(location.href)) {
+				userInput = setupText();
+				runThrough();
+			} else {
+				location.reload();
+			}
 		}
 		currUrl = location.href;
 	}
@@ -408,6 +414,9 @@ function resetPg() {
 	var gup = $("greyOut");
 	if (gup) {
 		closeEx();
+	}
+	if ($('dock')) {
+		$remove('dock');
 	}
 }
 // Removes all the children of the given element using recursion
@@ -681,9 +690,15 @@ function stylesheet_store () {
 		#cnt { \
 			min-width: 0px !important; \
 		} \
+		#center_col { \
+			margin-right: 0px; \
+		} \
 		#fll { \
 			margin: 0px auto !important; \
 			padding: 19px 0px; \
+		} \
+		.tsf-p, #foot { \
+			margin-right: 72px !important; \
 		} \
 		.gbh { \
 			left: auto !important; \
@@ -716,6 +731,7 @@ function stylesheet_store () {
 			font-size: 100%; \
 			text-align: center; \
 			border-bottom: 1px solid #000000; \
+			min-height: 19px; \
 		} \
 		#wikiHeader a, #wikiHeader a:active { \
 			color: #0077CC; \
@@ -725,6 +741,7 @@ function stylesheet_store () {
 			margin: 0px; \
 			padding: 5px 2px 2px 2px; \
 			font-size: 85%; \
+			min-height: 110px; \
 		} \
 		#wikiExp { \
 			min-height: 120px; \
@@ -830,8 +847,21 @@ function stylesheet_store () {
 		#foot { \
 			clear: both; \
 		} \
+		#fll { \
+			margin: 0px auto !important; \
+			padding: 19px 0px; \
+		} \
+		.topHolder { \
+			height: 68px; \
+			overflow: auto; \
+			position: absolute; \
+			right: 5px; \
+			top: -8px; \
+			width: " + Math.max(262, maxwidth - 879) + "px; \
+		} \
 		#mBox { \
 			width: 400px; \
+			margin-right: " + ( options.sideads ? 0 : 250) + "px; \
 		} \
 		#pBox { \
 			vertical-align: middle; \
@@ -859,6 +889,7 @@ function stylesheet_store () {
 		} \
 		#playerTag { \
 			height: 20px; \
+			overflow: hidden; \
 		} \
 		#vBox { \
 			height: 305px; \
@@ -955,29 +986,6 @@ function stylesheet_store () {
 		#hidePly { \
 			display: none; \
 		} \
-		#slideShow { \
-			position: fixed; \
-			text-align: center; \
-			padding: 15px; \
-			top: 50%; \
-			left: 50%; \
-			z-index: 9998; \
-			background-color: #FFFFFF; \
-			border: 1px solid #000000; \
-		} \
-		.sldImgs { \
-			max-width: " + maxwidth + "px; \
-			max-height: " + maxheight + "px; \
-		} \
-		#sldLink { \
-			text-align: center; \
-		} \
-		#next{ \
-			float: right; \
-		} \
-		#prev { \
-			float: left; \
-		} \
 		#res { \
 			padding-right: 0px; \
 			margin-top: 0px; \
@@ -1042,6 +1050,10 @@ function stylesheet_store () {
 		.closed { \
 			display: none; \
 		}  \
+		#fll { \
+			margin: 0px auto !important; \
+			padding: 19px 0px; \
+		} \
 		#dock { \
 			position: fixed; \
 			height: 40px; \
@@ -1060,6 +1072,14 @@ function stylesheet_store () {
 			cursor: pointer; \
 			float: left; \
 		}  \
+		.topHolder { \
+			height: 68px; \
+			overflow: auto; \
+			position: absolute; \
+			right: 5px; \
+			top: -8px; \
+			width: " + Math.max(262, maxwidth - 879) + "px; \
+		} \
 		#wikiHeader { \
 			font-size: 18pt; \
 			padding-left: .5em; \
@@ -1081,9 +1101,9 @@ function stylesheet_store () {
 			text-shadow: -1px 0px #888888; \
 		}  \
 		.vid_result { \
-			display: -moz-stack; \
+			display: inline-table; \
 			width: 16%; \
-			margin: 1px 2%; \
+			margin: 10px 2%; \
 			text-align: center; \
 		}  \
 		.vid_result img { \
@@ -1209,10 +1229,10 @@ function stylesheet_store () {
 			font-size: small; \
 			display: inline; \
 		} \
-		 .opli { \
+		.opli { \
 			display: inline; \
 		} \
-		 .confTab { \
+		.confTab { \
 			margin: 0px; \
 			padding: 2px 4px; \
 			border: 1px solid black; \
@@ -1240,7 +1260,7 @@ function stylesheet_store () {
 			margin: 6px 0px; \
 			border-bottom: 1px solid grey; \
 		} \
-		 #confWrap { \
+		#confWrap { \
 			height: 427px; \
 			border-bottom: 1px solid black; \
 			margin-bottom: 2px; \
@@ -1251,17 +1271,17 @@ function stylesheet_store () {
 		.sldImgs { \
 			display: block; \
 		} \
-		 .keycuts { \
+		.keycuts { \
 			width: 100%; \
 		} \
-		 .keycuts em { \
+		.keycuts em { \
 			text-decoration: underline; \
 			font-weight: bold; \
 		} \
 		.conf_Tab, #confTabs { \
 			background-color: #F0F7F9; \
 		} \
-		 #t_AbtConf { \
+		#t_AbtConf { \
 			background-color: #F0F7F9 !important; \
 		} \
 		#hidePly { \
@@ -1283,7 +1303,7 @@ function stylesheet_store () {
 			position: relative; \
 			margin-bottom: 3px; \
 		} \
-		 .conf_Tab { \
+		.conf_Tab { \
 			padding: 0px 0.5em .25em .5em; \
 			margin-top: 4px; \
 			border-bottom: 1px solid black; \
@@ -1297,13 +1317,13 @@ function stylesheet_store () {
 			border-bottom-color: #FFFFFF; \
 			background-color: #FFFFFF; \
 		} \
-		 .confTabOn { \
+		.confTabOn { \
 			margin: .7em; \
 		} \
-		 .confTabOn label { \
+		.confTabOn label { \
 			margin: .2em 0px; \
 		} \
-		 .confTabOn button { \
+		.confTabOn button { \
 			margin: .5em 0px; \
 		} \
 		#t_AbtConf { \
@@ -1319,7 +1339,7 @@ function stylesheet_store () {
 		#AbtConf p { \
 			margin-top: 0px; \
 		} \
-		 #deapallFault, #sNc { \
+		#deapallFault, #sNc { \
 			margin-left: .2em; \
 		} \
 		#newVer { \
@@ -1348,10 +1368,33 @@ function stylesheet_store () {
 			-moz-border-radius: 5px; \
 			color: #000000 !important; \
 		} \
+		#slideShow { \
+			position: fixed; \
+			text-align: center; \
+			padding: 15px; \
+			top: 50%; \
+			left: 50%; \
+			z-index: 9998; \
+			background-color: #FFFFFF; \
+			border: 1px solid #000000; \
+		} \
+		.sldImgs { \
+			max-width: " + maxwidth + "px; \
+			max-height: " + maxheight + "px; \
+		} \
+		#sldLink { \
+			text-align: center; \
+		} \
+		#next{ \
+			float: right; \
+		} \
+		#prev { \
+			float: left; \
+		} \
 		#res { \
 			margin: 0px 8px; \
 		} \
-		 #cnt { \
+		#cnt { \
 			max-width: 100%; \
 		} \
 		#ssb { \
@@ -1400,10 +1443,23 @@ function stylesheet_store () {
 			border-style: none; \
 		} \
 		#res {  \
-			padding-top: 7px;  \
+			padding-right: 0px; \
+			position: relative; \
 		} \
 		#center_col { \
 			margin-right: 0px; \
+		} \
+		#fll { \
+			margin: 0px auto !important; \
+			padding: 19px 0px; \
+		} \
+		.topHolder { \
+			height: 68px; \
+			overflow: auto; \
+			position: absolute; \
+			right: 5px; \
+			top: -8px; \
+			width: " + Math.max(262, maxwidth - 879) + "px; \
 		} \
 		#videoList { \
 			border: 1px solid black;  \
@@ -1424,7 +1480,7 @@ function stylesheet_store () {
 		#resOL { \
 			position: absolute; \
 			right: 0px; \
-			top: 7px; \
+			top: 24px; \
 			width: 44%; \
 			overflow: auto; \
 			height: " + (!options.vids || !options.imgs ? '500px' : '300px') + "; \
@@ -1435,8 +1491,8 @@ function stylesheet_store () {
 			width: " + (!options.vids ? '100%' : '44%') + "; \
 			height: " + (!options.vids ? '190px' : 'auto') + "; \
 			position: " + (!options.vids ? 'static' : 'absolute') + "; \
-			top: 312px; \
-			right: 0px; \
+			top: 320px; \
+			right: 3px; \
 			margin-top: " + (!options.vids ? '4px' : '1%') + "; \
 			text-align: center; \
 		} \
@@ -1466,7 +1522,7 @@ function stylesheet_store () {
 			padding: 0px; \
 		} \
 		#embedArea { \
-			height: " + ("468") + "px; \
+			height: 468px; \
 		} \
 		#hidePly { \
 			display: none !important; \
@@ -1490,10 +1546,6 @@ function stylesheet_store () {
 			width: 100%; \
 			margin-bottom: .5em; \
 			margin-top: 1%; \
-		} \
-		#res { \
-			padding-right: 0px; \
-			position: relative; \
 		} \
 		.vid_result, .rl-res { \
 			width: 120px; \
@@ -1809,45 +1861,52 @@ function setupPlayer(label) {
 function logoToTrans() {
 	var currLogo = $('logo').childNodes[1];
 	
-	var canvas = $create('canvas', {
-		id : 'transLogo'
-	});
-	var ctx = canvas.getContext('2d');
-	ctx.drawImage(currLogo, 0, 41,137,49,0,0,137,49);
-	
-	var imgd = ctx.getImageData(0, 0, 137, 49);
-	var pix = imgd.data
-	for (var i = 0, n = pix.length; i < n; i += 4) {
-		pix[i+3] = 255 - Math.min(pix[i],Math.min(pix[i+1],pix[i+2]));
+	try {
+		var canvas = $create('canvas', {
+			id : 'transLogo'
+		});
+		var ctx = canvas.getContext('2d');
+		ctx.drawImage(currLogo, 0, 41,137,49,0,0,137,49);
+		
+		var imgd = ctx.getImageData(0, 0, 137, 49);
+		var pix = imgd.data
+		for (var i = 0, n = pix.length; i < n; i += 4) {
+			pix[i+3] = 255 - Math.min(pix[i],Math.min(pix[i+1],pix[i+2]));
+		}
+		ctx.putImageData(imgd, 0, 0);
+		
+		removeAllChildren($('logo'));
+		$('logo').appendChild(canvas);
+	} catch (_ex) {
+		$('logo').appendChild(currLogo);
 	}
-	ctx.putImageData(imgd, 0, 0);
-	
-	removeAllChildren($('logo'));
-	$('logo').appendChild(canvas);
 }
 // Change the icon sheet from Google to be transparent
 function iconSheetTrans() {
 	var img = new Image();
 	img.src = "/images/srpr/nav_logo13.png";
-	
-	var canvas = $create('canvas', {
-		id : 'transLogo',
-		width: 167,
-		height: 222
-	});
-	var ctx = canvas.getContext('2d');
-	ctx.drawImage(img, 0, 0,167,222);
-	
-	var imgd = ctx.getImageData(0, 0, 167, 222);
-	var pix = imgd.data
-	for (var i = 0, n = pix.length; i < n; i += 4) {
-		if(pix[i+3] != 0 && (Math.abs(pix[i] - pix[i+1]) < 75 && Math.abs(pix[i+1] - pix[i+2]) < 75) ) {
-			pix[i+3] = Math.sqrt(255) * Math.sqrt(255 - Math.min(pix[i],Math.min(pix[i+1],pix[i+2])));
+	try {
+		var canvas = $create('canvas', {
+			id : 'transLogo',
+			width: 167,
+			height: 222
+		});
+		var ctx = canvas.getContext('2d');
+		ctx.drawImage(img, 0, 0,167,222);
+		
+		var imgd = ctx.getImageData(0, 0, 167, 222);
+		var pix = imgd.data;
+		for (var i = 0, n = pix.length; i < n; i += 4) {
+			if(pix[i+3] != 0 && (Math.abs(pix[i] - pix[i+1]) < 75 && Math.abs(pix[i+1] - pix[i+2]) < 75) ) {
+				pix[i+3] = Math.sqrt(255) * Math.sqrt(255 - Math.min(pix[i],Math.min(pix[i+1],pix[i+2])));
+			}
 		}
+		ctx.putImageData(imgd, 0, 0);
+		
+		return canvas.toDataURL("image/png");
+	} catch (_ex) {
+		return "/images/srpr/nav_logo13.png";
 	}
-	ctx.putImageData(imgd, 0, 0);
-	
-	return canvas.toDataURL("image/png");
 }
 	// End Display Functions -----------------------------------------------------------
 
@@ -2728,7 +2787,8 @@ function style_dialog(popup) {
 		var classic_set_window = new config_window(clcTab, "ClscStyl");
 			// General Settings
 		var classic_section = new config_section();
-		classic_section.sectionOptions.push(new config_desc_section('Coming Soon', 'This section is still under construction. Please excuse our mess.'));
+		classic_section.sectionOptions.push(new config_checkBox("Hide Sidebar Ads", "sideads", options.DEFAULT_SIDEADS));
+		//classic_section.sectionOptions.push(new config_desc_section('Coming Soon', 'This section is still under construction. Please excuse our mess.'));
 		classic_set_window.sections.push(classic_section);
 		
 		// Media Settings
@@ -2749,7 +2809,7 @@ function style_dialog(popup) {
 		var center_set_window = new config_window(cntTab, "CentStyl");
 			// General Settings
 		var center_section = new config_section();
-		center_section.sectionOptions.push(new config_desc_section('Coming Soon', 'This section is still under construction. Please excuse our mess.'));
+		center_section.sectionOptions.push(new config_colorBox('Background', 'genbgclr', options.DEFAULT_GENBGCLR));
 		center_set_window.sections.push(center_section);
 		
 		// General Settings
@@ -2900,7 +2960,7 @@ function config_dialog(popup) {
 		// app_section.sectionOptions.push(new config_checkBox("Add Margins", "margs", options.DEFAULT_MARGS));
 		app_section.sectionOptions.push(new config_checkBox("Remove Suggestions", "sugges", options.DEFAULT_SUGGES));
 		app_section.sectionOptions.push(new config_checkBox("Move \"Did you mean\" text", "dym", options.DEFAULT_DYM));
-		app_section.sectionOptions.push(new config_checkBox("Remove Sidebar Ads", "sideads", options.DEFAULT_SIDEADS));
+		app_section.sectionOptions.push(new config_checkBox("Move Top Content (Calculator, Showtimes, Etc.)", "moveTop", options.DEFAULT_MOVETOP));
 		app_set_window.sections.push(app_section);
 		
 		// Image Search Settings
@@ -3834,6 +3894,35 @@ function didyoumean() {
 		thebar.insertBefore(p1, thebar.childNodes[0]);
 	}
 }
+// Moves top content to a new position
+function topContentMove() {
+	if (options.styl == 'center') {
+		return;
+	}
+	
+	var topHolder;
+	if($('topstuff')) {
+		topHolder = $('topstuff');
+		topHolder.className = "topHolder";
+	} else {
+		topHolder = $create('div', {
+			id : 'topstuff',
+			className : 'topHolder'
+		});
+		var resnodes = $('res').childNodes;
+		for(var i = 0; i < resnodes.length; i++) {
+			if(resnodes[i].className != 'hd' &&
+					resnodes[i].id != 'ires' &&
+					resnodes[i].id != 'search') {
+				topHolder.appendChild(resnodes[i]);
+			} else {
+				break;
+			}
+		}
+	}
+	
+	$('sfcnt').appendChild(topHolder);
+}
 	// End Visual Functions ------------------------------------------------------------
 
 	// Start Video Extraction Functions --------------------------------------------
@@ -4478,6 +4567,9 @@ function Image_Search(query) {
 	
 	this.processPage = function (response) {
 		var na;
+		if (!response.responseText.match(/dyn\.setResults\(\[\[[^]*]\);/)) {
+			return;
+		}
 		eval("na = " + response.responseText.match(/dyn\.setResults\(\[\[[^]*]\);/)[0].substring(14));
 		
 		/*
@@ -4718,8 +4810,9 @@ function runThrough() {
 	if ($("preload")) {
 		resetPg();
 	} else {
-		var pdiv = $create("div");
-		pdiv.id = "preload";
+		var pdiv = $create("div", {
+			id : "preload"
+		});
 		document.body.appendChild(pdiv);
 	}
 	setupConf();
@@ -4745,10 +4838,13 @@ function runThrough() {
 	if (options.dym) {
 		didyoumean();
 	}
-	if (options.sideads) {
+	if (options.sideads || options.styl != 'classic') {
 		removeSideAds();
 	} else {
 		showSideAds();
+	}
+	if(options.moveTop) {
+		topContentMove();
 	}
 	
 	// Creates the player if either a video or image search is active
@@ -4822,7 +4918,7 @@ var dynaId = 'search';
 var statId = 'ires';
 
 // Starts the process
-if($$(statId, dynaId) && $$(statId, dynaId).children.length > 0) {
+if($$(statId, dynaId) && $$(statId, dynaId).children.length > 0 && !/.*#.*&tbs=.*/.test(location.href)) {
 	runThrough();
 } else {
 	delayed = true;
@@ -4830,7 +4926,7 @@ if($$(statId, dynaId) && $$(statId, dynaId).children.length > 0) {
 }
 
 function waitingForPage() {
-	if($$(statId, dynaId) && $$(statId, dynaId).children.length > 0) {
+	if($$(statId, dynaId) && $$(statId, dynaId).children.length > 0 && !/.*#.*&tbs=.*/.test(location.href)) {
 		userInput = setupText();
 		currUrl = location.href;
 		runThrough();

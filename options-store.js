@@ -8,6 +8,7 @@ function optionlist() {
 	this.DEFAULT_SUGGES = true;
 	this.DEFAULT_DYM = true;
 	this.DEFAULT_SIDEADS = true;
+	this.DEFAULT_MOVETOP = false;
 		// Wiki default
 	this.DEFAULT_WIKI = true;
 		// Shortcut defaults
@@ -65,6 +66,7 @@ function optionlist() {
 	this.sugges = GM_getValue("sugges", this.DEFAULT_SUGGES);
 	this.dym = GM_getValue("dym", this.DEFAULT_DYM);
 	this.sideads = GM_getValue("sideads", this.DEFAULT_SIDEADS);
+	this.moveTop = GM_getValue("moveTop", this.DEFAULT_MOVETOP);
 		// Wiki var
 	this.wiki = GM_getValue("wiki", this.DEFAULT_WIKI);
 		// Shortcut vars

@@ -13,9 +13,15 @@
 		#cnt { \
 			min-width: 0px !important; \
 		} \
+		#center_col { \
+			margin-right: 0px; \
+		} \
 		#fll { \
 			margin: 0px auto !important; \
 			padding: 19px 0px; \
+		} \
+		.tsf-p, #foot { \
+			margin-right: 72px !important; \
 		} \
 		.gbh { \
 			left: auto !important; \
@@ -48,6 +54,7 @@
 			font-size: 100%; \
 			text-align: center; \
 			border-bottom: 1px solid #000000; \
+			min-height: 19px; \
 		} \
 		#wikiHeader a, #wikiHeader a:active { \
 			color: #0077CC; \
@@ -57,6 +64,7 @@
 			margin: 0px; \
 			padding: 5px 2px 2px 2px; \
 			font-size: 85%; \
+			min-height: 110px; \
 		} \
 		#wikiExp { \
 			min-height: 120px; \

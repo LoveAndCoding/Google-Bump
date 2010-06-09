@@ -185,44 +185,51 @@ function setupPlayer(label) {
 function logoToTrans() {
 	var currLogo = $('logo').childNodes[1];
 	
-	var canvas = $create('canvas', {
-		id : 'transLogo'
-	});
-	var ctx = canvas.getContext('2d');
-	ctx.drawImage(currLogo, 0, 41,137,49,0,0,137,49);
-	
-	var imgd = ctx.getImageData(0, 0, 137, 49);
-	var pix = imgd.data
-	for (var i = 0, n = pix.length; i < n; i += 4) {
-		pix[i+3] = 255 - Math.min(pix[i],Math.min(pix[i+1],pix[i+2]));
+	try {
+		var canvas = $create('canvas', {
+			id : 'transLogo'
+		});
+		var ctx = canvas.getContext('2d');
+		ctx.drawImage(currLogo, 0, 41,137,49,0,0,137,49);
+		
+		var imgd = ctx.getImageData(0, 0, 137, 49);
+		var pix = imgd.data
+		for (var i = 0, n = pix.length; i < n; i += 4) {
+			pix[i+3] = 255 - Math.min(pix[i],Math.min(pix[i+1],pix[i+2]));
+		}
+		ctx.putImageData(imgd, 0, 0);
+		
+		removeAllChildren($('logo'));
+		$('logo').appendChild(canvas);
+	} catch (_ex) {
+		$('logo').appendChild(currLogo);
 	}
-	ctx.putImageData(imgd, 0, 0);
-	
-	removeAllChildren($('logo'));
-	$('logo').appendChild(canvas);
 }
 // Change the icon sheet from Google to be transparent
 function iconSheetTrans() {
 	var img = new Image();
 	img.src = "/images/srpr/nav_logo13.png";
-	
-	var canvas = $create('canvas', {
-		id : 'transLogo',
-		width: 167,
-		height: 222
-	});
-	var ctx = canvas.getContext('2d');
-	ctx.drawImage(img, 0, 0,167,222);
-	
-	var imgd = ctx.getImageData(0, 0, 167, 222);
-	var pix = imgd.data
-	for (var i = 0, n = pix.length; i < n; i += 4) {
-		if(pix[i+3] != 0 && (Math.abs(pix[i] - pix[i+1]) < 75 && Math.abs(pix[i+1] - pix[i+2]) < 75) ) {
-			pix[i+3] = Math.sqrt(255) * Math.sqrt(255 - Math.min(pix[i],Math.min(pix[i+1],pix[i+2])));
+	try {
+		var canvas = $create('canvas', {
+			id : 'transLogo',
+			width: 167,
+			height: 222
+		});
+		var ctx = canvas.getContext('2d');
+		ctx.drawImage(img, 0, 0,167,222);
+		
+		var imgd = ctx.getImageData(0, 0, 167, 222);
+		var pix = imgd.data;
+		for (var i = 0, n = pix.length; i < n; i += 4) {
+			if(pix[i+3] != 0 && (Math.abs(pix[i] - pix[i+1]) < 75 && Math.abs(pix[i+1] - pix[i+2]) < 75) ) {
+				pix[i+3] = Math.sqrt(255) * Math.sqrt(255 - Math.min(pix[i],Math.min(pix[i+1],pix[i+2])));
+			}
 		}
+		ctx.putImageData(imgd, 0, 0);
+		
+		return canvas.toDataURL("image/png");
+	} catch (_ex) {
+		return "/images/srpr/nav_logo13.png";
 	}
-	ctx.putImageData(imgd, 0, 0);
-	
-	return canvas.toDataURL("image/png");
 }
 	// End Display Functions -----------------------------------------------------------

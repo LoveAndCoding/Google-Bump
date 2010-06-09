@@ -4,8 +4,21 @@
 		#foot { \
 			clear: both; \
 		} \
+		#fll { \
+			margin: 0px auto !important; \
+			padding: 19px 0px; \
+		} \
+		.topHolder { \
+			height: 68px; \
+			overflow: auto; \
+			position: absolute; \
+			right: 5px; \
+			top: -8px; \
+			width: " + Math.max(262, maxwidth - 879) + "px; \
+		} \
 		#mBox { \
 			width: 400px; \
+			margin-right: " + ( options.sideads ? 0 : 250) + "px; \
 		} \
 		#pBox { \
 			vertical-align: middle; \
@@ -33,6 +46,7 @@
 		} \
 		#playerTag { \
 			height: 20px; \
+			overflow: hidden; \
 		} \
 		#vBox { \
 			height: 305px; \
@@ -128,29 +142,6 @@
 		} \
 		#hidePly { \
 			display: none; \
-		} \
-		#slideShow { \
-			position: fixed; \
-			text-align: center; \
-			padding: 15px; \
-			top: 50%; \
-			left: 50%; \
-			z-index: 9998; \
-			background-color: #FFFFFF; \
-			border: 1px solid #000000; \
-		} \
-		.sldImgs { \
-			max-width: " + maxwidth + "px; \
-			max-height: " + maxheight + "px; \
-		} \
-		#sldLink { \
-			text-align: center; \
-		} \
-		#next{ \
-			float: right; \
-		} \
-		#prev { \
-			float: left; \
 		} \
 		#res { \
 			padding-right: 0px; \

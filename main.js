@@ -31,8 +31,9 @@ function runThrough() {
 	if ($("preload")) {
 		resetPg();
 	} else {
-		var pdiv = $create("div");
-		pdiv.id = "preload";
+		var pdiv = $create("div", {
+			id : "preload"
+		});
 		document.body.appendChild(pdiv);
 	}
 	setupConf();
@@ -58,10 +59,13 @@ function runThrough() {
 	if (options.dym) {
 		didyoumean();
 	}
-	if (options.sideads) {
+	if (options.sideads || options.styl != 'classic') {
 		removeSideAds();
 	} else {
 		showSideAds();
+	}
+	if(options.moveTop) {
+		topContentMove();
 	}
 	
 	// Creates the player if either a video or image search is active
@@ -135,7 +139,7 @@ var dynaId = 'search';
 var statId = 'ires';
 
 // Starts the process
-if($$(statId, dynaId) && $$(statId, dynaId).children.length > 0) {
+if($$(statId, dynaId) && $$(statId, dynaId).children.length > 0 && !/.*#.*&tbs=.*/.test(location.href)) {
 	runThrough();
 } else {
 	delayed = true;
@@ -143,7 +147,7 @@ if($$(statId, dynaId) && $$(statId, dynaId).children.length > 0) {
 }
 
 function waitingForPage() {
-	if($$(statId, dynaId) && $$(statId, dynaId).children.length > 0) {
+	if($$(statId, dynaId) && $$(statId, dynaId).children.length > 0 && !/.*#.*&tbs=.*/.test(location.href)) {
 		userInput = setupText();
 		currUrl = location.href;
 		runThrough();

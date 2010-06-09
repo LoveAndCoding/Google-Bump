@@ -7,6 +7,10 @@
 		.closed { \
 			display: none; \
 		}  \
+		#fll { \
+			margin: 0px auto !important; \
+			padding: 19px 0px; \
+		} \
 		#dock { \
 			position: fixed; \
 			height: 40px; \
@@ -25,6 +29,14 @@
 			cursor: pointer; \
 			float: left; \
 		}  \
+		.topHolder { \
+			height: 68px; \
+			overflow: auto; \
+			position: absolute; \
+			right: 5px; \
+			top: -8px; \
+			width: " + Math.max(262, maxwidth - 879) + "px; \
+		} \
 		#wikiHeader { \
 			font-size: 18pt; \
 			padding-left: .5em; \
@@ -46,9 +58,9 @@
 			text-shadow: -1px 0px #888888; \
 		}  \
 		.vid_result { \
-			display: -moz-stack; \
+			display: inline-table; \
 			width: 16%; \
-			margin: 1px 2%; \
+			margin: 10px 2%; \
 			text-align: center; \
 		}  \
 		.vid_result img { \

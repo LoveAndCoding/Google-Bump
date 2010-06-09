@@ -2,10 +2,23 @@
 			border-style: none; \
 		} \
 		#res {  \
-			padding-top: 7px;  \
+			padding-right: 0px; \
+			position: relative; \
 		} \
 		#center_col { \
 			margin-right: 0px; \
+		} \
+		#fll { \
+			margin: 0px auto !important; \
+			padding: 19px 0px; \
+		} \
+		.topHolder { \
+			height: 68px; \
+			overflow: auto; \
+			position: absolute; \
+			right: 5px; \
+			top: -8px; \
+			width: " + Math.max(262, maxwidth - 879) + "px; \
 		} \
 		#videoList { \
 			border: 1px solid black;  \
@@ -26,7 +39,7 @@
 		#resOL { \
 			position: absolute; \
 			right: 0px; \
-			top: 7px; \
+			top: 24px; \
 			width: 44%; \
 			overflow: auto; \
 			height: " + (!options.vids || !options.imgs ? '500px' : '300px') + "; \
@@ -37,8 +50,8 @@
 			width: " + (!options.vids ? '100%' : '44%') + "; \
 			height: " + (!options.vids ? '190px' : 'auto') + "; \
 			position: " + (!options.vids ? 'static' : 'absolute') + "; \
-			top: 312px; \
-			right: 0px; \
+			top: 320px; \
+			right: 3px; \
 			margin-top: " + (!options.vids ? '4px' : '1%') + "; \
 			text-align: center; \
 		} \
@@ -68,7 +81,7 @@
 			padding: 0px; \
 		} \
 		#embedArea { \
-			height: " + ("468") + "px; \
+			height: 468px; \
 		} \
 		#hidePly { \
 			display: none !important; \
@@ -92,10 +105,6 @@
 			width: 100%; \
 			margin-bottom: .5em; \
 			margin-top: 1%; \
-		} \
-		#res { \
-			padding-right: 0px; \
-			position: relative; \
 		} \
 		.vid_result, .rl-res { \
 			width: 120px; \

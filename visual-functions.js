@@ -68,4 +68,33 @@ function didyoumean() {
 		thebar.insertBefore(p1, thebar.childNodes[0]);
 	}
 }
+// Moves top content to a new position
+function topContentMove() {
+	if (options.styl == 'center') {
+		return;
+	}
+	
+	var topHolder;
+	if($('topstuff')) {
+		topHolder = $('topstuff');
+		topHolder.className = "topHolder";
+	} else {
+		topHolder = $create('div', {
+			id : 'topstuff',
+			className : 'topHolder'
+		});
+		var resnodes = $('res').childNodes;
+		for(var i = 0; i < resnodes.length; i++) {
+			if(resnodes[i].className != 'hd' &&
+					resnodes[i].id != 'ires' &&
+					resnodes[i].id != 'search') {
+				topHolder.appendChild(resnodes[i]);
+			} else {
+				break;
+			}
+		}
+	}
+	
+	$('sfcnt').appendChild(topHolder);
+}
 	// End Visual Functions ------------------------------------------------------------

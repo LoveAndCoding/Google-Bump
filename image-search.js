@@ -296,6 +296,9 @@ function Image_Search(query) {
 	
 	this.processPage = function (response) {
 		var na;
+		if (!response.responseText.match(/dyn\.setResults\(\[\[[^]*]\);/)) {
+			return;
+		}
 		eval("na = " + response.responseText.match(/dyn\.setResults\(\[\[[^]*]\);/)[0].substring(14));
 		
 		/*

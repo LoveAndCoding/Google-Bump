@@ -61,10 +61,10 @@
 			font-size: small; \
 			display: inline; \
 		} \
-		 .opli { \
+		.opli { \
 			display: inline; \
 		} \
-		 .confTab { \
+		.confTab { \
 			margin: 0px; \
 			padding: 2px 4px; \
 			border: 1px solid black; \
@@ -92,7 +92,7 @@
 			margin: 6px 0px; \
 			border-bottom: 1px solid grey; \
 		} \
-		 #confWrap { \
+		#confWrap { \
 			height: 427px; \
 			border-bottom: 1px solid black; \
 			margin-bottom: 2px; \
@@ -103,17 +103,17 @@
 		.sldImgs { \
 			display: block; \
 		} \
-		 .keycuts { \
+		.keycuts { \
 			width: 100%; \
 		} \
-		 .keycuts em { \
+		.keycuts em { \
 			text-decoration: underline; \
 			font-weight: bold; \
 		} \
 		.conf_Tab, #confTabs { \
 			background-color: #F0F7F9; \
 		} \
-		 #t_AbtConf { \
+		#t_AbtConf { \
 			background-color: #F0F7F9 !important; \
 		} \
 		#hidePly { \
@@ -135,7 +135,7 @@
 			position: relative; \
 			margin-bottom: 3px; \
 		} \
-		 .conf_Tab { \
+		.conf_Tab { \
 			padding: 0px 0.5em .25em .5em; \
 			margin-top: 4px; \
 			border-bottom: 1px solid black; \
@@ -149,13 +149,13 @@
 			border-bottom-color: #FFFFFF; \
 			background-color: #FFFFFF; \
 		} \
-		 .confTabOn { \
+		.confTabOn { \
 			margin: .7em; \
 		} \
-		 .confTabOn label { \
+		.confTabOn label { \
 			margin: .2em 0px; \
 		} \
-		 .confTabOn button { \
+		.confTabOn button { \
 			margin: .5em 0px; \
 		} \
 		#t_AbtConf { \
@@ -171,7 +171,7 @@
 		#AbtConf p { \
 			margin-top: 0px; \
 		} \
-		 #deapallFault, #sNc { \
+		#deapallFault, #sNc { \
 			margin-left: .2em; \
 		} \
 		#newVer { \
@@ -200,10 +200,33 @@
 			-moz-border-radius: 5px; \
 			color: #000000 !important; \
 		} \
+		#slideShow { \
+			position: fixed; \
+			text-align: center; \
+			padding: 15px; \
+			top: 50%; \
+			left: 50%; \
+			z-index: 9998; \
+			background-color: #FFFFFF; \
+			border: 1px solid #000000; \
+		} \
+		.sldImgs { \
+			max-width: " + maxwidth + "px; \
+			max-height: " + maxheight + "px; \
+		} \
+		#sldLink { \
+			text-align: center; \
+		} \
+		#next{ \
+			float: right; \
+		} \
+		#prev { \
+			float: left; \
+		} \
 		#res { \
 			margin: 0px 8px; \
 		} \
-		 #cnt { \
+		#cnt { \
 			max-width: 100%; \
 		} \
 		#ssb { \

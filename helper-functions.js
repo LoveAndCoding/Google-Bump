@@ -132,8 +132,12 @@ function checknonreload() {
 		if($$(statId, dynaId)) {
 			// Restart process if it is not
 			resetPg();
-			userInput = setupText();
-			runThrough();
+			if(!/.*#.*&tbs=/.test(location.href)) {
+				userInput = setupText();
+				runThrough();
+			} else {
+				location.reload();
+			}
 		}
 		currUrl = location.href;
 	}
@@ -159,6 +163,9 @@ function resetPg() {
 	var gup = $("greyOut");
 	if (gup) {
 		closeEx();
+	}
+	if ($('dock')) {
+		$remove('dock');
 	}
 }
 // Removes all the children of the given element using recursion

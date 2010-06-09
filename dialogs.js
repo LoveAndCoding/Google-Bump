@@ -293,7 +293,8 @@ function style_dialog(popup) {
 		var classic_set_window = new config_window(clcTab, "ClscStyl");
 			// General Settings
 		var classic_section = new config_section();
-		classic_section.sectionOptions.push(new config_desc_section('Coming Soon', 'This section is still under construction. Please excuse our mess.'));
+		classic_section.sectionOptions.push(new config_checkBox("Hide Sidebar Ads", "sideads", options.DEFAULT_SIDEADS));
+		//classic_section.sectionOptions.push(new config_desc_section('Coming Soon', 'This section is still under construction. Please excuse our mess.'));
 		classic_set_window.sections.push(classic_section);
 		
 		// Media Settings
@@ -314,7 +315,7 @@ function style_dialog(popup) {
 		var center_set_window = new config_window(cntTab, "CentStyl");
 			// General Settings
 		var center_section = new config_section();
-		center_section.sectionOptions.push(new config_desc_section('Coming Soon', 'This section is still under construction. Please excuse our mess.'));
+		center_section.sectionOptions.push(new config_colorBox('Background', 'genbgclr', options.DEFAULT_GENBGCLR));
 		center_set_window.sections.push(center_section);
 		
 		// General Settings
@@ -465,7 +466,7 @@ function config_dialog(popup) {
 		// app_section.sectionOptions.push(new config_checkBox("Add Margins", "margs", options.DEFAULT_MARGS));
 		app_section.sectionOptions.push(new config_checkBox("Remove Suggestions", "sugges", options.DEFAULT_SUGGES));
 		app_section.sectionOptions.push(new config_checkBox("Move \"Did you mean\" text", "dym", options.DEFAULT_DYM));
-		app_section.sectionOptions.push(new config_checkBox("Remove Sidebar Ads", "sideads", options.DEFAULT_SIDEADS));
+		app_section.sectionOptions.push(new config_checkBox("Move Top Content (Calculator, Showtimes, Etc.)", "moveTop", options.DEFAULT_MOVETOP));
 		app_set_window.sections.push(app_section);
 		
 		// Image Search Settings
