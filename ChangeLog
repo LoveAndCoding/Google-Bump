@@ -1,12 +1,12 @@
 Version 2.02.20100609 - Bug Fix Release - 06/09/10
 
-	* Added ability to move top content
-	* Improved logic for exclusion rules
-	* Fixed issue with trigger on video search
-	* Fix for Canvas issue in FF 3.5.9
-	* Added one option to Classic Style options
-	* Added one option to Center Style options
-	* Fixed error in Error Console if no images were found
+    * Feature: Ability to move top content
+    * Feature: One option to Classic Style options (Re-add Ads)
+    * Feature: One option to Center Style options (Background Color)
+    * Bug: No longer trigger on video search
+    * Bug: Canvas issue in FF 3.5.9 now has workaround
+    * Bug: No longer an error in Error Console if no images were found
+    * Improved: Logic for exclusion rules
 
 Version 2.01.20100604 - Bug Fix Release - 06/04/10
 

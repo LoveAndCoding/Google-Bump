@@ -3,10 +3,17 @@
 		} \
 		.lsbb { \
 			white-space: nowrap; \
+			background-image: url(/images/srpr/nav_logo13.png); \
+			background-position: center bottom; \
+		} \
+		.multiExp, .siteSelector, .multiBtn { \
+			border-color: #CCCCCC; \
+			border-width: 1px; \
+		} \
+		.multiExp { \
+			border-left-style: solid; \
 		} \
 		#allSearches { \
-			background-color: #FFFFFF; \
-			z-index: 1000; \
 		} \
 		#expand, #collapse { \
 			cursor: pointer; \
@@ -31,17 +38,21 @@
 			color: #555555; \
 			margin: 0px; \
 			margin-left: 1em; \
-			display: inline; \
+			display: block; \
+		} \
+		.fullWidthTD { \
+			width: 100%; \
 		} \
 		.siteSelector { \
-			display: inline; \
-			margin-left: 1em; \
-			margin-bottom: 1em; \
+			padding: 6px 4px 4px 0px; \
+		} \
+		.siteSelector, .multiBtn { \
+			border-right-style: solid; \
+		} \
+		.siteSelector option { \
+			background-color: #EEEEEE !important; \
 		} \
 		.searchBoxes { \
-			display: inline; \
-			margin-left: 1em; \
-			width: 50%; \
 		} \
 		.closeBtn { \
 			color: red; \

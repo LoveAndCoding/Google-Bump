@@ -2,7 +2,7 @@
 // @name			Google Bump
 // @namespace		http://userscripts.org/scripts/show/33449
 // @description		Adds some functionality to the Google web search. Main features include Multisearch, Video result extraction, Wikipedia definitions and links, and some clutter cleanup by. All options can be turned off.
-// @version			2.01.20100604
+// @version			2.02.20100609
 // @include			http://www.google.tld/
 // @include			http://www.google.tld/#*
 // @include			http://www.google.tld/search?*
@@ -12,14 +12,14 @@
 
 /*
 	Author: KTaShes
-	Date: June 04 2010
+	Date: June 09 2010
 	
 	Code can now be found on GitHub @ http://github.com/ktsashes/Google-Bump
 	
 	This code uses juicer to compile from several different javascript files.
 	Juicer (C) Christian Johansen - http://cjohansen.no/en/ruby/juicer_a_css_and_javascript_packaging_tool
 */
-var version = "2.01";
+var version = "2.02";
 
 
 var image_store = {
@@ -185,6 +185,86 @@ function optionlist() {
 	this.DEFAULT_PLYTXTCLR = '0,0,0';
 	this.DEFAULT_PBLTXTCLR = '0,0,0';
 	
+		// Search Default Object
+	this.DEFAULT_SEARCHENGINES = " \
+[ \
+	{ \
+		\"Name\" : \"Google\", \
+		\"url_before\" : \"http://google.com/search?q=\", \
+		\"url_after\" : \"\", \
+	}, \
+	{ \
+		\"Name\" : \"ESPN\", \
+		\"url_before\" : \"http://search.espn.go.com/\", \
+		\"url_after\" : \"\", \
+	}, \
+	{ \
+		\"Name\" : \"eBay\", \
+		\"url_before\" : \"http://shop.ebay.com/items/?_nkw=\", \
+		\"url_after\" : \"\", \
+	}, \
+	{ \
+		\"Name\" : \"Source Forge\", \
+		\"url_before\" : \"http://sourceforge.net/search/?type_of_search=soft&words=\", \
+		\"url_after\" : \"\", \
+	}, \
+	{ \
+		\"Name\" : \"CNN\", \
+		\"url_before\" : \"http://search.cnn.com/search.jsp?type=web&sortBy=date&intl=false&query=\", \
+		\"url_after\" : \"\", \
+	}, \
+	{ \
+		\"Name\" : \"Flickr\", \
+		\"url_before\" : \"http://www.flickr.com/search/?q=\", \
+		\"url_after\" : \"\", \
+	}, \
+	{ \
+		\"Name\" : \"Wikipedia\", \
+		\"url_before\" : \"http://en.wikipedia.org/wiki/Special:Search?go=Go&search=\", \
+		\"url_after\" : \"\", \
+	}, \
+	{ \
+		\"Name\" : \"Youtube\", \
+		\"url_before\" : \"http://www.youtube.com/results?search_type=&aq=f&search_query=\", \
+		\"url_after\" : \"\", \
+	}, \
+	{ \
+		\"Name\" : \"Digg\", \
+		\"url_before\" : \"http://digg.com/search?section=all&s=\", \
+		\"url_after\" : \"\", \
+	}, \
+	{ \
+		\"Name\" : \"GameFAQs\", \
+		\"url_before\" : \"http://www.gamefaqs.com/search/index.html?platform=0&game=\", \
+		\"url_after\" : \"\", \
+	}, \
+	{ \
+		\"Name\" : \"IMDB\", \
+		\"url_before\" : \"http://www.imdb.com/find?s=all&x=22&y=12&q=\", \
+		\"url_after\" : \"\", \
+	}, \
+	{ \
+		\"Name\" : \"AnimeDB\", \
+		\"url_before\" : \"http://anidb.net/perl-bin/animedb.pl?show=animelist&do.search=Search&adb.search=\", \
+		\"url_after\" : \"\", \
+	}, \
+	{ \
+		\"Name\" : \"Wiktionary\", \
+		\"url_before\" : \"http://en.wiktionary.org/wiki/Special:Search?go=Go&search=\", \
+		\"url_after\" : \"\", \
+	}, \
+	{ \
+		\"Name\" : \"Wiki How To\", \
+		\"url_before\" : \"http://www.wikihow.com/Special:LSearch?fulltext=Search&search=\", \
+		\"url_after\" : \"\", \
+	}, \
+	{ \
+		\"Name\" : \"Wiki Quote\", \
+		\"url_before\" : \"http://en.wikiquote.org/wiki/Special:Search?go=Go&search=\", \
+		\"url_after\" : \"\", \
+	} \
+] \
+";
 	
 		// Visual vars
 	this.margs = GM_getValue("margs", this.DEFAULT_MARGS);
@@ -245,11 +325,18 @@ function optionlist() {
 	this.mdatxtclr = GM_getValue("mdatxtclr", this.DEFAULT_MDATXTCLR);
 	this.plytxtclr = GM_getValue("plytxtclr", this.DEFAULT_PLYTXTCLR);
 	this.pbltxtclr = GM_getValue("pbltxtclr", this.DEFAULT_PBLTXTCLR);
+	
+		// Search Engines
+	this.searchengines = GM_getValue("searchengines", this.DEFAULT_SEARCHENGINES);
 }
 
 var options = new optionlist();
 
 	// Start Helper Functions ----------------------------------------------------------
+// Trim for strings
+function _trim(b) {
+	return b.replace(/^\s*/, "").replace(/\s*$/, "");
+}
 // Shortcut for document.getElementById
 function $(id) {
 	return document.getElementById(id);
@@ -1570,10 +1657,17 @@ function stylesheet_store () {
 		} \
 		.lsbb { \
 			white-space: nowrap; \
+			background-image: url(/images/srpr/nav_logo13.png); \
+			background-position: center bottom; \
+		} \
+		.multiExp, .siteSelector, .multiBtn { \
+			border-color: #CCCCCC; \
+			border-width: 1px; \
+		} \
+		.multiExp { \
+			border-left-style: solid; \
 		} \
 		#allSearches { \
-			background-color: #FFFFFF; \
-			z-index: 1000; \
 		} \
 		#expand, #collapse { \
 			cursor: pointer; \
@@ -1598,17 +1692,21 @@ function stylesheet_store () {
 			color: #555555; \
 			margin: 0px; \
 			margin-left: 1em; \
-			display: inline; \
+			display: block; \
+		} \
+		.fullWidthTD { \
+			width: 100%; \
 		} \
 		.siteSelector { \
-			display: inline; \
-			margin-left: 1em; \
-			margin-bottom: 1em; \
+			padding: 6px 4px 4px 0px; \
+		} \
+		.siteSelector, .multiBtn { \
+			border-right-style: solid; \
+		} \
+		.siteSelector option { \
+			background-color: #EEEEEE !important; \
 		} \
 		.searchBoxes { \
-			display: inline; \
-			margin-left: 1em; \
-			width: 50%; \
 		} \
 		.closeBtn { \
 			color: red; \
@@ -2461,6 +2559,89 @@ function config_colorBox(label, id, dflt) {
 			GM_setValue(this.id, this.defaultVal);
 		}
 	};
+}
+
+/**
+  *	General purpose button object
+  */
+function config_keyvalTable(label, id, keys, vals, dflt) {
+	
+	this.label = label;
+	this.id = id;
+	this.currentValue = GM_getValue(id, dflt);
+	this.defaultVal = dflt;
+	this.keys = keys;
+	this.values = vals;
+	this.list;
+	
+	this.draw = function (parentNode) {
+		var disp = $create("p", {
+			textContent : this.label + ": ",
+			className : "confLbl"
+		});
+		this.list = $create("select", {
+			name : this.id,
+			className : "opli"
+		});
+		var SR = this;
+		this.list.addEventListener("change", function(event) { 
+			GM_setValue(SR.list.name, SR.list.value);
+		}, true);
+		// Creates the desired Options with the given  values and ids
+		for (var lo = 0; lo < this.options.length; lo++) {
+			var op = $create("option", {
+				textContent : this.options[lo],
+				value : this.values[lo],
+				id : this.id + "_" + lo
+			});
+			if (this.values[lo] == this.currentValue) {
+				op.selected = true;
+			}
+			this.list.appendChild(op);
+		}
+		
+		var hldr = $create('div', {
+			className : 'config_option'
+		});
+		
+		hldr.appendChild(disp);
+		hldr.appendChild(this.list);
+		parentNode.appendChild(hldr);
+	};
+	
+	this.setDefault = function () {
+		if (this.list) {
+			this.list.value = this.defaultVal;
+			GM_setValue(this.id, this.defaultVal);
+		}
+	};
+	
+	this.addKeyVal = function (_k, _v) {
+		
+	};
+	
+	this.removeKeyVal = function (_k) {
+		for(var kv = 0, len = this.keys.length; kv < len; kv++) {
+			strStore += _op(this.keys[kv], this.values[kv]);
+			if(kv < len - 1) {
+				strStore += ",";
+			}
+		}
+	};
+	
+	this.getKeyValPairs = function (_op) {
+		if (!_op) {
+			_op = function (k,v) { return "{\"key\" : " + k + "\",\"value\":\"" + v + "\"}"; };
+		}
+		var strStore = "[";
+		for(var kv = 0, len = this.keys.length; kv < len; kv++) {
+			strStore += _op(this.keys[kv], this.values[kv]);
+			if(kv < len - 1) {
+				strStore += ",";
+			}
+		}
+		return strStore + "]";
+	}
 }
 
 /**
@@ -3356,6 +3537,23 @@ function styler() {
 		stylr.undraw();
 	}
 }
+// Get a random string for searching
+function randSearch() {
+	// Variable length to lower collision rate further
+	var v = "";
+	for(var i = 0; i < 14; i++) {
+		var n1 = Math.random();
+		var n2 = Math.random();
+		if(n1 * 1.5 > 1) {
+			v += String.fromCharCode(Math.round(Math.random() * 9) + 48);
+		} else if (n2 * 1.5 > 1) {
+			v += String.fromCharCode(Math.round(Math.random() * 25) + 65);
+		} else {
+			v += String.fromCharCode(Math.round(Math.random() * 25) + 97);
+		}
+	}
+	return v;
+}
 	// End Configuration Functions ----------------------------------------------------
 
 // Activate Keyboard Shortcuts for the script
@@ -3435,72 +3633,72 @@ function multisearcher() {
 		var theirButton = $cl('lsb')[0];
 		this.myButton = $create('input', {
 			type : 'button',
-			className : 'lsb',
+			className : 'lsb multiExp',
 			value : 'More Options',
-			style : 'border-left: 1px solid #CCCCCC;'
 		});
 		
+		this.origOptionBox = new multisearchbox(null).getOptBox();
+		this.origOptionBox.className += " removed";
+		
+		theirButton.parentNode.insertBefore(this.origOptionBox, theirButton);
 		theirButton.parentNode.appendChild(this.myButton);
+		
+		this.newSearchWrapper = $cl("lst-td")[0].parentNode.parentNode;
 		
 		var SR = this;
 		this.myButton.addEventListener('click', function (e) {
 			SR.expandCollapse();
 		}, false);
 		
-		this.wrapper = $create("div", {
+		this.wrapper = $create("tr", {
 			id : "allSearches"
 		});
+		// this.wrapper = this.newSearchWrapper;
 		
-		this.multiwrapper = $create("div");
-		this.multiwrapper.id = "expandedMulti";
-		var tabhead1 = $create("h3");
-		tabhead1.textContent = "Current Tab";
-		tabhead1.className = "TabHead";
-		var tabhead2 = $create("h3");
-		tabhead2.textContent = "New Tab(s)";
-		tabhead2.className = "TabHead";
-		
-		this.origOptionBox = new multisearchbox(null).getOptBox();
-		
-		this.multiwrapper.appendChild(tabhead1);
-		this.multiwrapper.appendChild(this.origOptionBox);
-		this.multiwrapper.appendChild(tabhead2);
-		this.multiwrapper.appendChild($create("br"));
-		
-		this.newSearchWrapper = $create("div", {
-			id : 'newSearchBoxes'
+		this.multiwrapper = $create("td", {
+			id : "expandedMulti",
+			colSpan : 2
 		});
 		
 		for (var nm = GM_getValue("numMulti", 2); nm > 0 ; nm--) {
 			var msb = new multisearchbox(this);
 			msb.draw(this.newSearchWrapper);
+			msb.hide();
 			this.boxes.push(msb);
 		}
 		
-		this.multiwrapper.appendChild(this.newSearchWrapper);
+		var rs1 = $create('div', {
+			className : 'ds'
+		});
+		var rs2 = $create('div', {
+			className : 'lsbb'
+		});
 		
-		var adder = $create("div");
-		adder.id = "adding";
-		adder.textContent = "Add more...";
-		this.multiwrapper.appendChild(adder);
+		var adder = $create("button", {
+			textContent : "Add More",
+			className : "lsb multiBtn"
+		});
+		rs2.appendChild(adder);
 		
 		var srchAll = $create("button", {
 			textContent : "Search All",
-			id : "searchAll"
+			className : "lsb multiBtn"
 		});
-		this.multiwrapper.appendChild(srchAll);
+		rs2.appendChild(srchAll);
 		
 		var srchNew = $create("button", {
 			textContent : "Search New",
-			id : "searchNew"
+			className : "lsb multiBtn"
 		});
-		this.multiwrapper.appendChild(srchNew);
+		rs2.appendChild(srchNew);
 		
 		var fillOutAll = $create('button', {
-			textContent : 'Set All from Original',
-			id : 'setBoxes'
+			textContent : 'Fill All',
+			className : "lsb multiBtn"
 		});
-		this.multiwrapper.appendChild(fillOutAll);
+		rs2.appendChild(fillOutAll);
+		rs1.appendChild(rs2);
+		this.multiwrapper.appendChild(rs1);
 		
 		adder.addEventListener("click", function (event) {
 			SR.addBox();
@@ -3536,7 +3734,7 @@ function multisearcher() {
 			}
 		}, false);
 		
-		$cl('tsf-p')[0].appendChild(this.wrapper);
+		this.newSearchWrapper.appendChild(this.wrapper);
 		
 	};
 	
@@ -3545,15 +3743,24 @@ function multisearcher() {
 		msb.draw(this.newSearchWrapper);
 		this.boxes.push(msb);
 		GM_setValue("numMulti", parseInt(GM_getValue("numMulti", 2)) + 1);
+		this.newSearchWrapper.appendChild(this.wrapper);
 	};
 	
 	this.expandCollapse = function () {
 		if (!this.expanded) {
 			this.wrapper.appendChild(this.multiwrapper);
 			this.myButton.value = "Less Options";
+			this.origOptionBox.className = this.origOptionBox.className.replace(" removed", "");
+			for (var b = 0; b < this.boxes.length; b++) {
+				this.boxes[b].reveal();
+			}
 		} else {
 			this.wrapper.removeChild(this.multiwrapper);
 			this.myButton.value = "More Options";
+			this.origOptionBox.className += " removed";
+			for (var b = 0; b < this.boxes.length; b++) {
+				this.boxes[b].hide();
+			}
 		}
 		this.expanded = !this.expanded;
 	};
@@ -3614,6 +3821,8 @@ function multisearchbox (parentObj) {
 	this.parentObj = parentObj;
 	this.wrapping;
 	this.srchBox;
+	this.srchBtn;
+	this.fillBtn;
 	this.removeBtn;
 	this.optionBox;
 	this.goBtn;
@@ -3627,28 +3836,71 @@ function multisearchbox (parentObj) {
 	this.draw = function (parentNode) {
 		this.active = true;
 		
-		this.wrapping = $create("div", {
+		this.wrapping = $create("tr", {
 			className : "SBoxes"
 		});
 		
-		this.wrapping.appendChild(this.getOptBox());
+		var sbTd = $create("td", {
+			className : "lst-td fullWidthTD"
+		});
 		
+		var btnTd = $create("td");
+		
+		this.wrapping.appendChild(sbTd);
+		this.wrapping.appendChild(btnTd);
+		
+		var ruse = $create('div', {
+			style : 'position: relative'
+		});
 		this.srchBox = $create("input", {
 			type : "text",
-			className : "searchBoxes"
+			className : "lst searchBoxes"
 		});
-		this.wrapping.appendChild(this.srchBox);
+		ruse.appendChild(this.srchBox);
+		sbTd.appendChild(ruse);
 		
-		this.removeBtn = $create("p", {
-			className : "closeBtn",
-			textContent : "X"
+		var wrp = $create('div', {
+			className : 'ds'
 		});
-		this.wrapping.appendChild(this.removeBtn);
+		ruse = $create('div', {
+			className : 'lsbb'
+		});
+		
+		this.srchBtn = $create('input', {
+			type : 'button',
+			className : 'lsb',
+			value : 'Search',
+		});
+		this.fillBtn = $create('input', {
+			type : 'button',
+			className : 'lsb multiExp',
+			value : 'Fill',
+		});
+		this.removeBtn = $create('input', {
+			type : 'button',
+			className : 'lsb multiExp',
+			value : 'Remove',
+		});
+		
+		ruse.appendChild(this.getOptBox());
+		ruse.appendChild(this.srchBtn);
+		ruse.appendChild(this.fillBtn);
+		ruse.appendChild(this.removeBtn);
+		wrp.appendChild(ruse);
+		btnTd.appendChild(wrp);
 		
 		var SR = this;
 		this.removeBtn.addEventListener("click", function () {
 			SR.undraw();
 			GM_setValue("numMulti", parseInt(GM_getValue("numMulti", 2)) - 1);
+		}, false);
+		
+		this.fillBtn.addEventListener("click", function () {
+			SR.setValue(SR.parentObj.original.value);
+		}, false);
+		
+		this.srchBtn.addEventListener("click", function () {
+			SR.search();
 		}, false);
 		
 		parentNode.appendChild(this.wrapping);
@@ -3659,10 +3911,18 @@ function multisearchbox (parentObj) {
 		$remove(this.wrapping);
 	};
 	
+	this.reveal = function () {
+		this.wrapping.className = "SBoxes";
+	};
+	
+	this.hide = function () {
+		this.wrapping.className = "removed";
+	};
+	
 	this.getOptBox = function () {
 		if (!this.optionBox) {
 			this.optionBox = $create("select", {
-				className : "siteSelector"
+				className : "siteSelector lsb"
 			});
 			for (var i = this.showList.length - 1; i >= 0;i--) {
 				var opt = $create("option", {
@@ -3689,7 +3949,7 @@ function multisearchbox (parentObj) {
 	
 	this.search = function () {
 		if (this.active) {
-			var code = new array();
+			var code = [];
 			this.addCode(code);
 			redirgo(code, true);
 		}

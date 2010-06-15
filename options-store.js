@@ -60,6 +60,86 @@ function optionlist() {
 	this.DEFAULT_PLYTXTCLR = '0,0,0';
 	this.DEFAULT_PBLTXTCLR = '0,0,0';
 	
+		// Search Default Object
+	this.DEFAULT_SEARCHENGINES = " \
+[ \
+	{ \
+		\"Name\" : \"Google\", \
+		\"url_before\" : \"http://google.com/search?q=\", \
+		\"url_after\" : \"\", \
+	}, \
+	{ \
+		\"Name\" : \"ESPN\", \
+		\"url_before\" : \"http://search.espn.go.com/\", \
+		\"url_after\" : \"\", \
+	}, \
+	{ \
+		\"Name\" : \"eBay\", \
+		\"url_before\" : \"http://shop.ebay.com/items/?_nkw=\", \
+		\"url_after\" : \"\", \
+	}, \
+	{ \
+		\"Name\" : \"Source Forge\", \
+		\"url_before\" : \"http://sourceforge.net/search/?type_of_search=soft&words=\", \
+		\"url_after\" : \"\", \
+	}, \
+	{ \
+		\"Name\" : \"CNN\", \
+		\"url_before\" : \"http://search.cnn.com/search.jsp?type=web&sortBy=date&intl=false&query=\", \
+		\"url_after\" : \"\", \
+	}, \
+	{ \
+		\"Name\" : \"Flickr\", \
+		\"url_before\" : \"http://www.flickr.com/search/?q=\", \
+		\"url_after\" : \"\", \
+	}, \
+	{ \
+		\"Name\" : \"Wikipedia\", \
+		\"url_before\" : \"http://en.wikipedia.org/wiki/Special:Search?go=Go&search=\", \
+		\"url_after\" : \"\", \
+	}, \
+	{ \
+		\"Name\" : \"Youtube\", \
+		\"url_before\" : \"http://www.youtube.com/results?search_type=&aq=f&search_query=\", \
+		\"url_after\" : \"\", \
+	}, \
+	{ \
+		\"Name\" : \"Digg\", \
+		\"url_before\" : \"http://digg.com/search?section=all&s=\", \
+		\"url_after\" : \"\", \
+	}, \
+	{ \
+		\"Name\" : \"GameFAQs\", \
+		\"url_before\" : \"http://www.gamefaqs.com/search/index.html?platform=0&game=\", \
+		\"url_after\" : \"\", \
+	}, \
+	{ \
+		\"Name\" : \"IMDB\", \
+		\"url_before\" : \"http://www.imdb.com/find?s=all&x=22&y=12&q=\", \
+		\"url_after\" : \"\", \
+	}, \
+	{ \
+		\"Name\" : \"AnimeDB\", \
+		\"url_before\" : \"http://anidb.net/perl-bin/animedb.pl?show=animelist&do.search=Search&adb.search=\", \
+		\"url_after\" : \"\", \
+	}, \
+	{ \
+		\"Name\" : \"Wiktionary\", \
+		\"url_before\" : \"http://en.wiktionary.org/wiki/Special:Search?go=Go&search=\", \
+		\"url_after\" : \"\", \
+	}, \
+	{ \
+		\"Name\" : \"Wiki How To\", \
+		\"url_before\" : \"http://www.wikihow.com/Special:LSearch?fulltext=Search&search=\", \
+		\"url_after\" : \"\", \
+	}, \
+	{ \
+		\"Name\" : \"Wiki Quote\", \
+		\"url_before\" : \"http://en.wikiquote.org/wiki/Special:Search?go=Go&search=\", \
+		\"url_after\" : \"\", \
+	} \
+] \
+";
 	
 		// Visual vars
 	this.margs = GM_getValue("margs", this.DEFAULT_MARGS);
@@ -120,6 +200,9 @@ function optionlist() {
 	this.mdatxtclr = GM_getValue("mdatxtclr", this.DEFAULT_MDATXTCLR);
 	this.plytxtclr = GM_getValue("plytxtclr", this.DEFAULT_PLYTXTCLR);
 	this.pbltxtclr = GM_getValue("pbltxtclr", this.DEFAULT_PBLTXTCLR);
+	
+		// Search Engines
+	this.searchengines = GM_getValue("searchengines", this.DEFAULT_SEARCHENGINES);
 }
 
 var options = new optionlist();

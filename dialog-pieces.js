@@ -367,6 +367,89 @@ function config_colorBox(label, id, dflt) {
 /**
   *	General purpose button object
   */
+function config_keyvalTable(label, id, keys, vals, dflt) {
+	
+	this.label = label;
+	this.id = id;
+	this.currentValue = GM_getValue(id, dflt);
+	this.defaultVal = dflt;
+	this.keys = keys;
+	this.values = vals;
+	this.list;
+	
+	this.draw = function (parentNode) {
+		var disp = $create("p", {
+			textContent : this.label + ": ",
+			className : "confLbl"
+		});
+		this.list = $create("select", {
+			name : this.id,
+			className : "opli"
+		});
+		var SR = this;
+		this.list.addEventListener("change", function(event) { 
+			GM_setValue(SR.list.name, SR.list.value);
+		}, true);
+		// Creates the desired Options with the given  values and ids
+		for (var lo = 0; lo < this.options.length; lo++) {
+			var op = $create("option", {
+				textContent : this.options[lo],
+				value : this.values[lo],
+				id : this.id + "_" + lo
+			});
+			if (this.values[lo] == this.currentValue) {
+				op.selected = true;
+			}
+			this.list.appendChild(op);
+		}
+		
+		var hldr = $create('div', {
+			className : 'config_option'
+		});
+		
+		hldr.appendChild(disp);
+		hldr.appendChild(this.list);
+		parentNode.appendChild(hldr);
+	};
+	
+	this.setDefault = function () {
+		if (this.list) {
+			this.list.value = this.defaultVal;
+			GM_setValue(this.id, this.defaultVal);
+		}
+	};
+	
+	this.addKeyVal = function (_k, _v) {
+		
+	};
+	
+	this.removeKeyVal = function (_k) {
+		for(var kv = 0, len = this.keys.length; kv < len; kv++) {
+			strStore += _op(this.keys[kv], this.values[kv]);
+			if(kv < len - 1) {
+				strStore += ",";
+			}
+		}
+	};
+	
+	this.getKeyValPairs = function (_op) {
+		if (!_op) {
+			_op = function (k,v) { return "{\"key\" : " + k + "\",\"value\":\"" + v + "\"}"; };
+		}
+		var strStore = "[";
+		for(var kv = 0, len = this.keys.length; kv < len; kv++) {
+			strStore += _op(this.keys[kv], this.values[kv]);
+			if(kv < len - 1) {
+				strStore += ",";
+			}
+		}
+		return strStore + "]";
+	}
+}
+
+/**
+  *	General purpose button object
+  */
 function button(value, action) {
 	
 	this.val = value;

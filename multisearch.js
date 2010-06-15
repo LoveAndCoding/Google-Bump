@@ -44,72 +44,72 @@ function multisearcher() {
 		var theirButton = $cl('lsb')[0];
 		this.myButton = $create('input', {
 			type : 'button',
-			className : 'lsb',
+			className : 'lsb multiExp',
 			value : 'More Options',
-			style : 'border-left: 1px solid #CCCCCC;'
 		});
 		
+		this.origOptionBox = new multisearchbox(null).getOptBox();
+		this.origOptionBox.className += " removed";
+		
+		theirButton.parentNode.insertBefore(this.origOptionBox, theirButton);
 		theirButton.parentNode.appendChild(this.myButton);
+		
+		this.newSearchWrapper = $cl("lst-td")[0].parentNode.parentNode;
 		
 		var SR = this;
 		this.myButton.addEventListener('click', function (e) {
 			SR.expandCollapse();
 		}, false);
 		
-		this.wrapper = $create("div", {
+		this.wrapper = $create("tr", {
 			id : "allSearches"
 		});
+		// this.wrapper = this.newSearchWrapper;
 		
-		this.multiwrapper = $create("div");
-		this.multiwrapper.id = "expandedMulti";
-		var tabhead1 = $create("h3");
-		tabhead1.textContent = "Current Tab";
-		tabhead1.className = "TabHead";
-		var tabhead2 = $create("h3");
-		tabhead2.textContent = "New Tab(s)";
-		tabhead2.className = "TabHead";
-		
-		this.origOptionBox = new multisearchbox(null).getOptBox();
-		
-		this.multiwrapper.appendChild(tabhead1);
-		this.multiwrapper.appendChild(this.origOptionBox);
-		this.multiwrapper.appendChild(tabhead2);
-		this.multiwrapper.appendChild($create("br"));
-		
-		this.newSearchWrapper = $create("div", {
-			id : 'newSearchBoxes'
+		this.multiwrapper = $create("td", {
+			id : "expandedMulti",
+			colSpan : 2
 		});
 		
 		for (var nm = GM_getValue("numMulti", 2); nm > 0 ; nm--) {
 			var msb = new multisearchbox(this);
 			msb.draw(this.newSearchWrapper);
+			msb.hide();
 			this.boxes.push(msb);
 		}
 		
-		this.multiwrapper.appendChild(this.newSearchWrapper);
+		var rs1 = $create('div', {
+			className : 'ds'
+		});
+		var rs2 = $create('div', {
+			className : 'lsbb'
+		});
 		
-		var adder = $create("div");
-		adder.id = "adding";
-		adder.textContent = "Add more...";
-		this.multiwrapper.appendChild(adder);
+		var adder = $create("button", {
+			textContent : "Add More",
+			className : "lsb multiBtn"
+		});
+		rs2.appendChild(adder);
 		
 		var srchAll = $create("button", {
 			textContent : "Search All",
-			id : "searchAll"
+			className : "lsb multiBtn"
 		});
-		this.multiwrapper.appendChild(srchAll);
+		rs2.appendChild(srchAll);
 		
 		var srchNew = $create("button", {
 			textContent : "Search New",
-			id : "searchNew"
+			className : "lsb multiBtn"
 		});
-		this.multiwrapper.appendChild(srchNew);
+		rs2.appendChild(srchNew);
 		
 		var fillOutAll = $create('button', {
-			textContent : 'Set All from Original',
-			id : 'setBoxes'
+			textContent : 'Fill All',
+			className : "lsb multiBtn"
 		});
-		this.multiwrapper.appendChild(fillOutAll);
+		rs2.appendChild(fillOutAll);
+		rs1.appendChild(rs2);
+		this.multiwrapper.appendChild(rs1);
 		
 		adder.addEventListener("click", function (event) {
 			SR.addBox();
@@ -145,7 +145,7 @@ function multisearcher() {
 			}
 		}, false);
 		
-		$cl('tsf-p')[0].appendChild(this.wrapper);
+		this.newSearchWrapper.appendChild(this.wrapper);
 		
 	};
 	
@@ -154,15 +154,24 @@ function multisearcher() {
 		msb.draw(this.newSearchWrapper);
 		this.boxes.push(msb);
 		GM_setValue("numMulti", parseInt(GM_getValue("numMulti", 2)) + 1);
+		this.newSearchWrapper.appendChild(this.wrapper);
 	};
 	
 	this.expandCollapse = function () {
 		if (!this.expanded) {
 			this.wrapper.appendChild(this.multiwrapper);
 			this.myButton.value = "Less Options";
+			this.origOptionBox.className = this.origOptionBox.className.replace(" removed", "");
+			for (var b = 0; b < this.boxes.length; b++) {
+				this.boxes[b].reveal();
+			}
 		} else {
 			this.wrapper.removeChild(this.multiwrapper);
 			this.myButton.value = "More Options";
+			this.origOptionBox.className += " removed";
+			for (var b = 0; b < this.boxes.length; b++) {
+				this.boxes[b].hide();
+			}
 		}
 		this.expanded = !this.expanded;
 	};
@@ -223,6 +232,8 @@ function multisearchbox (parentObj) {
 	this.parentObj = parentObj;
 	this.wrapping;
 	this.srchBox;
+	this.srchBtn;
+	this.fillBtn;
 	this.removeBtn;
 	this.optionBox;
 	this.goBtn;
@@ -236,28 +247,71 @@ function multisearchbox (parentObj) {
 	this.draw = function (parentNode) {
 		this.active = true;
 		
-		this.wrapping = $create("div", {
+		this.wrapping = $create("tr", {
 			className : "SBoxes"
 		});
 		
-		this.wrapping.appendChild(this.getOptBox());
+		var sbTd = $create("td", {
+			className : "lst-td fullWidthTD"
+		});
 		
+		var btnTd = $create("td");
+		
+		this.wrapping.appendChild(sbTd);
+		this.wrapping.appendChild(btnTd);
+		
+		var ruse = $create('div', {
+			style : 'position: relative'
+		});
 		this.srchBox = $create("input", {
 			type : "text",
-			className : "searchBoxes"
+			className : "lst searchBoxes"
 		});
-		this.wrapping.appendChild(this.srchBox);
+		ruse.appendChild(this.srchBox);
+		sbTd.appendChild(ruse);
 		
-		this.removeBtn = $create("p", {
-			className : "closeBtn",
-			textContent : "X"
+		var wrp = $create('div', {
+			className : 'ds'
 		});
-		this.wrapping.appendChild(this.removeBtn);
+		ruse = $create('div', {
+			className : 'lsbb'
+		});
+		
+		this.srchBtn = $create('input', {
+			type : 'button',
+			className : 'lsb',
+			value : 'Search',
+		});
+		this.fillBtn = $create('input', {
+			type : 'button',
+			className : 'lsb multiExp',
+			value : 'Fill',
+		});
+		this.removeBtn = $create('input', {
+			type : 'button',
+			className : 'lsb multiExp',
+			value : 'Remove',
+		});
+		
+		ruse.appendChild(this.getOptBox());
+		ruse.appendChild(this.srchBtn);
+		ruse.appendChild(this.fillBtn);
+		ruse.appendChild(this.removeBtn);
+		wrp.appendChild(ruse);
+		btnTd.appendChild(wrp);
 		
 		var SR = this;
 		this.removeBtn.addEventListener("click", function () {
 			SR.undraw();
 			GM_setValue("numMulti", parseInt(GM_getValue("numMulti", 2)) - 1);
+		}, false);
+		
+		this.fillBtn.addEventListener("click", function () {
+			SR.setValue(SR.parentObj.original.value);
+		}, false);
+		
+		this.srchBtn.addEventListener("click", function () {
+			SR.search();
 		}, false);
 		
 		parentNode.appendChild(this.wrapping);
@@ -268,10 +322,18 @@ function multisearchbox (parentObj) {
 		$remove(this.wrapping);
 	};
 	
+	this.reveal = function () {
+		this.wrapping.className = "SBoxes";
+	};
+	
+	this.hide = function () {
+		this.wrapping.className = "removed";
+	};
+	
 	this.getOptBox = function () {
 		if (!this.optionBox) {
 			this.optionBox = $create("select", {
-				className : "siteSelector"
+				className : "siteSelector lsb"
 			});
 			for (var i = this.showList.length - 1; i >= 0;i--) {
 				var opt = $create("option", {
@@ -298,7 +360,7 @@ function multisearchbox (parentObj) {
 	
 	this.search = function () {
 		if (this.active) {
-			var code = new array();
+			var code = [];
 			this.addCode(code);
 			redirgo(code, true);
 		}

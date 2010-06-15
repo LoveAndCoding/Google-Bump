@@ -30,4 +30,21 @@ function styler() {
 		stylr.undraw();
 	}
 }
+// Get a random string for searching
+function randSearch() {
+	// Variable length to lower collision rate further
+	var v = "";
+	for(var i = 0; i < 14; i++) {
+		var n1 = Math.random();
+		var n2 = Math.random();
+		if(n1 * 1.5 > 1) {
+			v += String.fromCharCode(Math.round(Math.random() * 9) + 48);
+		} else if (n2 * 1.5 > 1) {
+			v += String.fromCharCode(Math.round(Math.random() * 25) + 65);
+		} else {
+			v += String.fromCharCode(Math.round(Math.random() * 25) + 97);
+		}
+	}
+	return v;
+}
 	// End Configuration Functions ----------------------------------------------------

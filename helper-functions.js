@@ -1,4 +1,8 @@
 	// Start Helper Functions ----------------------------------------------------------
+// Trim for strings
+function _trim(b) {
+	return b.replace(/^\s*/, "").replace(/\s*$/, "");
+}
 // Shortcut for document.getElementById
 function $(id) {
 	return document.getElementById(id);
