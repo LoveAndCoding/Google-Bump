@@ -72,7 +72,7 @@ function multisearcher() {
 		});
 		
 		for (var nm = GM_getValue("numMulti", 2); nm > 0 ; nm--) {
-			var msb = new multisearchbox(this);
+			var msb = new multisearchbox(this, (this.boxes.length + 1) % options.searchengines.length);
 			msb.draw(this.newSearchWrapper);
 			msb.hide();
 			this.boxes.push(msb);
@@ -112,6 +112,8 @@ function multisearcher() {
 		this.multiwrapper.appendChild(rs1);
 		
 		adder.addEventListener("click", function (event) {
+			event.stopPropagation();
+			event.preventDefault();
 			SR.addBox();
 		}, false);
 		
@@ -119,7 +121,7 @@ function multisearcher() {
 			if (SR.expanded) {
 				event.stopPropagation();
 				event.preventDefault();
-				redirgo([this.origOptionBox.value, $cl('lst')[0].value], false);
+				redirgo([SR.origOptionBox.value, $cl('lst')[0].value], false);
 			}
 		}, false);
 		
@@ -150,7 +152,7 @@ function multisearcher() {
 	};
 	
 	this.addBox = function () {
-		var msb = new multisearchbox(this);
+		var msb = new multisearchbox(this, (this.boxes.length + 1) % options.searchengines.length);
 		msb.draw(this.newSearchWrapper);
 		this.boxes.push(msb);
 		GM_setValue("numMulti", parseInt(GM_getValue("numMulti", 2)) + 1);
@@ -227,9 +229,10 @@ function multisearcher() {
   *			If it is active, search for it
   *	
   */
-function multisearchbox (parentObj) {
+function multisearchbox (parentObj, listNum) {
 	
 	this.parentObj = parentObj;
+	this.listNum = listNum;
 	this.wrapping;
 	this.srchBox;
 	this.srchBtn;
@@ -243,7 +246,7 @@ function multisearchbox (parentObj) {
 	// quote|howto|defin|anidb|imdb|gamefaq|diggs|utube|wikipda|googl|flckr|cnns|opnsrc|eby|espns
 	this.valList = ["quote", "howto", "defin", "anidb", "imdb", "gamefaq", "diggs", "utube", "wikipda", "flckr", "cnns", "opnsrc", "eby", "espns", "googl"];
 	this.showList = ["WikiQuote", "Wiki How to", "Wiktionary", "AnimeDB", "IMDB", "GameFAQs", "Digg", "Youtube", "Wikipedia", "Flickr", "CNN", "Source Forge", "Ebay", "ESPN", "Google"];
-		
+	
 	this.draw = function (parentNode) {
 		this.active = true;
 		
@@ -293,7 +296,7 @@ function multisearchbox (parentObj) {
 			value : 'Remove',
 		});
 		
-		ruse.appendChild(this.getOptBox());
+		ruse.appendChild(this.getOptBox(this.listNum));
 		ruse.appendChild(this.srchBtn);
 		ruse.appendChild(this.fillBtn);
 		ruse.appendChild(this.removeBtn);
@@ -330,16 +333,19 @@ function multisearchbox (parentObj) {
 		this.wrapping.className = "removed";
 	};
 	
-	this.getOptBox = function () {
+	this.getOptBox = function (_show) {
 		if (!this.optionBox) {
 			this.optionBox = $create("select", {
 				className : "siteSelector lsb"
 			});
-			for (var i = this.showList.length - 1; i >= 0;i--) {
+			for (var i = 0; i < options.searchengines.length; i++) {
 				var opt = $create("option", {
-					value : this.valList[i],
-					textContent : this.showList[i]
+					value : i,
+					textContent : options.searchengines[i].Name
 				});
+				if ((_show && _show == i) || (!_show && i == 0)) {
+					opt.selected = true;
+				}
 				this.optionBox.appendChild(opt);
 			}
 		}

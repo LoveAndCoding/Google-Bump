@@ -139,7 +139,7 @@ var dynaId = 'search';
 var statId = 'ires';
 
 // Starts the process
-if($$(statId, dynaId) && $$(statId, dynaId).children.length > 0 && !/.*#.*&tbs=.*/.test(location.href)) {
+if($$(statId, dynaId) && $$(statId, dynaId).children.length > 0 && !/.*&tbs=.*/.test(location.href)) {
 	runThrough();
 } else {
 	delayed = true;
@@ -147,7 +147,7 @@ if($$(statId, dynaId) && $$(statId, dynaId).children.length > 0 && !/.*#.*&tbs=.
 }
 
 function waitingForPage() {
-	if($$(statId, dynaId) && $$(statId, dynaId).children.length > 0 && !/.*#.*&tbs=.*/.test(location.href)) {
+	if($$(statId, dynaId) && $$(statId, dynaId).children.length > 0 && !/.*&tbs=.*/.test(location.href)) {
 		userInput = setupText();
 		currUrl = location.href;
 		runThrough();

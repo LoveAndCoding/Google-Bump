@@ -2,24 +2,23 @@
 // @name			Google Bump
 // @namespace		http://userscripts.org/scripts/show/33449
 // @description		Adds some functionality to the Google web search. Main features include Multisearch, Video result extraction, Wikipedia definitions and links, and some clutter cleanup by. All options can be turned off.
-// @version			2.02.20100609
+// @version			2.03.20100620
 // @include			http://www.google.tld/
 // @include			http://www.google.tld/#*
 // @include			http://www.google.tld/search?*
 // @include			http://www.google.tld/webhp?*
-// @exclude			http://www.google.com/search?*&tbs=*
 // ==/UserScript==
 
 /*
 	Author: KTaShes
-	Date: June 09 2010
+	Date: June 20 2010
 	
 	Code can now be found on GitHub @ http://github.com/ktsashes/Google-Bump
 	
 	This code uses juicer to compile from several different javascript files.
 	Juicer (C) Christian Johansen - http://cjohansen.no/en/ruby/juicer_a_css_and_javascript_packaging_tool
 */
-var version = "2.02";
+var version = "2.03";
 
 
 var image_store = {
@@ -143,6 +142,7 @@ function optionlist() {
 		// Video defaults
 	this.DEFAULT_EXVIDS = true;
 	this.DEFAULT_VIDS = false;
+	this.DEFAULT_VDSRCHR = "google";
 		// Embed defaults
 	this.DEFAULT_EMBD = true;
 	this.DEFAULT_HDVD = true;
@@ -281,6 +281,7 @@ function optionlist() {
 		// Video vars
 	this.exvids = GM_getValue("exvids", this.DEFAULT_EXVIDS);
 	this.vids = GM_getValue("vids", this.DEFAULT_VIDS);
+	this.vdsrchr = GM_getValue("vdsrchr", this.DEFAULT_VDSRCHR);
 		// Embed vars
 	this.embd = GM_getValue("embd", this.DEFAULT_EMBD);
 	this.hdvd = GM_getValue("hdvd", this.DEFAULT_HDVD);
@@ -327,7 +328,7 @@ function optionlist() {
 	this.pbltxtclr = GM_getValue("pbltxtclr", this.DEFAULT_PBLTXTCLR);
 	
 		// Search Engines
-	this.searchengines = GM_getValue("searchengines", this.DEFAULT_SEARCHENGINES);
+	this.searchengines = eval(GM_getValue("searchengines", this.DEFAULT_SEARCHENGINES));
 }
 
 var options = new optionlist();
@@ -417,6 +418,13 @@ function html_entity_decode(str) {
     var tarea = $create('textarea');
     tarea.innerHTML = str;
 	return tarea.value;
+}
+// Converts an html string into a working html tag
+function stringtohtml(htmlstring) {
+	var toHTML = $create("html", {
+		innerHTML : htmlstring
+	});
+	return toHTML;
 }
 // Shortcut for redirecting the page and opening new tabs
 function linkit(theLink, tabit, under) {
@@ -1779,6 +1787,12 @@ var ssStore = new stylesheet_store();
   *	@depends stylesheet-store.js
   */
   // Start Display Functions ---------------------------------------------------------
+// Restyles the page
+function restylePage() {
+	logoToTrans();
+	
+	allStyles();
+}
 // Adds all the styles for the page.
 function allStyles () {
 	var maxwidth = window.innerWidth - 50;
@@ -1924,36 +1938,10 @@ function greydout() {
 	document.body.appendChild(greyer);
 	return greyer;
 }
-// Converts an html string into a working html tag
-function stringtohtml(htmlstring) {
-	var toHTML = $create("html", {
-		innerHTML : htmlstring
-	});
-	return toHTML;
-}
 // Creates a player div used by both the video and image searchs
 function makePlayer() {
 	embedder = new Media_Embed();
 	embedder.draw($('mBox'));
-}
-// Sets up the player for use
-function setupPlayer(label) {
-	player = $("pBox");
-	removeAllChildren(player);
-	var tagDiv = $create("div", {
-		id : "playerTag",
-		textContent : label
-	});
-	var hidePlayer = $create("div", {
-		id : "hidePly",
-		textContent : "X"
-	});
-	hidePlayer.addEventListener("click", function (event) {
-		removeAllChildren(player);
-		player.className = "rBox closed";
-	}, false);
-	player.appendChild(tagDiv);
-	player.appendChild(hidePlayer);
 }
 // Change the Google logo to be transparent
 function logoToTrans() {
@@ -2562,7 +2550,7 @@ function config_colorBox(label, id, dflt) {
 }
 
 /**
-  *	General purpose button object
+  *	Key Value Table
   */
 function config_keyvalTable(label, id, keys, vals, dflt) {
 	
@@ -2617,16 +2605,12 @@ function config_keyvalTable(label, id, keys, vals, dflt) {
 	};
 	
 	this.addKeyVal = function (_k, _v) {
-		
+		this.keys.push(_k);
+		this.values.push(_v);
 	};
 	
-	this.removeKeyVal = function (_k) {
-		for(var kv = 0, len = this.keys.length; kv < len; kv++) {
-			strStore += _op(this.keys[kv], this.values[kv]);
-			if(kv < len - 1) {
-				strStore += ",";
-			}
-		}
+	this.removeKeyVal = function (_i) {
+		
 	};
 	
 	this.getKeyValPairs = function (_op) {
@@ -3167,6 +3151,7 @@ function config_dialog(popup) {
 			// Genearl Settings
 		var vid_section = new config_section("Sidebar Options");
 		vid_section.sectionOptions.push(new config_checkBox("Search For Videos", "vids", options.DEFAULT_VIDS));
+		vid_section.sectionOptions.push(new config_selectionBox("Search using", "vdsrchr", ["Google","Youtube"], ["google", "youtube"], options.DEFAULT_VDSRCHR));
 		// vid_section.sectionOptions.push(new config_checkBox("Remove Videos from Search Results", "exvids", options.DEFAULT_EXVIDS));
 		vid_set_window.sections.push(vid_section);
 			// Embed Settings
@@ -3661,7 +3646,7 @@ function multisearcher() {
 		});
 		
 		for (var nm = GM_getValue("numMulti", 2); nm > 0 ; nm--) {
-			var msb = new multisearchbox(this);
+			var msb = new multisearchbox(this, (this.boxes.length + 1) % options.searchengines.length);
 			msb.draw(this.newSearchWrapper);
 			msb.hide();
 			this.boxes.push(msb);
@@ -3701,6 +3686,8 @@ function multisearcher() {
 		this.multiwrapper.appendChild(rs1);
 		
 		adder.addEventListener("click", function (event) {
+			event.stopPropagation();
+			event.preventDefault();
 			SR.addBox();
 		}, false);
 		
@@ -3708,7 +3695,7 @@ function multisearcher() {
 			if (SR.expanded) {
 				event.stopPropagation();
 				event.preventDefault();
-				redirgo([this.origOptionBox.value, $cl('lst')[0].value], false);
+				redirgo([SR.origOptionBox.value, $cl('lst')[0].value], false);
 			}
 		}, false);
 		
@@ -3739,7 +3726,7 @@ function multisearcher() {
 	};
 	
 	this.addBox = function () {
-		var msb = new multisearchbox(this);
+		var msb = new multisearchbox(this, (this.boxes.length + 1) % options.searchengines.length);
 		msb.draw(this.newSearchWrapper);
 		this.boxes.push(msb);
 		GM_setValue("numMulti", parseInt(GM_getValue("numMulti", 2)) + 1);
@@ -3816,9 +3803,10 @@ function multisearcher() {
   *			If it is active, search for it
   *	
   */
-function multisearchbox (parentObj) {
+function multisearchbox (parentObj, listNum) {
 	
 	this.parentObj = parentObj;
+	this.listNum = listNum;
 	this.wrapping;
 	this.srchBox;
 	this.srchBtn;
@@ -3832,7 +3820,7 @@ function multisearchbox (parentObj) {
 	// quote|howto|defin|anidb|imdb|gamefaq|diggs|utube|wikipda|googl|flckr|cnns|opnsrc|eby|espns
 	this.valList = ["quote", "howto", "defin", "anidb", "imdb", "gamefaq", "diggs", "utube", "wikipda", "flckr", "cnns", "opnsrc", "eby", "espns", "googl"];
 	this.showList = ["WikiQuote", "Wiki How to", "Wiktionary", "AnimeDB", "IMDB", "GameFAQs", "Digg", "Youtube", "Wikipedia", "Flickr", "CNN", "Source Forge", "Ebay", "ESPN", "Google"];
-		
+	
 	this.draw = function (parentNode) {
 		this.active = true;
 		
@@ -3882,7 +3870,7 @@ function multisearchbox (parentObj) {
 			value : 'Remove',
 		});
 		
-		ruse.appendChild(this.getOptBox());
+		ruse.appendChild(this.getOptBox(this.listNum));
 		ruse.appendChild(this.srchBtn);
 		ruse.appendChild(this.fillBtn);
 		ruse.appendChild(this.removeBtn);
@@ -3919,16 +3907,19 @@ function multisearchbox (parentObj) {
 		this.wrapping.className = "removed";
 	};
 	
-	this.getOptBox = function () {
+	this.getOptBox = function (_show) {
 		if (!this.optionBox) {
 			this.optionBox = $create("select", {
 				className : "siteSelector lsb"
 			});
-			for (var i = this.showList.length - 1; i >= 0;i--) {
+			for (var i = 0; i < options.searchengines.length; i++) {
 				var opt = $create("option", {
-					value : this.valList[i],
-					textContent : this.showList[i]
+					value : i,
+					textContent : options.searchengines[i].Name
 				});
+				if ((_show && _show == i) || (!_show && i == 0)) {
+					opt.selected = true;
+				}
 				this.optionBox.appendChild(opt);
 			}
 		}
@@ -3978,38 +3969,8 @@ function redirgo(theList, tablast) {
 		for (var x = 0; x < theList.length; x += 2) {
 			if (x == theList.length - 2) {
 				putintabs = tablast || false;
-			}	
-			if (theList[x] == "quote") {
-				linkit("http://en.wikiquote.org/wiki/Special:Search?go=Go&search=" + theList[x + 1], putintabs);
-			} else if (theList[x] == "howto") {
-				linkit("http://www.wikihow.com/Special:LSearch?fulltext=Search&search=" + theList[x + 1], putintabs);
-			} else if (theList[x] == "defin") {
-				linkit("http://en.wiktionary.org/wiki/Special:Search?go=Go&search=" + theList[x + 1], putintabs);
-			} else if (theList[x] == "anidb") {
-				linkit("http://anidb.net/perl-bin/animedb.pl?show=animelist&do.search=Search&adb.search=" + theList[x + 1], putintabs);
-			} else if (theList[x] == "imdb") {
-				linkit("http://www.imdb.com/find?s=all&x=22&y=12&q=" + theList[x + 1], putintabs);
-			} else if (theList[x] == "gamefaq") {
-				linkit("http://www.gamefaqs.com/search/index.html?platform=0&game=" + theList[x + 1], putintabs);
-			} else if (theList[x] == "diggs") {
-				linkit("http://digg.com/search?section=all&s=" + theList[x + 1], putintabs);
-			} else if (theList[x] == "utube") {
-				linkit("http://www.youtube.com/results?search_type=&aq=f&search_query=" + theList[x + 1], putintabs);
-			} else if (theList[x] == "wikipda") {
-				linkit("http://en.wikipedia.org/wiki/Special:Search?go=Go&search=" + theList[x + 1], putintabs);
-			} else if (theList[x] == "googl") {
-				linkit("http://google.com/search?q=" + theList[x + 1], putintabs);
-			} else if (theList[x] == "flckr") {
-				linkit("http://www.flickr.com/search/?q=" + theList[x + 1], putintabs);
-			} else if (theList[x] == "cnns") {
-				linkit("http://search.cnn.com/search.jsp?type=web&sortBy=date&intl=false&query=" + theList[x + 1], putintabs);
-			} else if (theList[x] == "opnsrc") {
-				linkit("http://sourceforge.net/search/?type_of_search=soft&words=" + theList[x + 1], putintabs);
-			} else if (theList[x] == "eby") {
-				linkit("http://shop.ebay.com/items/?_nkw=" + theList[x + 1], putintabs);
-			} else if (theList[x] == "espns") {
-				linkit("http://search.espn.go.com/" + theList[x + 1].split(" ").join("-"), putintabs);
 			}
+			linkit(options.searchengines[theList[x]].url_before + theList[x + 1] + options.searchengines[theList[x]].url_after, putintabs);
 		}
 	}
 }
@@ -4034,7 +3995,6 @@ function setupText(preset) {
 	// Checks for google specific syntax
 	var checkforcolon = search.split(":");
 	var regexColon = new RegExp("^(site|filetype|allintitle|allinbody|allinurl)$");
-	var listredirs = new Array();
 	var counter = 0;
 	for (var k = 0; k < checkforcolon.length; k += 2) {
 		var indiv = checkforcolon[k].split(" ");
@@ -4045,9 +4005,6 @@ function setupText(preset) {
 			checkforcolon[k + 1] = checkforcolon[k + 1].split(" ").slice(1,checkforcolon[k + 1].length).join(" ");
 			checkforcolon[k] = indiv.join(" ");
 		}
-	}
-	if (listredirs.length > 0) {
-		redirgo(listredirs);
 	}
 	search = checkforcolon.join(" ");
 	search = search.split(" ");
@@ -4523,9 +4480,40 @@ function showvids(response) {
 		novids();
 	}
 }
+// Handles Youtube Searches
+function youtubeSearched(response) {
+	eval("var nv = " + response.responseText.substr(1));
+	var results = nv.feed.entry;
+	
+	var box = rightBox("videoList");
+	
+	if(results.length > 0) {
+		for(var v = 0; v < results.length; v++) {
+			var new_vid = new indiv_video_result(results[v].media$group.media$thumbnail[0].url, results[v].link[0].href.match(/.*watch\?v=[^&]*/)[0], "youtube", results[v].title.$t);
+			new_vid.draw(box);
+		}
+		
+		if ($("imageList")) {
+			$("mBox").insertBefore(box, $("imageList"));
+		} else {
+			$("mBox").appendChild(box);
+		}
+		
+		if (options.styl == "dock") {
+			box.className = "removed";
+			$("vidDock").className = "";
+		}
+	} else {
+		novids();
+	}
+}
 // Searches for videos based on what the user is searching for
 function menutogglevids(theSearch) {
-	get("http://video.google.com/videosearch?q=" + encodeURIComponent(theSearch), showvids, novids);
+	if(options.vdsrchr == "youtube") {
+		get("http://gdata.youtube.com/feeds/api/videos?alt=json-in-script&callback=y&max-results=5&format=5&q=" + encodeURIComponent(theSearch), youtubeSearched, novids);
+	} else {
+		get("http://video.google.com/videosearch?q=" + encodeURIComponent(theSearch), showvids, novids);
+	}
 }
 	// End Video Search Functions --------------------------------------------------
 
@@ -5178,7 +5166,7 @@ var dynaId = 'search';
 var statId = 'ires';
 
 // Starts the process
-if($$(statId, dynaId) && $$(statId, dynaId).children.length > 0 && !/.*#.*&tbs=.*/.test(location.href)) {
+if($$(statId, dynaId) && $$(statId, dynaId).children.length > 0 && !/.*&tbs=.*/.test(location.href)) {
 	runThrough();
 } else {
 	delayed = true;
@@ -5186,7 +5174,7 @@ if($$(statId, dynaId) && $$(statId, dynaId).children.length > 0 && !/.*#.*&tbs=.
 }
 
 function waitingForPage() {
-	if($$(statId, dynaId) && $$(statId, dynaId).children.length > 0 && !/.*#.*&tbs=.*/.test(location.href)) {
+	if($$(statId, dynaId) && $$(statId, dynaId).children.length > 0 && !/.*&tbs=.*/.test(location.href)) {
 		userInput = setupText();
 		currUrl = location.href;
 		runThrough();

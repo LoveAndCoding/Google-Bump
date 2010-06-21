@@ -365,7 +365,7 @@ function config_colorBox(label, id, dflt) {
 }
 
 /**
-  *	General purpose button object
+  *	Key Value Table
   */
 function config_keyvalTable(label, id, keys, vals, dflt) {
 	
@@ -420,16 +420,12 @@ function config_keyvalTable(label, id, keys, vals, dflt) {
 	};
 	
 	this.addKeyVal = function (_k, _v) {
-		
+		this.keys.push(_k);
+		this.values.push(_v);
 	};
 	
-	this.removeKeyVal = function (_k) {
-		for(var kv = 0, len = this.keys.length; kv < len; kv++) {
-			strStore += _op(this.keys[kv], this.values[kv]);
-			if(kv < len - 1) {
-				strStore += ",";
-			}
-		}
+	this.removeKeyVal = function (_i) {
+		
 	};
 	
 	this.getKeyValPairs = function (_op) {

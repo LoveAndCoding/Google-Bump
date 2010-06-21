@@ -84,6 +84,13 @@ function html_entity_decode(str) {
     tarea.innerHTML = str;
 	return tarea.value;
 }
+// Converts an html string into a working html tag
+function stringtohtml(htmlstring) {
+	var toHTML = $create("html", {
+		innerHTML : htmlstring
+	});
+	return toHTML;
+}
 // Shortcut for redirecting the page and opening new tabs
 function linkit(theLink, tabit, under) {
 	if (tabit || (options.tabs && under)) {

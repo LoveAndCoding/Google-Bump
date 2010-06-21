@@ -18,6 +18,7 @@ function optionlist() {
 		// Video defaults
 	this.DEFAULT_EXVIDS = true;
 	this.DEFAULT_VIDS = false;
+	this.DEFAULT_VDSRCHR = "google";
 		// Embed defaults
 	this.DEFAULT_EMBD = true;
 	this.DEFAULT_HDVD = true;
@@ -156,6 +157,7 @@ function optionlist() {
 		// Video vars
 	this.exvids = GM_getValue("exvids", this.DEFAULT_EXVIDS);
 	this.vids = GM_getValue("vids", this.DEFAULT_VIDS);
+	this.vdsrchr = GM_getValue("vdsrchr", this.DEFAULT_VDSRCHR);
 		// Embed vars
 	this.embd = GM_getValue("embd", this.DEFAULT_EMBD);
 	this.hdvd = GM_getValue("hdvd", this.DEFAULT_HDVD);
@@ -202,7 +204,7 @@ function optionlist() {
 	this.pbltxtclr = GM_getValue("pbltxtclr", this.DEFAULT_PBLTXTCLR);
 	
 		// Search Engines
-	this.searchengines = GM_getValue("searchengines", this.DEFAULT_SEARCHENGINES);
+	this.searchengines = eval(GM_getValue("searchengines", this.DEFAULT_SEARCHENGINES));
 }
 
 var options = new optionlist();

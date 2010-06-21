@@ -68,8 +68,39 @@ function showvids(response) {
 		novids();
 	}
 }
+// Handles Youtube Searches
+function youtubeSearched(response) {
+	eval("var nv = " + response.responseText.substr(1));
+	var results = nv.feed.entry;
+	
+	var box = rightBox("videoList");
+	
+	if(results.length > 0) {
+		for(var v = 0; v < results.length; v++) {
+			var new_vid = new indiv_video_result(results[v].media$group.media$thumbnail[0].url, results[v].link[0].href.match(/.*watch\?v=[^&]*/)[0], "youtube", results[v].title.$t);
+			new_vid.draw(box);
+		}
+		
+		if ($("imageList")) {
+			$("mBox").insertBefore(box, $("imageList"));
+		} else {
+			$("mBox").appendChild(box);
+		}
+		
+		if (options.styl == "dock") {
+			box.className = "removed";
+			$("vidDock").className = "";
+		}
+	} else {
+		novids();
+	}
+}
 // Searches for videos based on what the user is searching for
 function menutogglevids(theSearch) {
-	get("http://video.google.com/videosearch?q=" + encodeURIComponent(theSearch), showvids, novids);
+	if(options.vdsrchr == "youtube") {
+		get("http://gdata.youtube.com/feeds/api/videos?alt=json-in-script&callback=y&max-results=5&format=5&q=" + encodeURIComponent(theSearch), youtubeSearched, novids);
+	} else {
+		get("http://video.google.com/videosearch?q=" + encodeURIComponent(theSearch), showvids, novids);
+	}
 }
 	// End Video Search Functions --------------------------------------------------

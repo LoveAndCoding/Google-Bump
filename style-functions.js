@@ -5,6 +5,12 @@
   *	@depends stylesheet-store.js
   */
   // Start Display Functions ---------------------------------------------------------
+// Restyles the page
+function restylePage() {
+	logoToTrans();
+	
+	allStyles();
+}
 // Adds all the styles for the page.
 function allStyles () {
 	var maxwidth = window.innerWidth - 50;
@@ -150,36 +156,10 @@ function greydout() {
 	document.body.appendChild(greyer);
 	return greyer;
 }
-// Converts an html string into a working html tag
-function stringtohtml(htmlstring) {
-	var toHTML = $create("html", {
-		innerHTML : htmlstring
-	});
-	return toHTML;
-}
 // Creates a player div used by both the video and image searchs
 function makePlayer() {
 	embedder = new Media_Embed();
 	embedder.draw($('mBox'));
-}
-// Sets up the player for use
-function setupPlayer(label) {
-	player = $("pBox");
-	removeAllChildren(player);
-	var tagDiv = $create("div", {
-		id : "playerTag",
-		textContent : label
-	});
-	var hidePlayer = $create("div", {
-		id : "hidePly",
-		textContent : "X"
-	});
-	hidePlayer.addEventListener("click", function (event) {
-		removeAllChildren(player);
-		player.className = "rBox closed";
-	}, false);
-	player.appendChild(tagDiv);
-	player.appendChild(hidePlayer);
 }
 // Change the Google logo to be transparent
 function logoToTrans() {

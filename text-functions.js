@@ -14,38 +14,8 @@ function redirgo(theList, tablast) {
 		for (var x = 0; x < theList.length; x += 2) {
 			if (x == theList.length - 2) {
 				putintabs = tablast || false;
-			}	
-			if (theList[x] == "quote") {
-				linkit("http://en.wikiquote.org/wiki/Special:Search?go=Go&search=" + theList[x + 1], putintabs);
-			} else if (theList[x] == "howto") {
-				linkit("http://www.wikihow.com/Special:LSearch?fulltext=Search&search=" + theList[x + 1], putintabs);
-			} else if (theList[x] == "defin") {
-				linkit("http://en.wiktionary.org/wiki/Special:Search?go=Go&search=" + theList[x + 1], putintabs);
-			} else if (theList[x] == "anidb") {
-				linkit("http://anidb.net/perl-bin/animedb.pl?show=animelist&do.search=Search&adb.search=" + theList[x + 1], putintabs);
-			} else if (theList[x] == "imdb") {
-				linkit("http://www.imdb.com/find?s=all&x=22&y=12&q=" + theList[x + 1], putintabs);
-			} else if (theList[x] == "gamefaq") {
-				linkit("http://www.gamefaqs.com/search/index.html?platform=0&game=" + theList[x + 1], putintabs);
-			} else if (theList[x] == "diggs") {
-				linkit("http://digg.com/search?section=all&s=" + theList[x + 1], putintabs);
-			} else if (theList[x] == "utube") {
-				linkit("http://www.youtube.com/results?search_type=&aq=f&search_query=" + theList[x + 1], putintabs);
-			} else if (theList[x] == "wikipda") {
-				linkit("http://en.wikipedia.org/wiki/Special:Search?go=Go&search=" + theList[x + 1], putintabs);
-			} else if (theList[x] == "googl") {
-				linkit("http://google.com/search?q=" + theList[x + 1], putintabs);
-			} else if (theList[x] == "flckr") {
-				linkit("http://www.flickr.com/search/?q=" + theList[x + 1], putintabs);
-			} else if (theList[x] == "cnns") {
-				linkit("http://search.cnn.com/search.jsp?type=web&sortBy=date&intl=false&query=" + theList[x + 1], putintabs);
-			} else if (theList[x] == "opnsrc") {
-				linkit("http://sourceforge.net/search/?type_of_search=soft&words=" + theList[x + 1], putintabs);
-			} else if (theList[x] == "eby") {
-				linkit("http://shop.ebay.com/items/?_nkw=" + theList[x + 1], putintabs);
-			} else if (theList[x] == "espns") {
-				linkit("http://search.espn.go.com/" + theList[x + 1].split(" ").join("-"), putintabs);
 			}
+			linkit(options.searchengines[theList[x]].url_before + theList[x + 1] + options.searchengines[theList[x]].url_after, putintabs);
 		}
 	}
 }
@@ -70,7 +40,6 @@ function setupText(preset) {
 	// Checks for google specific syntax
 	var checkforcolon = search.split(":");
 	var regexColon = new RegExp("^(site|filetype|allintitle|allinbody|allinurl)$");
-	var listredirs = new Array();
 	var counter = 0;
 	for (var k = 0; k < checkforcolon.length; k += 2) {
 		var indiv = checkforcolon[k].split(" ");
@@ -81,9 +50,6 @@ function setupText(preset) {
 			checkforcolon[k + 1] = checkforcolon[k + 1].split(" ").slice(1,checkforcolon[k + 1].length).join(" ");
 			checkforcolon[k] = indiv.join(" ");
 		}
-	}
-	if (listredirs.length > 0) {
-		redirgo(listredirs);
 	}
 	search = checkforcolon.join(" ");
 	search = search.split(" ");
