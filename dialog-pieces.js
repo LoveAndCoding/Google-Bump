@@ -444,6 +444,49 @@ function config_keyvalTable(label, id, keys, vals, dflt) {
 }
 
 /**
+  *	Configuration unvalidated text field
+  */
+function config_textField(label, id, dflt) {
+	
+	this.label = label;
+	this.id = id;
+	this.value = GM_getValue(id, dflt);
+	this.defaultVal = dflt;
+	this.tbox;
+	
+	this.draw = function (parentNode) {
+		var lbl = $create("label", {
+			textContent : this.label + ": ",
+			"for" : this.id
+		});
+		this.tbox = $create("textarea",{
+			name : this.id,
+			id : this.id,
+			className : "config_textField",
+			textContent : this.value
+		});
+		this.tbox.addEventListener("change", function(event) {
+			GM_setValue(event.target.id, event.target.value); 
+		}, true);
+		
+		var hldr = $create('div', {
+			className : 'config_option'
+		});
+		
+		hldr.appendChild(lbl);
+		hldr.appendChild(this.tbox);
+		parentNode.appendChild(hldr);
+	};
+	
+	this.setDefault = function () {
+		if (this.tbox) {
+			this.tbox.value = this.defaultVal;
+			GM_setValue(this.id, this.defaultVal);
+		}
+	};
+}
+
+/**
   *	General purpose button object
   */
 function button(value, action) {

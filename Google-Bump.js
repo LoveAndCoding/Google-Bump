@@ -2,7 +2,7 @@
 // @name			Google Bump
 // @namespace		http://userscripts.org/scripts/show/33449
 // @description		Adds some functionality to the Google web search. Main features include Multisearch, Video result extraction, Wikipedia definitions and links, and some clutter cleanup by. All options can be turned off.
-// @version			2.03.20100620
+// @version			2.03.20100623
 // @include			http://www.google.tld/
 // @include			http://www.google.tld/#*
 // @include			http://www.google.tld/search?*
@@ -11,7 +11,7 @@
 
 /*
 	Author: KTaShes
-	Date: June 20 2010
+	Date: June 23 2010
 	
 	Code can now be found on GitHub @ http://github.com/ktsashes/Google-Bump
 	
@@ -1363,6 +1363,11 @@ function stylesheet_store () {
 		.config_option { \
 			margin: 2px; \
 		} \
+		.config_textField { \
+			display: block; \
+			width: 100%; \
+			height: 120px; \
+		} \
 		.sldImgs { \
 			display: block; \
 		} \
@@ -2629,6 +2634,49 @@ function config_keyvalTable(label, id, keys, vals, dflt) {
 }
 
 /**
+  *	Configuration unvalidated text field
+  */
+function config_textField(label, id, dflt) {
+	
+	this.label = label;
+	this.id = id;
+	this.value = GM_getValue(id, dflt);
+	this.defaultVal = dflt;
+	this.tbox;
+	
+	this.draw = function (parentNode) {
+		var lbl = $create("label", {
+			textContent : this.label + ": ",
+			"for" : this.id
+		});
+		this.tbox = $create("textarea",{
+			name : this.id,
+			id : this.id,
+			className : "config_textField",
+			textContent : this.value
+		});
+		this.tbox.addEventListener("change", function(event) {
+			GM_setValue(event.target.id, event.target.value); 
+		}, true);
+		
+		var hldr = $create('div', {
+			className : 'config_option'
+		});
+		
+		hldr.appendChild(lbl);
+		hldr.appendChild(this.tbox);
+		parentNode.appendChild(hldr);
+	};
+	
+	this.setDefault = function () {
+		if (this.tbox) {
+			this.tbox.value = this.defaultVal;
+			GM_setValue(this.id, this.defaultVal);
+		}
+	};
+}
+
+/**
   *	General purpose button object
   */
 function button(value, action) {
@@ -3171,6 +3219,8 @@ function config_dialog(popup) {
 			// Advanced
 		var adv_section = new config_section();
 		adv_section.sectionOptions.push(new config_selectionBox("Millisecond delay for page (Only change if you have load issues)", "delay", ["100 ms","200 ms","300 ms","400 ms","500 ms","700 ms","1000 ms"], [100, 200, 300, 400, 500, 700, 1000], options.DEFAULT_DELAY));
+		adv_section.sectionOptions.push(new config_desc_section('Search Engines', 'The search engines are an array of JavaScript objects with the values Name, url_before, and url_after. To add or remove a search engine, just edit the content below.'));
+		adv_section.sectionOptions.push(new config_textField("Search Engines", "searchengines", options.DEFAULT_SEARCHENGINES));
 		other_set_window.sections.push(adv_section);
 		
 		// General Settings

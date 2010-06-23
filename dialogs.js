@@ -512,6 +512,8 @@ function config_dialog(popup) {
 			// Advanced
 		var adv_section = new config_section();
 		adv_section.sectionOptions.push(new config_selectionBox("Millisecond delay for page (Only change if you have load issues)", "delay", ["100 ms","200 ms","300 ms","400 ms","500 ms","700 ms","1000 ms"], [100, 200, 300, 400, 500, 700, 1000], options.DEFAULT_DELAY));
+		adv_section.sectionOptions.push(new config_desc_section('Search Engines', 'The search engines are an array of JavaScript objects with the values Name, url_before, and url_after. To add or remove a search engine, just edit the content below.'));
+		adv_section.sectionOptions.push(new config_textField("Search Engines", "searchengines", options.DEFAULT_SEARCHENGINES));
 		other_set_window.sections.push(adv_section);
 		
 		// General Settings
