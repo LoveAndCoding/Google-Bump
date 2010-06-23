@@ -1,3 +1,10 @@
+Version 2.03.20100623 - Feature Release - 06/23/10
+
+    * Feature: Able to choose YouTube to search for videos
+    * Feature: Able to add and remove search engines from Multisearch
+    * Improved: Logic for exclusion rules
+    * Improved: Multisearch now fits new Google style
+
 Version 2.02.20100609 - Bug Fix Release - 06/09/10
 
     * Feature: Ability to move top content
