@@ -123,6 +123,10 @@
 		.rl-details, .rl-snippet, .rl-snippet-grid-view, .rl-watch-on, .rl-cannot-play-here, .rl-special { \
 			display: none; \
 		} \
+		.vid_result a { \
+			display: block; \
+			text-align: center; \
+		} \
 		#imageList { \
 			text-align: center; \
 			height: 238px; \

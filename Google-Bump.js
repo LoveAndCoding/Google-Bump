@@ -2,7 +2,7 @@
 // @name			Google Bump
 // @namespace		http://userscripts.org/scripts/show/33449
 // @description		Adds some functionality to the Google web search. Main features include Multisearch, Video result extraction, Wikipedia definitions and links, and some clutter cleanup by. All options can be turned off.
-// @version			2.03.20100623
+// @version			2.04.20100629
 // @include			http://www.google.tld/
 // @include			http://www.google.tld/#*
 // @include			http://www.google.tld/search?*
@@ -11,14 +11,14 @@
 
 /*
 	Author: KTaShes
-	Date: June 23 2010
+	Date: June 29 2010
 	
 	Code can now be found on GitHub @ http://github.com/ktsashes/Google-Bump
 	
 	This code uses juicer to compile from several different javascript files.
 	Juicer (C) Christian Johansen - http://cjohansen.no/en/ruby/juicer_a_css_and_javascript_packaging_tool
 */
-var version = "2.03";
+var version = "2.04";
 
 
 var image_store = {
@@ -168,6 +168,8 @@ function optionlist() {
 	this.DEFAULT_OLDSIZE = true;
 		// Advanced defaults
 	this.DEFAULT_DELAY = 400;
+		// Classic Style defaults
+	this.DEFAULT_CLCVRTHRZ = 'horizontal';
 		// Color Defaults
 			// Background Colors
 	this.DEFAULT_GENBGCLR = '255,255,255';
@@ -191,77 +193,77 @@ function optionlist() {
 	{ \
 		\"Name\" : \"Google\", \
 		\"url_before\" : \"http://google.com/search?q=\", \
-		\"url_after\" : \"\", \
+		\"url_after\" : \"\" \
 	}, \
 	{ \
 		\"Name\" : \"ESPN\", \
 		\"url_before\" : \"http://search.espn.go.com/\", \
-		\"url_after\" : \"\", \
+		\"url_after\" : \"\" \
 	}, \
 	{ \
 		\"Name\" : \"eBay\", \
 		\"url_before\" : \"http://shop.ebay.com/items/?_nkw=\", \
-		\"url_after\" : \"\", \
+		\"url_after\" : \"\" \
 	}, \
 	{ \
 		\"Name\" : \"Source Forge\", \
 		\"url_before\" : \"http://sourceforge.net/search/?type_of_search=soft&words=\", \
-		\"url_after\" : \"\", \
+		\"url_after\" : \"\" \
 	}, \
 	{ \
 		\"Name\" : \"CNN\", \
 		\"url_before\" : \"http://search.cnn.com/search.jsp?type=web&sortBy=date&intl=false&query=\", \
-		\"url_after\" : \"\", \
+		\"url_after\" : \"\" \
 	}, \
 	{ \
 		\"Name\" : \"Flickr\", \
 		\"url_before\" : \"http://www.flickr.com/search/?q=\", \
-		\"url_after\" : \"\", \
+		\"url_after\" : \"\" \
 	}, \
 	{ \
 		\"Name\" : \"Wikipedia\", \
 		\"url_before\" : \"http://en.wikipedia.org/wiki/Special:Search?go=Go&search=\", \
-		\"url_after\" : \"\", \
+		\"url_after\" : \"\" \
 	}, \
 	{ \
 		\"Name\" : \"Youtube\", \
 		\"url_before\" : \"http://www.youtube.com/results?search_type=&aq=f&search_query=\", \
-		\"url_after\" : \"\", \
+		\"url_after\" : \"\" \
 	}, \
 	{ \
 		\"Name\" : \"Digg\", \
 		\"url_before\" : \"http://digg.com/search?section=all&s=\", \
-		\"url_after\" : \"\", \
+		\"url_after\" : \"\" \
 	}, \
 	{ \
 		\"Name\" : \"GameFAQs\", \
 		\"url_before\" : \"http://www.gamefaqs.com/search/index.html?platform=0&game=\", \
-		\"url_after\" : \"\", \
+		\"url_after\" : \"\" \
 	}, \
 	{ \
 		\"Name\" : \"IMDB\", \
 		\"url_before\" : \"http://www.imdb.com/find?s=all&x=22&y=12&q=\", \
-		\"url_after\" : \"\", \
+		\"url_after\" : \"\" \
 	}, \
 	{ \
 		\"Name\" : \"AnimeDB\", \
 		\"url_before\" : \"http://anidb.net/perl-bin/animedb.pl?show=animelist&do.search=Search&adb.search=\", \
-		\"url_after\" : \"\", \
+		\"url_after\" : \"\" \
 	}, \
 	{ \
 		\"Name\" : \"Wiktionary\", \
 		\"url_before\" : \"http://en.wiktionary.org/wiki/Special:Search?go=Go&search=\", \
-		\"url_after\" : \"\", \
+		\"url_after\" : \"\" \
 	}, \
 	{ \
 		\"Name\" : \"Wiki How To\", \
 		\"url_before\" : \"http://www.wikihow.com/Special:LSearch?fulltext=Search&search=\", \
-		\"url_after\" : \"\", \
+		\"url_after\" : \"\" \
 	}, \
 	{ \
 		\"Name\" : \"Wiki Quote\", \
 		\"url_before\" : \"http://en.wikiquote.org/wiki/Special:Search?go=Go&search=\", \
-		\"url_after\" : \"\", \
+		\"url_after\" : \"\" \
 	} \
 ] \
 ";
@@ -326,6 +328,9 @@ function optionlist() {
 	this.mdatxtclr = GM_getValue("mdatxtclr", this.DEFAULT_MDATXTCLR);
 	this.plytxtclr = GM_getValue("plytxtclr", this.DEFAULT_PLYTXTCLR);
 	this.pbltxtclr = GM_getValue("pbltxtclr", this.DEFAULT_PBLTXTCLR);
+	
+		// Classic Style vars
+	this.clcvrthrz = GM_getValue("clcvrthrz", this.DEFAULT_CLCVRTHRZ);
 	
 		// Search Engines
 	this.searchengines = eval(GM_getValue("searchengines", this.DEFAULT_SEARCHENGINES));
@@ -895,6 +900,10 @@ function stylesheet_store () {
 		.rl-details, .rl-snippet, .rl-snippet-grid-view, .rl-watch-on, .rl-cannot-play-here, .rl-special { \
 			display: none; \
 		} \
+		.vid_result a { \
+			display: block; \
+			text-align: center; \
+		} \
 		#imageList { \
 			text-align: center; \
 			height: 238px; \
@@ -957,6 +966,7 @@ function stylesheet_store () {
 		#mBox { \
 			width: 400px; \
 			margin-right: " + ( options.sideads ? 0 : 250) + "px; \
+			float: " + (options.clcvrthrz == 'horizontal' ? '' : 'right') + "; \
 		} \
 		#pBox { \
 			vertical-align: middle; \
@@ -970,7 +980,7 @@ function stylesheet_store () {
 			height: 400px; \
 		} \
 		.rBox { \
-			float: right; \
+			float: " + (options.clcvrthrz != 'horizontal' ? 'none' : 'right') + "; \
 			text-align: center; \
 		} \
 		.wBBord { \
@@ -995,10 +1005,10 @@ function stylesheet_store () {
 			border-style: none; \
 		} \
 		#videoList { \
-			width: 180px; \
+			width: " + (options.clcvrthrz == 'horizontal' ? '180px' : 'auto') + "; \
 		} \
 		#imageList { \
-			width: 220px; \
+			width: " + (options.clcvrthrz == 'horizontal' ? '220px' : 'auto') + "; \
 		} \
 		#ssb { \
 			position: relative; \
@@ -1060,8 +1070,8 @@ function stylesheet_store () {
 			height: 340px; \
 		} \
 		.vid_thumb { \
-			width: 140px; \
-			height: 100px; \
+			width: " + (options.clcvrthrz == 'horizontal' ? '140px' : '70px') + "; \
+			height: " + (options.clcvrthrz == 'horizontal' ? '100px' : '50px') + "; \
 			padding: 0px 10px; \
 			border-style: none; \
 			border-bottom: 1px solid #000000; \
@@ -1070,6 +1080,10 @@ function stylesheet_store () {
 			font-size: 11pt; \
 			border: 1px solid #000000; \
 			margin: 9px; \
+			display: " + (options.clcvrthrz == 'horizontal' ? 'block' : 'inline-block') + "; \
+			width: " + (options.clcvrthrz == 'horizontal' ? '160px' : '90px') + "; \
+			height: " + (options.clcvrthrz == 'horizontal' ? 'auto' : '105px') + "; \
+			overflow: " + (options.clcvrthrz == 'horizontal' ? '' : 'hidden') + "; \
 		} \
 		.vid_result a { \
 			text-decoration: none; \
@@ -3001,6 +3015,7 @@ function style_dialog(popup) {
 			// General Settings
 		var classic_section = new config_section();
 		classic_section.sectionOptions.push(new config_checkBox("Hide Sidebar Ads", "sideads", options.DEFAULT_SIDEADS));
+		classic_section.sectionOptions.push(new config_selectionBox("Display Media Content", "clcvrthrz", ["Horizontally", "Vertically"], ["horizontal", "vertical"], options.DEFAULT_CLCVRTHRZ));
 		//classic_section.sectionOptions.push(new config_desc_section('Coming Soon', 'This section is still under construction. Please excuse our mess.'));
 		classic_set_window.sections.push(classic_section);
 		
@@ -4537,7 +4552,7 @@ function youtubeSearched(response) {
 	
 	var box = rightBox("videoList");
 	
-	if(results.length > 0) {
+	if(results && results.length > 0) {
 		for(var v = 0; v < results.length; v++) {
 			var new_vid = new indiv_video_result(results[v].media$group.media$thumbnail[0].url, results[v].link[0].href.match(/.*watch\?v=[^&]*/)[0], "youtube", results[v].title.$t);
 			new_vid.draw(box);

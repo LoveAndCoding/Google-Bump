@@ -75,7 +75,7 @@ function youtubeSearched(response) {
 	
 	var box = rightBox("videoList");
 	
-	if(results.length > 0) {
+	if(results && results.length > 0) {
 		for(var v = 0; v < results.length; v++) {
 			var new_vid = new indiv_video_result(results[v].media$group.media$thumbnail[0].url, results[v].link[0].href.match(/.*watch\?v=[^&]*/)[0], "youtube", results[v].title.$t);
 			new_vid.draw(box);

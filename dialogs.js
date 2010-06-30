@@ -294,6 +294,7 @@ function style_dialog(popup) {
 			// General Settings
 		var classic_section = new config_section();
 		classic_section.sectionOptions.push(new config_checkBox("Hide Sidebar Ads", "sideads", options.DEFAULT_SIDEADS));
+		classic_section.sectionOptions.push(new config_selectionBox("Display Media Content", "clcvrthrz", ["Horizontally", "Vertically"], ["horizontal", "vertical"], options.DEFAULT_CLCVRTHRZ));
 		//classic_section.sectionOptions.push(new config_desc_section('Coming Soon', 'This section is still under construction. Please excuse our mess.'));
 		classic_set_window.sections.push(classic_section);
 		

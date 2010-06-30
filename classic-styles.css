@@ -19,6 +19,7 @@
 		#mBox { \
 			width: 400px; \
 			margin-right: " + ( options.sideads ? 0 : 250) + "px; \
+			float: " + (options.clcvrthrz == 'horizontal' ? '' : 'right') + "; \
 		} \
 		#pBox { \
 			vertical-align: middle; \
@@ -32,7 +33,7 @@
 			height: 400px; \
 		} \
 		.rBox { \
-			float: right; \
+			float: " + (options.clcvrthrz != 'horizontal' ? 'none' : 'right') + "; \
 			text-align: center; \
 		} \
 		.wBBord { \
@@ -57,10 +58,10 @@
 			border-style: none; \
 		} \
 		#videoList { \
-			width: 180px; \
+			width: " + (options.clcvrthrz == 'horizontal' ? '180px' : 'auto') + "; \
 		} \
 		#imageList { \
-			width: 220px; \
+			width: " + (options.clcvrthrz == 'horizontal' ? '220px' : 'auto') + "; \
 		} \
 		#ssb { \
 			position: relative; \
@@ -122,8 +123,8 @@
 			height: 340px; \
 		} \
 		.vid_thumb { \
-			width: 140px; \
-			height: 100px; \
+			width: " + (options.clcvrthrz == 'horizontal' ? '140px' : '70px') + "; \
+			height: " + (options.clcvrthrz == 'horizontal' ? '100px' : '50px') + "; \
 			padding: 0px 10px; \
 			border-style: none; \
 			border-bottom: 1px solid #000000; \
@@ -132,6 +133,10 @@
 			font-size: 11pt; \
 			border: 1px solid #000000; \
 			margin: 9px; \
+			display: " + (options.clcvrthrz == 'horizontal' ? 'block' : 'inline-block') + "; \
+			width: " + (options.clcvrthrz == 'horizontal' ? '160px' : '90px') + "; \
+			height: " + (options.clcvrthrz == 'horizontal' ? 'auto' : '105px') + "; \
+			overflow: " + (options.clcvrthrz == 'horizontal' ? '' : 'hidden') + "; \
 		} \
 		.vid_result a { \
 			text-decoration: none; \
