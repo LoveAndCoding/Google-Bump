@@ -88,7 +88,7 @@ function indiv_img_result(src, link, title, sizeInfo, type, num) {
 				event.preventDefault();
 			}
 			
-			embedder.addImageEmbed(this, true);
+			embedder.addImageEmbed(this);
 		}
 	};
 	

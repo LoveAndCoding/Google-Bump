@@ -149,7 +149,7 @@ function indiv_video_result(src, link, domain, name) {
 		}
 		object.appendChild(embed);
 		
-		embedder.addVideoEmbed(this, true, object)
+		embedder.addVideoEmbed(this, object)
 	};
 	
 	// Handles logic for youtube embeds including extra options

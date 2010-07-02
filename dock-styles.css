@@ -11,24 +11,30 @@
 			margin: 0px auto !important; \
 			padding: 19px 0px; \
 		} \
+		#center_col { \
+			padding-left: 40px; \
+			min-height: 300px; \
+		} \
 		#dock { \
-			position: fixed; \
-			height: 40px; \
-			width: 260px; \
-			border: 1px solid #000000; \
-			border-bottom-style: none; \
-			bottom: 0px; \
-			right: 50%; \
-			margin-right: -130px; \
+			position: absolute; \
+			width: 44px; \
+			border-width: 1px; \
+			border-color: rgb(" + options.dockbdrclr + "); \
+			border-style: " + (options.dockborder ? "solid" : "none") + "; \
+			border-left-style: none; \
+			top: 0px; \
+			left: 160px; \
 			text-align: center; \
-			background-color: #F0F7F9; \
+			background-color: rgb(" + options.dockbgclr + "); \
 		}  \
 		.dockLink { \
-			padding: 1em 1.25em; \
-			display: inline; \
+			padding: .4em 0px; \
+			display: block; \
 			cursor: pointer; \
-			float: left; \
 		}  \
+		.dockLink a { \
+			text-decoration: none; \
+		} \
 		.topHolder { \
 			height: 68px; \
 			overflow: auto; \

@@ -1,3 +1,6 @@
+		html { \
+			background-color: rgb(" + options.genbgclr + "); \
+		} \
 		body { \
 			width: 760px; \
 			margin: 0px auto !important; \

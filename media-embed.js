@@ -107,9 +107,12 @@ function Media_Embed () {
 		this.clearEmbed(this.defaultMessage);
 		
 		var hidePlayer = $create("div", {
-			id : "hidePly",
-			textContent : "X"
+			id : "hidePly"
 		});
+		hidePlayer.appendChild($create("img",{
+			src : image_store.media_close,
+			alt : "Close"
+		}));
 		var SR = this;
 		hidePlayer.addEventListener("click", function (event) {
 			SR.clearEmbed();
@@ -119,14 +122,14 @@ function Media_Embed () {
 		parentNode.appendChild(this.player);
 	};
 	
-	this.addImageEmbed = function (img, controls) {
+	this.addImageEmbed = function (img) {
 		this.imgRes = img;
 		var title = img.title;
 		var url = img.link;
 		
 		this.clearEmbed(title);
 		
-		if(controls) {
+		if(options.imgCtrl) {
 			this.drawImageControls();
 		}
 		
@@ -144,11 +147,11 @@ function Media_Embed () {
 		this.player.className = "rBox imgShowing";
 	};
 	
-	this.addVideoEmbed = function (vid, controls, embed) {
+	this.addVideoEmbed = function (vid, embed) {
 		this.vidRes = vid;
 		this.clearEmbed(vid.name);
 		
-		if(controls) {
+		if(options.vidCtrl) {
 			this.drawVideoControls();
 		}
 		
@@ -196,8 +199,13 @@ function Media_Embed () {
 		});
 		icn.draw(this.controlsArea);
 		
+		icn = new Control_Icon(image_store.image_new_tab, "Open in New Tab", function () {
+			GM_openInTab(SR.imgRes.link);
+		});
+		icn.draw(this.controlsArea);
+		
 		icn = new Control_Icon(image_store.image_slideshow, "Play Slideshow from here", function () {
-			imgSearch.startSlides(SR.imgRes.locNum)
+			imgSearch.startSlides(SR.imgRes.locNum);
 		});
 		icn.draw(this.controlsArea);
 		

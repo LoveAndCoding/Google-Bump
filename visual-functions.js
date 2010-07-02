@@ -66,6 +66,17 @@ function didyoumean() {
 		p2.className = "removed";
 		p1.id = "dymTxt";
 		thebar.insertBefore(p1, thebar.childNodes[0]);
+		var anon = function () {
+				var thebar = $('leftnav');
+				p2.className = "removed";
+				p1.id = "dymTxt";
+				thebar.insertBefore(p1, thebar.childNodes[0]);
+			};
+		if($('leftnav')) {
+			anon();
+		} else {
+			var inter = setInterval(function () { if($('leftnav')) { anon(); clearInterval(inter); } },options.delay);
+		}
 	}
 }
 // Moves top content to a new position

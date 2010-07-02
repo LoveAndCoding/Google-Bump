@@ -1,3 +1,6 @@
+		#mBox, #pBox, #videoList, #imageList, #controlArea, #embedArea { \
+			border: 1px none rgb(" + options.clcbdrclr + "); \
+		} \
 		#center_col { \
 			margin-right: 0px; \
 		} \
@@ -20,17 +23,16 @@
 			width: 400px; \
 			margin-right: " + ( options.sideads ? 0 : 250) + "px; \
 			float: " + (options.clcvrthrz == 'horizontal' ? '' : 'right') + "; \
+			border-style: " + (options.clcborder ? 'solid' : 'none') + "; \
 		} \
 		#pBox { \
 			vertical-align: middle; \
 			overflow: hidden; \
 			width: 400px; \
+			border-bottom-style: " + (options.clcborder ? 'solid' : 'none') + "; \
 		} \
 		.playing, .imgShowing { \
 			position: relative; \
-		} \
-		.playing .embedArea { \
-			height: 400px; \
 		} \
 		.rBox { \
 			float: " + (options.clcvrthrz != 'horizontal' ? 'none' : 'right') + "; \
@@ -58,10 +60,22 @@
 			border-style: none; \
 		} \
 		#videoList { \
-			width: " + (options.clcvrthrz == 'horizontal' ? '180px' : 'auto') + "; \
+			width: " + (options.clcvrthrz == 'horizontal' && options.imgs ? '180px' : 'auto') + "; \
+			border-right-style: " + (options.clcborder && options.clctoprht != "videos" && options.clcvrthrz == "horizontal" ? "solid" : "none") + "; \
+			border-left-style: " + (options.clcborder && options.clctoprht == "videos" && options.clcvrthrz == "horizontal" ? "solid" : "none") + "; \
+			border-top-style: " + (options.clcborder && options.clctoprht != "videos" && options.clcvrthrz == "vertical" ? "solid" : "none") + "; \
+			border-bottom-style: " + (options.clcborder && options.clctoprht == "videos" && options.clcvrthrz == "vertical" ? "solid" : "none") + "; \
+			margin-right: " + (options.clcborder && options.clctoprht != "videos" && options.clcvrthrz == "horizontal" ? "-1px" : "0px") + "; \
+			margin-left: " + (options.clcborder && options.clctoprht == "videos" && options.clcvrthrz == "horizontal" ? "-1px" : "0px") + "; \
+			margin-top: " + (options.clcborder && options.clctoprht != "videos" && options.clcvrthrz == "vertical" ? "-1px" : "0px") + "; \
+			margin-bottom: " + (options.clcborder && options.clctoprht == "videos" && options.clcvrthrz == "vertical" ? "-1px" : "0px") + "; \
 		} \
 		#imageList { \
-			width: " + (options.clcvrthrz == 'horizontal' ? '220px' : 'auto') + "; \
+			width: " + (options.clcvrthrz == 'horizontal' && options.vids ? '219px' : 'auto') + "; \
+			border-right-style: " + (options.clcborder && options.clctoprht != "images" && options.clcvrthrz == "horizontal" ? "solid" : "none") + "; \
+			border-left-style: " + (options.clcborder && options.clctoprht == "images" && options.clcvrthrz == "horizontal" ? "solid" : "none") + "; \
+			border-top-style: " + (options.clcborder && options.clctoprht != "images" && options.clcvrthrz == "vertical" && options.vids ? "solid" : "none") + "; \
+			border-bottom-style: " + (options.clcborder && options.clctoprht == "images" && options.clcvrthrz == "vertical" ? "solid" : "none") + "; \
 		} \
 		#ssb { \
 			position: relative; \
@@ -122,6 +136,19 @@
 		.playing #embedArea { \
 			height: 340px; \
 		} \
+		.playing #embedArea, .imgShowing #embedArea { \
+			border-top-style: " + ((options.imgCtrl || options.vidCtrl) ? 'solid' : 'none') + "; \
+		} \
+		.playing #controlArea, .imgShowing #controlArea { \
+			border-top-style: " + (options.clcborder && (options.imgCtrl || options.vidCtrl) ? 'solid' : 'none') + "; \
+			height: 16px; \
+		} \
+		.playing #controlArea { \
+			display: " + (options.vidCtrl ? 'block' : 'none') + "; \
+		} \
+		.imgShowing #controlArea { \
+			display: " + (options.imgCtrl ? 'block' : 'none') + "; \
+		} \
 		.vid_thumb { \
 			width: " + (options.clcvrthrz == 'horizontal' ? '140px' : '70px') + "; \
 			height: " + (options.clcvrthrz == 'horizontal' ? '100px' : '50px') + "; \
@@ -133,7 +160,7 @@
 			font-size: 11pt; \
 			border: 1px solid #000000; \
 			margin: 9px; \
-			display: " + (options.clcvrthrz == 'horizontal' ? 'block' : 'inline-block') + "; \
+			display: " + (options.clcvrthrz == 'horizontal' && options.imgs ? 'block' : 'inline-block') + "; \
 			width: " + (options.clcvrthrz == 'horizontal' ? '160px' : '90px') + "; \
 			height: " + (options.clcvrthrz == 'horizontal' ? 'auto' : '105px') + "; \
 			overflow: " + (options.clcvrthrz == 'horizontal' ? '' : 'hidden') + "; \

@@ -2,7 +2,7 @@
 // @name			Google Bump
 // @namespace		http://userscripts.org/scripts/show/33449
 // @description		Adds some functionality to the Google web search. Main features include Multisearch, Video result extraction, Wikipedia definitions and links, and some clutter cleanup by. All options can be turned off.
-// @version			2.04.20100629
+// @version			2.04.20100702
 // @include			http://www.google.tld/
 // @include			http://www.google.tld/#*
 // @include			http://www.google.tld/search?*
@@ -11,7 +11,7 @@
 
 /*
 	Author: KTaShes
-	Date: June 29 2010
+	Date: July 02 2010
 	
 	Code can now be found on GitHub @ http://github.com/ktsashes/Google-Bump
 	

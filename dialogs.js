@@ -268,7 +268,6 @@ function style_dialog(popup) {
 		var bgc_set_window = new config_window(bgcTab, 'BgColrs');
 			// Colors
 		var bgc_section = new config_section("Background Colors");
-		bgc_section.sectionOptions.push(new config_colorBox('Body (Mostly for Center Style)', 'genbgclr', options.DEFAULT_GENBGCLR));
 		bgc_section.sectionOptions.push(new config_colorBox('Main Area', 'resltclr', options.DEFAULT_RESLTCLR));
 		bgc_section.sectionOptions.push(new config_colorBox('Google Bar (Top)', 'glbarclr', options.DEFAULT_GLBARCLR));
 		bgc_section.sectionOptions.push(new config_colorBox('Added Items', 'addedclr', options.DEFAULT_ADDEDCLR));
@@ -292,11 +291,18 @@ function style_dialog(popup) {
 		// Classic Settings
 		var classic_set_window = new config_window(clcTab, "ClscStyl");
 			// General Settings
-		var classic_section = new config_section();
+		var classic_section = new config_section("General");
 		classic_section.sectionOptions.push(new config_checkBox("Hide Sidebar Ads", "sideads", options.DEFAULT_SIDEADS));
-		classic_section.sectionOptions.push(new config_selectionBox("Display Media Content", "clcvrthrz", ["Horizontally", "Vertically"], ["horizontal", "vertical"], options.DEFAULT_CLCVRTHRZ));
 		//classic_section.sectionOptions.push(new config_desc_section('Coming Soon', 'This section is still under construction. Please excuse our mess.'));
 		classic_set_window.sections.push(classic_section);
+			// Media Content Settings
+		var classic_media_section = new config_section("Media Content");
+		classic_media_section.sectionOptions.push(new config_selectionBox("Orientation", "clcvrthrz", ["Horizontally", "Vertically"], ["horizontal", "vertical"], options.DEFAULT_CLCVRTHRZ));
+		classic_media_section.sectionOptions.push(new config_selectionBox("Right/Top", "clctoprht", ["Images", "Videos"], ["images", "videos"], options.DEFAULT_CLCTOPRHT));
+		classic_media_section.sectionOptions.push(new config_checkBox("Border", "clcborder", options.DEFAULT_CLCBORDER));
+		classic_media_section.sectionOptions.push(new config_colorBox('Border Color', 'clcbdrclr', options.DEFAULT_CLCBDRCLR));
+		classic_set_window.sections.push(classic_media_section);
+		
 		
 		// Media Settings
 		var media_set_window = new config_window(mdaTab, "MdaStyl");
@@ -307,9 +313,12 @@ function style_dialog(popup) {
 		
 		// Dock Settings
 		var dock_set_window = new config_window(dckTab, "DockStyl");
-			// General Settings
-		var dock_section = new config_section();
-		dock_section.sectionOptions.push(new config_desc_section('Coming Soon', 'This section is still under construction. Please excuse our mess.'));
+			// Navigation Settings
+		var dock_section = new config_section("Navigation");
+		dock_section.sectionOptions.push(new config_selectionBox("Display", "docknavstl", ["Text", "Icons", "Both"], ["text", "icon", "both"], options.DEFAULT_DOCKNAVSTL));
+		dock_section.sectionOptions.push(new config_checkBox("Border", "dockborder", options.DEFAULT_DOCKBORDER));
+		dock_section.sectionOptions.push(new config_colorBox('Border Color', 'dockbdrclr', options.DEFAULT_DOCKBDRCLR));
+		dock_section.sectionOptions.push(new config_colorBox('Background Color', 'dockbgclr', options.DEFAULT_DOCKBGCLR));
 		dock_set_window.sections.push(dock_section);
 		
 		// Center Settings
@@ -346,7 +355,7 @@ function style_dialog(popup) {
 		
 		// Save and default buttons
 		var SR = this;
-		var savebtn = new button("Save", function () { SR.popup.undraw(); location.reload(); });
+		var savebtn = new button("Close", function () { SR.popup.undraw(); location.reload(); });
 		var defbtn = new button("Defaults", function () { SR.setDefaults(); });
 		savebtn.draw(btnwrap);
 		defbtn.draw(btnwrap);
@@ -476,6 +485,7 @@ function config_dialog(popup) {
 		var img_section = new config_section("Sidebar Options");
 		img_section.sectionOptions.push(new config_checkBox("Search For Images", "imgs", options.DEFAULT_IMGS));
 		img_section.sectionOptions.push(new config_checkBox("Show in player", "imgPlyr", options.DEFAULT_IMGPLYR));
+		img_section.sectionOptions.push(new config_checkBox("Show Control Bar", "imgCtrl", options.DEFAULT_IMGCTRL));
 		img_section.sectionOptions.push(new config_selectionBox("Number of pages to load", "imgPages", ["1 Pages","2 Pages","3 Pages","4 Pages","5 Pages","7 Pages","10 Pages"], [1, 2, 3, 4, 5, 7, 10], options.DEFAULT_IMGPGS));
 		img_section.sectionOptions.push(new config_selectionBox("Image display size", "imgSize", ["Titles Only","Small","Medium","Large", "Details"], ["title", "small", "medium", "large", "details"], options.DEFAULT_IMGSIZE));
 		img_set_window.sections.push(img_section);
@@ -498,6 +508,7 @@ function config_dialog(popup) {
 		vid_set_window.sections.push(vid_section);
 			// Embed Settings
 		var emd_section = new config_section("Embed Options");
+		emd_section.sectionOptions.push(new config_checkBox("Show Extra Controls", "vidCtrl", options.DEFAULT_VIDCTRL));
 		emd_section.sectionOptions.push(new config_checkBox("Embed videos (when available)", "embd", options.DEFAULT_EMBD));
 		emd_section.sectionOptions.push(new config_checkBox("Play in HD (when available)", "hdvd", options.DEFAULT_HDVD));
 		emd_section.sectionOptions.push(new config_checkBox("Enable Fullscreen (when available)", "fsvd", options.DEFAULT_FSVD));
@@ -571,7 +582,7 @@ function config_dialog(popup) {
 		
 		// Save and default buttons
 		var SR = this;
-		var savebtn = new button("Save", function () { SR.popup.undraw(); location.reload(); });
+		var savebtn = new button("Close", function () { SR.popup.undraw(); location.reload(); });
 		var defbtn = new button("Defaults", function () { SR.setDefaults(); });
 		savebtn.draw(btnwrap);
 		defbtn.draw(btnwrap);

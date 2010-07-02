@@ -6,15 +6,14 @@ function scriptPage() {
 		verNotice();
 	} else if (Date.now() - options.updateCheck >= 86400000 || options.updateCheck === 0) {
 		GM_setValue("updtTime", Date.now().toString());
-		get("http://userscripts.org/scripts/show/33449", chckAgainst, unable);
+		get("http://userscripts.org/scripts/source/33449.meta.js", chckAgainst, unable);
 	}
 }
 //Dummy function for errors
 function unable(response) {}
 // Checks the version number on the script homepage against this version number and informs if a newer version is available
 function chckAgainst(response) {
-	var spage = stringtohtml(response.responseText);
-	var newest = parseFloat(spage.getElementsByTagName('code')[0].textContent);
+	var newest = parseFloat(/\/\/ @version.+/.exec(response.responseText)[0].replace(/\/\/ @version\s+/, ''));
 	// Creates an install link if a newer version is available
 	if (newest > version) {
 		GM_setValue("newver", "" + newest);
@@ -37,8 +36,6 @@ function verNotice() {
 		textContent : "Update Google Bump"
 	});
 	divHolder.appendChild(uplink);
-	
-	// divHolder.appendChild($create("textNode", " | "));
 	
 	uplink = $create("a", {
 		href : "http://userscripts.org/scripts/show/33449#full_description",

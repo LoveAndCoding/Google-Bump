@@ -21,6 +21,7 @@ function optionlist() {
 	this.DEFAULT_VDSRCHR = "google";
 		// Embed defaults
 	this.DEFAULT_EMBD = true;
+	this.DEFAULT_VIDCTRL = true;
 	this.DEFAULT_HDVD = true;
 	this.DEFAULT_FSVD = true;
 	this.DEFAULT_APVD = true;
@@ -31,6 +32,7 @@ function optionlist() {
 		// Image defaults
 	this.DEFAULT_IMGS = false;
 	this.DEFAULT_IMGPLYR = true;
+	this.DEFAULT_IMGCTRL = true;
 	this.DEFAULT_IMGSIZE = "large";
 	this.DEFAULT_SLDSHW = true;
 	this.DEFAULT_SLDKEY = true;
@@ -46,6 +48,14 @@ function optionlist() {
 	this.DEFAULT_DELAY = 400;
 		// Classic Style defaults
 	this.DEFAULT_CLCVRTHRZ = 'horizontal';
+	this.DEFAULT_CLCTOPRHT = 'videos';
+	this.DEFAULT_CLCBORDER = false;
+	this.DEFAULT_CLCBDRCLR = "193,211,232";
+		// Dock Style defaults
+	this.DEFAULT_DOCKNAVSTL = 'icon';
+	this.DEFAULT_DOCKBORDER = true;
+	this.DEFAULT_DOCKBDRCLR = "193,211,232";
+	this.DEFAULT_DOCKBGCLR = "240,247,249";
 		// Color Defaults
 			// Background Colors
 	this.DEFAULT_GENBGCLR = '255,255,255';
@@ -162,6 +172,7 @@ function optionlist() {
 	this.vdsrchr = GM_getValue("vdsrchr", this.DEFAULT_VDSRCHR);
 		// Embed vars
 	this.embd = GM_getValue("embd", this.DEFAULT_EMBD);
+	this.vidCtrl = GM_getValue("vidCtrl", this.DEFAULT_VIDCTRL);
 	this.hdvd = GM_getValue("hdvd", this.DEFAULT_HDVD);
 	this.fsvd = GM_getValue("fsvd", this.DEFAULT_FSVD);
 	this.apvd = GM_getValue("apvd", this.DEFAULT_APVD);
@@ -172,6 +183,7 @@ function optionlist() {
 		// Image vars
 	this.imgs = GM_getValue("imgs", this.DEFAULT_IMGS);
 	this.imgPlyr = GM_getValue("imgPlyr", this.DEFAULT_IMGPLYR);
+	this.imgCtrl = GM_getValue("imgCtrl", this.DEFAULT_IMGCTRL);
 	this.imgSize = GM_getValue("imgSize", this.DEFAULT_IMGSIZE);
 	this.sldshw = GM_getValue("sldshw", this.DEFAULT_SLDSHW);
 	this.sldkey = GM_getValue("sldkey", this.DEFAULT_SLDKEY);
@@ -207,6 +219,14 @@ function optionlist() {
 	
 		// Classic Style vars
 	this.clcvrthrz = GM_getValue("clcvrthrz", this.DEFAULT_CLCVRTHRZ);
+	this.clctoprht = GM_getValue("clctoprht", this.DEFAULT_CLCTOPRHT);
+	this.clcborder = GM_getValue("clcborder", this.DEFAULT_CLCBORDER);
+	this.clcbdrclr = GM_getValue("clcbdrclr", this.DEFAULT_CLCBDRCLR);
+		// Dock Style vars
+	this.docknavstl = GM_getValue("docknavstl", this.DEFAULT_DOCKNAVSTL);
+	this.dockborder = GM_getValue("dockborder", this.DEFAULT_DOCKBORDER);
+	this.dockbdrclr = GM_getValue("dockbdrclr", this.DEFAULT_DOCKBDRCLR);
+	this.dockbgclr = GM_getValue("dockbgclr", this.DEFAULT_DOCKBGCLR);
 	
 		// Search Engines
 	this.searchengines = eval(GM_getValue("searchengines", this.DEFAULT_SEARCHENGINES));

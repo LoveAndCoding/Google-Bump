@@ -2,7 +2,7 @@
 // @name			Google Bump
 // @namespace		http://userscripts.org/scripts/show/33449
 // @description		Adds some functionality to the Google web search. Main features include Multisearch, Video result extraction, Wikipedia definitions and links, and some clutter cleanup by. All options can be turned off.
-// @version			2.04.20100629
+// @version			2.04.20100702
 // @include			http://www.google.tld/
 // @include			http://www.google.tld/#*
 // @include			http://www.google.tld/search?*
@@ -11,7 +11,7 @@
 
 /*
 	Author: KTaShes
-	Date: June 29 2010
+	Date: July 02 2010
 	
 	Code can now be found on GitHub @ http://github.com/ktsashes/Google-Bump
 	
@@ -119,7 +119,266 @@ var image_store = {
 						"4eHZBf8J9cLjPgMIdYFOA1hIeREPN5hpG4s" +
 						"oIcygUBkJDUM%2FuOyiIkSzaSGAVYvMg79z" +
 						"AQQYACovRIfeUjOIwAAAABJRU5ErkJggg%3" +
-						"D%3D"
+						"D%3D",
+	
+	image_new_tab :		"data:image/png;base64,iVBORw0KGgoAA" +
+						"AANSUhEUgAAABAAAAAQCAYAAAAf8%2F9hAA" +
+						"AAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZ" +
+						"VJlYWR5ccllPAAAAI9JREFUeNpiTJ78mYES" +
+						"wITEngbE%2F7FgfOIMjEgu%2BD8nhwfDhpQ" +
+						"pXxhwiYP0syDZDhNEAdg0IwOYAZmEFBITBj" +
+						"jBk23aYEy2AcR4AS%2BQ8bpKugGSxUJw9vP" +
+						"ed6QZgKyZkGFMhDQTksdwAT7n0iQWYAZMx5" +
+						"YKcQGo2unIXsiCSmQSacZ0mB7kMMiCCZICA" +
+						"AIMAMq%2BNGdlcNHmAAAAAElFTkSuQmCC",
+	
+	dock_web_icon :		"data:image/png;base64,iVBORw0KGgoAA" +
+						"AANSUhEUgAAACAAAAAgCAYAAABzenr0AAAA" +
+						"GXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJ" +
+						"lYWR5ccllPAAAB%2FlJREFUeNrEV%2FtvXE" +
+						"cVPvfuy%2Fv0eu117KwTmrppXhQ1DbQIBIW" +
+						"mgRCh0vBKhFBE1aCAlAhISJXSoiJRIMIilL" +
+						"b0h6hFpSCKK0IU2tBIFa0SWqKqouGhVmpJk" +
+						"43j3dhex%2FZ6vd7HvTPDNzP3tc4f0Lsaz9" +
+						"zxzDnfOfOdc%2BYaQgh6P5%2Bw%2FLP78QU" +
+						"i4Bib%2BhIZholmkOn06mfiHb98z%2B9ux%" +
+						"2FKtjeYLO212Mc15JdcV%2B6yIRT9%2BDvM" +
+						"M7WW0U9Nzu05LuQYpsc4o%2BAgl9%2FiDxz" +
+						"QAd43NGJRyCpkmcUNApUFD%2Fc%2FFbXviQ" +
+						"KP9yv0Li6OJVGIHhULLyWLnKRReTVAupW9q" +
+						"W%2Beo0Tx2qxlaeSid%2BPZ8NHLTTw0j9Sj" +
+						"ANHwgwgFjYCR8D7iPzSwyoVwIU3li5eDxu6" +
+						"oLz%2F221ng%2Ba5BNfdkfqHXRyC2qBR%2F" +
+						"OJwFqDH64TK32qxnT7Duciu%2Fa35d95psA" +
+						"8RffC8K3%2BFoANplCu3%2B48IdfXJn52f5" +
+						"m83UFpjt9N8UiN2G7ja3hznMMEXUnx6k7Ua" +
+						"CW1aJqvQowV2m%2B%2Fsv%2BZPxrJwDi8JN" +
+						"7U%2Fe76%2B9%2B%2BIseHDMoyOIWNtr0gY" +
+						"GjJy5N3Le%2FunBGvduYr9XPUPHKDipV9nW" +
+						"cpXzymTYlo5OUjKeoL9NL1w%2BuosHcWoqE" +
+						"ctRovQjDiofAsz9S4LzdI1AAuBQltAfWDD0" +
+						"7Upx46K6F5nvqXR6LhdZolykcXqWOgQu9ng" +
+						"ttRzzWBS%2BsJsEZjkKo%2FxV6v0EbVh2id" +
+						"OKj4NR1WCt23PvYwsNLo0ABENgkhd48fHp7" +
+						"cXLk%2B7XGO55i2WxbA8mmvg6rhkiGLgTqH" +
+						"hstGyDi2xAtQ5C4DMTcDC4VsHYZDQ9ins5i" +
+						"zXnssR%2B459Hadp8HDge4zgXRqbljT1Wqr" +
+						"ygOSDKq3tCEjBn9IN6NCqgy0fC5PTZtUyGX" +
+						"pkzyXs%2FFkgMt6yzZ1n8pm2jSxYki2SJCq" +
+						"fi%2Bo93pp09Wa%2Fe0%2FSPAGTAuvlOaHu" +
+						"1RFnNbnb3bJAdSyS1QHlYWcwc0U%2FsIioi" +
+						"Kk4ym5jgsbYAvJ2i29gjC8nXsXVQwB3ODxF" +
+						"gdxPx1n83nDgrB%2FSNgQoQg96BUwKDcttv" +
+						"E0KTbbdZWRzBfP6eVKsVaORfkHYWNVplv0z" +
+						"%2Fe2kPlqy%2BqvVIWAy9ki0ak9UmMZ6nZe" +
+						"vVQMvl01PeAoK2M83w8eqMinoWExChGhfxB" +
+						"%2BtDwGVrR%2F2PMtaCEKW8pxdITeHE9Iec" +
+						"Xm%2F%2BhheYVujDxHl2uXFKe1AB035PMqm" +
+						"TXbL2Rwv4tvge42CoFpBO3KQAMLh%2FM7aa" +
+						"%2B7i%2FDfTHKpDbT8PKjIKsJD3C40vGEIM" +
+						"cb%2Bn2h%2BW%2BHuDZNzk3iWIq%2BF6A4H" +
+						"ApTGNxqWe%2FI%2Bc8FAWySArLpLdTf81V1" +
+						"1k1rWp%2BxVMY6Xe%2BP%2FXfpkRiyoxs5F" +
+						"hRXqhUany4p5UxoIF2xOP7fRJu9zY8CLm5w" +
+						"A%2BO6gR%2FRUP579O7lA0BaRVZ7Da59G5t" +
+						"rYPmtlEtvc4pMZ6mRo0jkgwDxMSSfv5PJZS" +
+						"SFqHS1hLkY9aR6EDgMoRl2uDU%2F7AGwOXV" +
+						"7hQJFyDAyZIa66c1378TCWV0REYpTM6N0w4" +
+						"ok0u4nO3K6zmsaRk%2F3HqpPvgHAdYBgKFx" +
+						"RujRVpDSypBvSCgC3Uh4AxnkgtRqI2Ydocu" +
+						"bPum7JTaokS8KZdLH8Q2S4v8K6pFbrOcJJr" +
+						"UaBluefgdtnKBIexLoM1Zt%2Fw3H8nnozOX" +
+						"ibqSNiPERBDlSZw2ZbWDRTPeUVCy5JR0wxn" +
+						"iEKmkjJ5ZnfYB3X%2BYO5XOAOGQHazCNtrw" +
+						"GktJLZFdsMgq5WHGgzHd6cx%2Bc9ADiC8%2" +
+						"BCJEsBZiK4vPKEsEoGao9OuBlGrv4l1WrEd" +
+						"UKzfddNjTVD5vmgtUxHWaDXQS829%2FwtkQ" +
+						"vEvXxCnrujNFIut8a4ORiB3yyycTW9XiYc5" +
+						"NcSLCgmS6WZzHRmql3MiR%2FVWnWqNGrSul" +
+						"EdwLuABcZJ5grQlidhG7%2FJEAQhdsbXIF9" +
+						"u0%2BwPhaC%2Fp3aypQAjtqVa7SdXFOeSCT" +
+						"fCCOBkMw5egoyJLu6soEl7pXaAC9lM%2Bu1" +
+						"cJNMSSe54qUIGgFJ07W%2BCOPIJqfZ4G8p%" +
+						"2BeBcCXArUA3BB0hDluk9aZKKWaB4HSGepF" +
+						"2f2UWuMRz3M%2FeUfoetHvocAqw%2Foq5K7" +
+						"DXXLNz4ulje1gFEg2HwGqkgIAITIXuBdI1%" +
+						"2Fp04gtIxyGtTHCHtNxztQLDdIFy5eixvPT" +
+						"M0FR1Cle7vRUEw69kdgwUI0WmNmTt05ZIve" +
+						"nghRlPiFKpnUq56yVNQPKU6zmfkF65tsvUa" +
+						"JwlI%2FQZikQ%2FsufC%2BIaGTM1LAAi6cH" +
+						"ntcfQ%2FUXlJxD3L5S8ZvxNZbUXAOkchJ%2" +
+						"F9d%2BCXaBylovvYsNK1Hlnxg5MLYuuO6Qg" +
+						"buA%2B5CmfGK4%2BsexHiUzLTDfUN5IJP6l" +
+						"m9xUBE5FxQeLNGdQMjAZbX3iT9dKt1yn2eU" +
+						"EJ0e0BM66MbK63eSiB5JxD%2Bv5qLRjSDOW" +
+						"qVEuEqdy6dvuTMP9nMeBGhQOrn78Hj5w18J" +
+						"fhUZwQ8TKUgsqXDlyU8cKAy8dTaR2PVYq%2" +
+						"FXagHDDTPgfOCpCOHWEm7bOuTISlYDiwPjE" +
+						"%2BlHDYZKrQzjvhhS84bvj1FFXDafTY0mGv" +
+						"WgHZRqga77yOu6nblfBvhFMP45xoyOhGNpg" +
+						"%2Bbz9yJDziWNc%2B9UayCkNKQx7RqDodrx" +
+						"vhZfvMGRYCNrkWPpP9XFq0MsAfQrj07TUMe" +
+						"Qb5lR93wPv5%2FN%2FAQYAS%2B7Xa8YMGm4" +
+						"AAAAASUVORK5CYII%3D",
+	
+	dock_video_icon :	"data:image/png;base64,iVBORw0KGgoAA" +
+						"AANSUhEUgAAACAAAAAgCAYAAABzenr0AAAA" +
+						"GXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJ" +
+						"lYWR5ccllPAAAAoJJREFUeNrsV8ttGzEQ5Q" +
+						"iKXEIqyMnQ0VWkBOtg3XVRBYYLMDYHFWDAS" +
+						"AmuwhcDQopIC%2FzMmOQMucMVDQUIJF20gn" +
+						"ZHy9G8N1%2BCxlz4AiX%2FjN%2B7M%2BG%2" +
+						"Bx%2B9bEuYafL%2FfP54DfblcPon4NhPhbO" +
+						"DpEqw7HYF6bbfbk4IPw9D8nl26CK8ErgSuB" +
+						"OocwBAMZYkM0WRaA6XXeW4TxHtUyLJaNvy6" +
+						"P%2BzVe8aBQwLOewPROKEynMkwuBFgEhQqN" +
+						"lDZJ7XBaEIkLKINFwlALwJeCGBSzKARHkgZ" +
+						"pmqINNjE8%2FQXBCZmyrMoR8XgfD8F3rscG" +
+						"kKMd2AYYotQOQkJSYnYbLxvokGHeXDeNptw" +
+						"JWAzMw4x6aTl3zCJxJHKOljHmhNrXZ%2BAs" +
+						"1Z0aimyWvaYDUhAVI2UhID4STXnpGvBSBTj" +
+						"x3nXT4HNBDgFTAAk2qiAaQTH5BcINNUOKoC" +
+						"m6Qxgx4Aj0C1C62w2hzqpkvtqtFotZEAZIy" +
+						"aEY%2BFz4ERPvEiOdgk4YYZIUt3jH7VHUEX" +
+						"WQ%2BkUEEQsLRsFkqcm5J1rimTsAufYRxkE" +
+						"3OfUdFFusTSEwDRDq9SCRDl3C4xGZFgw5Zz" +
+						"qbgpicSQvUg3QdKhIW5KZtN6k8MtMIBoJjl" +
+						"0obei%2BKMIQB1HSCSjsgQsH1MylkprstbR" +
+						"BJRbrB3ldFyBUgjxdvA9fpCAvcAqoupnAoG" +
+						"nu4n3SAhxburZajTo7gbVUmWgITinpCAQms" +
+						"F6vT7r7hYDHt%2BPXj%2BFAfv34ddrtuGH1" +
+						"DczvP4O5v92a2QLkHa99f3npGnqez%2F8Jc" +
+						"LVaHSdgFsbc%2F5DzwUKSfsOPvw8PfcP%2F" +
+						"eTbMR7PdbneW09Fms3kq58OLH04vfn0KMAD" +
+						"erqAZMvlLrgAAAABJRU5ErkJggg%3D%3D",
+	
+	dock_image_icon :	"data:image/png;base64,iVBORw0KGgoAA" +
+						"AANSUhEUgAAACAAAAAgCAYAAABzenr0AAAA" +
+						"GXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJ" +
+						"lYWR5ccllPAAAA%2FRJREFUeNrsV0tyE0EM" +
+						"lcZOHH8WyYIUqcAJgKpscgoORXEolsAB2OY" +
+						"KBkLl51RhZzwzEmq1uqd7Mh6qsgAWdOxk0u" +
+						"7Pk%2FT0JCPYYGZ46kDEJ%2B8t4C%2BPFPp" +
+						"beZ%2F%2FoXu%2FLJfLD3VdwziZPCeid7t2" +
+						"cIbW%2F8cdC%2FrXd1cxFMXofVVVAqDJAIC" +
+						"jwZvXr3Q9yy%2FUvfKL0b30GPaf%2BMUAcX" +
+						"4%2BX8DzkxNdvt78hG%2FfvoMY5Ahi%2Bzz" +
+						"ki4sL3VfXFfQAIGjkjaTMAmK%2FyV0CZADs" +
+						"QvC49G8hP0dHR8DUQN0QLJdfZS%2F7vWGRc" +
+						"ZwJDIBbm4dAB7lbnZXkLvDoQZ%2F9IW6GsD" +
+						"3QjYPpBPb2xtDI5Tc31%2BBi6y33ADBZzPb" +
+						"sAFDzyAOsk32R6yWDPU8ODtRyF5a725V3%2" +
+						"FS5uWOhIrHde6gFAHicaB8ItidXqVU8UMVQ" +
+						"OGY0U%2BLYsoaxKwICQGQJdglQED5AByQHI" +
+						"T0PNcNLy40k31QiAzcODGdDNcoZdgpcDkL0" +
+						"OAPY4n41I2JqiXmFTQuf2uqrVE5woI3YSsm" +
+						"vA%2BNE1YgHttNjSwUISssUBaCSm22orBlC" +
+						"vq9waB5cGPSAuqOUA7FWfrrT4PJzNZjrnMq" +
+						"AUDjhP9KxsNaVD0HGeguBjqAbaZjQt8L5uD" +
+						"ZPHQt6HR4eaz9ww3K9WoiMtWRG9bKV7uvmR" +
+						"h0A8QBkJe1mnY1QU8Oz4WPJ%2FT0FfX19D5" +
+						"fL%2FN2OQhKRZQB0KcpRl543ZdAoLkd3FYg" +
+						"HFuFDi3d7digDdqsUZ8FQ2LR%2BZBrPAC5H" +
+						"LgqnEdj6fwWg0hv3Jnogtwnh%2FX93ujCgf" +
+						"Sliv1rC6X0G9rSzW3N6ZynWA5GoK01AIPFt" +
+						"PT0%2Fl8rm6a7PZwOruHqptqblebrcClHJa" +
+						"JpEK0h8VwAoIBgkaDIF8%2BOLlC5hODvSyy" +
+						"8sfIq032SHQHgUAmFRIw4B58UGMgqjn0JAO" +
+						"OPfsi5tdRbz8filxvdErGJPSZ9dyN8%2BTu" +
+						"ZAsaJkV1EPBD4XA1wKG9XoNV1dXEXYgF1s1" +
+						"ZK9ArUu18lG0lNCqpuU%2BBs8jDAuR%2B%2" +
+						"FDzp4%2FRjb6Upk0JG6AAhiGmOeeWewK2BS" +
+						"suHAKgOqAwyaoXW1MSagH6gsHmbkPiz7TnW" +
+						"P1byzX3MSulu5SQWwpryiSuxyAi7gLqERVj" +
+						"QCjbCHnOp4YMcSDmb2dhe9dvvj%2Fw7mXp1" +
+						"NnZWZ8QUds5pCXIXBCLCvQEPSlcaQOSFYKe" +
+						"PutRV%2Bzci20L7IkXu2D2HGGOaYfmLdSQ5" +
+						"cA4kStkgrQu7awFEHiQdLOccie2Wdy25ux5" +
+						"kWkQ520dxaZ2sBa0zUTKgZQ8aJ1T8AAnMhM" +
+						"7Hg6tfCCmvCgIFf4bX83k%2FQH%2BDxm%2F" +
+						"BBgAAM3KLqFI2NUAAAAASUVORK5CYII%3D",
+	
+	dock_wiki_icon :	"data:image/png;base64,iVBORw0KGgoAA" +
+						"AANSUhEUgAAACAAAAAgCAYAAABzenr0AAAA" +
+						"GXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJ" +
+						"lYWR5ccllPAAAB2ZJREFUeNrsV1tMVFcU3f" +
+						"O684KB4f1UHqM8FFRIJRZFv6pGU%2BpX%2F" +
+						"fTXavyoJmixpl%2F%2B1FT90MSmRom2H02t" +
+						"JrU%2BikShikAZUIQyyIAIM4IMyGOGxzxv1" +
+						"z5Agwqpxjb98YTN3Jl77jlr77322ucSvR%2" +
+						"F%2F81C85XwDLC0HY8LjMfv8fuXcjejoaE9" +
+						"vb%2B8Tt9v9GF%2BH%2F20A%2BqysrI%2F8" +
+						"fn%2FKvn37Vq1bt64wKTEpVSOpNURKUmCVw" +
+						"cFBZ3Nzc8v5igrr84GB521tbb%2FhucF3Dh" +
+						"E825CSkvJZRUXFT0PDQ%2FLw8LD84sULeWR" +
+						"kRB4ZHZHHxsaEucfHZY%2FHDfPI7e3tth07" +
+						"dpQhUKXECN8wAttgH8y%2FqdPplsFb6cLFC" +
+						"x9rNJJUVXmLmh88EB7zv7mHFbguKCigLVu2" +
+						"iGu2Gzdv0PFvjj%2FA6JmYmGjDtMC8pf%2B" +
+						"A%2FTr3hRFqYV%2FJC4zP9%2B%2BXnU6njP" +
+						"zKBw4ckBcbZWVl8ujoqIiMyzUoHzp0aNG5v" +
+						"Nfc5iqYepZc5oGBAU9LS0v3hvXrc9jDqqoq" +
+						"jgItXbqUpqamCBuQ1Wqlzs5OysvLEwucO3e" +
+						"Orl69Srm5uZSZmUmBQICmp2fmNjU1kcvlIr" +
+						"vdPmKxWPS4Hi4pKTnT399fi0cfz3nPIPSwr" +
+						"jNnzlSVl5c36g2Ga8FQkIaGXGQ2mwnko6nJ" +
+						"KUpNTcXi02Rtsv4dy9jYWEpKSqJNmzaRLIc" +
+						"AIEgIOaWlpRM72wjANTU1Zp576tSpVoC6ic" +
+						"vf5oefQ%2BKHTcNGw8LC0ouKijKCwRDFxMQ" +
+						"yuzFDJoVSQWqVGhHRklKhJKRDLLB9%2B3ay" +
+						"2Wxis1BIFssplSrSqNVk0BvI43bT0aNHxdy" +
+						"zZ89O4cMGC80HEITxDRfMjU00q1atyg4E%2" +
+						"FFRcXMzhI9Q7abUSmSJMsEgCSJpJ5cwIDzc" +
+						"Jr0OhkKA1gwwLDyNjmBFgZorgxo2bhDRwtK" +
+						"MXAzCsUqmM27ZvizcajXTyxEliEAUFhVRbW" +
+						"0uSpKWoqChKSkyk%2BPh4AWAOQ2pqCtXV1V" +
+						"EIKeAKkDQSvNfT095ekR4eDQ31tHfv3lToS" +
+						"fbsni%2BlgBH5UO%2FxCP8y1D5NTk6Szxeg" +
+						"zVs206NHj8QkSZLIaAwjMF0AOHiwjJgru3b" +
+						"tIpQbyZwC%2FAUQCY6ao6%2BX9uzZQ6gg8W" +
+						"zBmjXpDofDNL%2FUXxIJr9erTUhMjOLcMYs" +
+						"5AgGfj5YsWYLF%2BigEXqhUSkK1iLz6cC8I" +
+						"0jHxOC2QYZEGP36HOIErKrEug8vIyCC9Xq9" +
+						"FGiT8ZFoQACucOSLSJGm1pEMIb9%2B%2BDU" +
+						"8ClJOTC6K149pHgWBAeM%2BVwZ8VFecpiN%" +
+						"2BKitaKVHFEuGQbG620du1asW5dfT2tXLmS" +
+						"lCoVO8MVp1sQAKdDq9PKBqOewuFRY2MjvPM" +
+						"BQBZBXWkCaam9VyvSEQAw1ojOTjuu%2FbRx" +
+						"4yZ6%2BPChAIZGJcJe%2Bkkp1dc3UGJCAns" +
+						"vAKvVauX8fV8CgDAys6b1Oj0ZDAbBAz94AG" +
+						"5ROur6SVcXdcEOlZWJHLPoIG1iU04XbzI%2" +
+						"BNk73QUhJ0oj7d%2B%2FWUHZ2NkpYJXTC4X" +
+						"BOzZb86wAgOl7PxITLYNCLnGqRispbleTH4" +
+						"mg81AseCNHA9zt3bosIsJ04eQJ88FPW8uUi" +
+						"Dd3d3VR%2BuFwAcDifEcgNHVEKnbBaGxnA2" +
+						"GIc6Ebdt%2Bh0BpECVsGODptY6NOdO6mnpw" +
+						"fEUgiP7fYuSkBo4%2BLiUBWjIiWbt27F%2F" +
+						"A4hXAFE7sqVK5QJ8mk0GhH%2BgefPe0BG72" +
+						"zlvQ4A5WW7fPnyfRYSIwBwFLxeMD0YRAUEh" +
+						"Q7s3r0bmwVRCf2o8WSRKl7cB674%2FcyXHD" +
+						"LgOY4S2jKtWb1aKCNXR0119R1UUMf8PVWvk" +
+						"HASYpRZUrIxT6fVRrG6jSGnTqeDLJkWsWhc" +
+						"fBxdu3aNIiIiKD09jabBeNaF7q5uysbm3Bt" +
+						"KNmxA7u%2BJSK1YsQIRUHMJ%2B0pLS79FL%" +
+						"2Fll0QjwAMmuHzv29Xc6vU5EIBpeM6PBTsr" +
+						"Pzxda4EJ%2FgFyDdAZC46LIyEiAdIpqCINQ" +
+						"cek2NzeJ%2BWC9UMxLP1%2B6aDKZ2ufLMC1" +
+						"yWnE9ffq0o7q6%2BkeWZL1B%2F9JN1gYzQE" +
+						"WZo0jSaojnsHEauH2zTrS2tghQPIeleXRkt" +
+						"P%2F06dP3wbHfX91MtdAxCSpoRyTCofkSQm" +
+						"rhns6aUFhYyK2VcEqiiMgIkVvmB5fiOFRwa" +
+						"GgIqYkUfSE%2FP49i4mI5bW4I0hdI08VXTk" +
+						"WLA%2BAwQUptAAHnjEocSCx8DuCFE9GMuK5" +
+						"Z2xXKmVNdaJakXkgwc8FiyQRnlrGOOIo%2F" +
+						"LD6MKrow2%2FDoTQHwCEDb%2F8TpRYOFxrl" +
+						"J4dSjWY5aZ26INovWy2XJn9wBI0wmofnJyU" +
+						"mhO9XVP3x55Mh5hP37xTb%2FJwA8gjjl2kC" +
+						"wceS%2BHV7bkRIFaj9WyfFn%2F3FQ4abDpQ" +
+						"vA9oaGhus4rJzF0a6yr6%2FvCnfZd30vmDu" +
+						"28Wd6Wlpa7rNnz2LAD01ycrIOYiW1tra6Ea" +
+						"kAGs0UVLAZ87jWvf%2FFm9Grb0lcIng5ofF" +
+						"ZfQ%2B9f9l82%2FGXAAMAH%2FQXLaHbfVMA" +
+						"AAAASUVORK5CYII%3D"
 	
 }
 /**
@@ -145,6 +404,7 @@ function optionlist() {
 	this.DEFAULT_VDSRCHR = "google";
 		// Embed defaults
 	this.DEFAULT_EMBD = true;
+	this.DEFAULT_VIDCTRL = true;
 	this.DEFAULT_HDVD = true;
 	this.DEFAULT_FSVD = true;
 	this.DEFAULT_APVD = true;
@@ -155,6 +415,7 @@ function optionlist() {
 		// Image defaults
 	this.DEFAULT_IMGS = false;
 	this.DEFAULT_IMGPLYR = true;
+	this.DEFAULT_IMGCTRL = true;
 	this.DEFAULT_IMGSIZE = "large";
 	this.DEFAULT_SLDSHW = true;
 	this.DEFAULT_SLDKEY = true;
@@ -170,6 +431,14 @@ function optionlist() {
 	this.DEFAULT_DELAY = 400;
 		// Classic Style defaults
 	this.DEFAULT_CLCVRTHRZ = 'horizontal';
+	this.DEFAULT_CLCTOPRHT = 'videos';
+	this.DEFAULT_CLCBORDER = false;
+	this.DEFAULT_CLCBDRCLR = "193,211,232";
+		// Dock Style defaults
+	this.DEFAULT_DOCKNAVSTL = 'icon';
+	this.DEFAULT_DOCKBORDER = true;
+	this.DEFAULT_DOCKBDRCLR = "193,211,232";
+	this.DEFAULT_DOCKBGCLR = "240,247,249";
 		// Color Defaults
 			// Background Colors
 	this.DEFAULT_GENBGCLR = '255,255,255';
@@ -286,6 +555,7 @@ function optionlist() {
 	this.vdsrchr = GM_getValue("vdsrchr", this.DEFAULT_VDSRCHR);
 		// Embed vars
 	this.embd = GM_getValue("embd", this.DEFAULT_EMBD);
+	this.vidCtrl = GM_getValue("vidCtrl", this.DEFAULT_VIDCTRL);
 	this.hdvd = GM_getValue("hdvd", this.DEFAULT_HDVD);
 	this.fsvd = GM_getValue("fsvd", this.DEFAULT_FSVD);
 	this.apvd = GM_getValue("apvd", this.DEFAULT_APVD);
@@ -296,6 +566,7 @@ function optionlist() {
 		// Image vars
 	this.imgs = GM_getValue("imgs", this.DEFAULT_IMGS);
 	this.imgPlyr = GM_getValue("imgPlyr", this.DEFAULT_IMGPLYR);
+	this.imgCtrl = GM_getValue("imgCtrl", this.DEFAULT_IMGCTRL);
 	this.imgSize = GM_getValue("imgSize", this.DEFAULT_IMGSIZE);
 	this.sldshw = GM_getValue("sldshw", this.DEFAULT_SLDSHW);
 	this.sldkey = GM_getValue("sldkey", this.DEFAULT_SLDKEY);
@@ -331,6 +602,14 @@ function optionlist() {
 	
 		// Classic Style vars
 	this.clcvrthrz = GM_getValue("clcvrthrz", this.DEFAULT_CLCVRTHRZ);
+	this.clctoprht = GM_getValue("clctoprht", this.DEFAULT_CLCTOPRHT);
+	this.clcborder = GM_getValue("clcborder", this.DEFAULT_CLCBORDER);
+	this.clcbdrclr = GM_getValue("clcbdrclr", this.DEFAULT_CLCBDRCLR);
+		// Dock Style vars
+	this.docknavstl = GM_getValue("docknavstl", this.DEFAULT_DOCKNAVSTL);
+	this.dockborder = GM_getValue("dockborder", this.DEFAULT_DOCKBORDER);
+	this.dockbdrclr = GM_getValue("dockbdrclr", this.DEFAULT_DOCKBDRCLR);
+	this.dockbgclr = GM_getValue("dockbgclr", this.DEFAULT_DOCKBGCLR);
 	
 		// Search Engines
 	this.searchengines = eval(GM_getValue("searchengines", this.DEFAULT_SEARCHENGINES));
@@ -641,9 +920,12 @@ function Media_Embed () {
 		this.clearEmbed(this.defaultMessage);
 		
 		var hidePlayer = $create("div", {
-			id : "hidePly",
-			textContent : "X"
+			id : "hidePly"
 		});
+		hidePlayer.appendChild($create("img",{
+			src : image_store.media_close,
+			alt : "Close"
+		}));
 		var SR = this;
 		hidePlayer.addEventListener("click", function (event) {
 			SR.clearEmbed();
@@ -653,14 +935,14 @@ function Media_Embed () {
 		parentNode.appendChild(this.player);
 	};
 	
-	this.addImageEmbed = function (img, controls) {
+	this.addImageEmbed = function (img) {
 		this.imgRes = img;
 		var title = img.title;
 		var url = img.link;
 		
 		this.clearEmbed(title);
 		
-		if(controls) {
+		if(options.imgCtrl) {
 			this.drawImageControls();
 		}
 		
@@ -678,11 +960,11 @@ function Media_Embed () {
 		this.player.className = "rBox imgShowing";
 	};
 	
-	this.addVideoEmbed = function (vid, controls, embed) {
+	this.addVideoEmbed = function (vid, embed) {
 		this.vidRes = vid;
 		this.clearEmbed(vid.name);
 		
-		if(controls) {
+		if(options.vidCtrl) {
 			this.drawVideoControls();
 		}
 		
@@ -730,8 +1012,13 @@ function Media_Embed () {
 		});
 		icn.draw(this.controlsArea);
 		
+		icn = new Control_Icon(image_store.image_new_tab, "Open in New Tab", function () {
+			GM_openInTab(SR.imgRes.link);
+		});
+		icn.draw(this.controlsArea);
+		
 		icn = new Control_Icon(image_store.image_slideshow, "Play Slideshow from here", function () {
-			imgSearch.startSlides(SR.imgRes.locNum)
+			imgSearch.startSlides(SR.imgRes.locNum);
 		});
 		icn.draw(this.controlsArea);
 		
@@ -775,6 +1062,9 @@ function stylesheet_store () {
 	
 
 	this.center_stylesheet = " \
+		html { \
+			background-color: rgb(" + options.genbgclr + "); \
+		} \
 		body { \
 			width: 760px; \
 			margin: 0px auto !important; \
@@ -945,6 +1235,9 @@ function stylesheet_store () {
 		} /* "; /* End Stylesheet */
 
 	this.classic_stylesheet = " \
+		#mBox, #pBox, #videoList, #imageList, #controlArea, #embedArea { \
+			border: 1px none rgb(" + options.clcbdrclr + "); \
+		} \
 		#center_col { \
 			margin-right: 0px; \
 		} \
@@ -967,17 +1260,16 @@ function stylesheet_store () {
 			width: 400px; \
 			margin-right: " + ( options.sideads ? 0 : 250) + "px; \
 			float: " + (options.clcvrthrz == 'horizontal' ? '' : 'right') + "; \
+			border-style: " + (options.clcborder ? 'solid' : 'none') + "; \
 		} \
 		#pBox { \
 			vertical-align: middle; \
 			overflow: hidden; \
 			width: 400px; \
+			border-bottom-style: " + (options.clcborder ? 'solid' : 'none') + "; \
 		} \
 		.playing, .imgShowing { \
 			position: relative; \
-		} \
-		.playing .embedArea { \
-			height: 400px; \
 		} \
 		.rBox { \
 			float: " + (options.clcvrthrz != 'horizontal' ? 'none' : 'right') + "; \
@@ -1005,10 +1297,22 @@ function stylesheet_store () {
 			border-style: none; \
 		} \
 		#videoList { \
-			width: " + (options.clcvrthrz == 'horizontal' ? '180px' : 'auto') + "; \
+			width: " + (options.clcvrthrz == 'horizontal' && options.imgs ? '180px' : 'auto') + "; \
+			border-right-style: " + (options.clcborder && options.clctoprht != "videos" && options.clcvrthrz == "horizontal" ? "solid" : "none") + "; \
+			border-left-style: " + (options.clcborder && options.clctoprht == "videos" && options.clcvrthrz == "horizontal" ? "solid" : "none") + "; \
+			border-top-style: " + (options.clcborder && options.clctoprht != "videos" && options.clcvrthrz == "vertical" ? "solid" : "none") + "; \
+			border-bottom-style: " + (options.clcborder && options.clctoprht == "videos" && options.clcvrthrz == "vertical" ? "solid" : "none") + "; \
+			margin-right: " + (options.clcborder && options.clctoprht != "videos" && options.clcvrthrz == "horizontal" ? "-1px" : "0px") + "; \
+			margin-left: " + (options.clcborder && options.clctoprht == "videos" && options.clcvrthrz == "horizontal" ? "-1px" : "0px") + "; \
+			margin-top: " + (options.clcborder && options.clctoprht != "videos" && options.clcvrthrz == "vertical" ? "-1px" : "0px") + "; \
+			margin-bottom: " + (options.clcborder && options.clctoprht == "videos" && options.clcvrthrz == "vertical" ? "-1px" : "0px") + "; \
 		} \
 		#imageList { \
-			width: " + (options.clcvrthrz == 'horizontal' ? '220px' : 'auto') + "; \
+			width: " + (options.clcvrthrz == 'horizontal' && options.vids ? '219px' : 'auto') + "; \
+			border-right-style: " + (options.clcborder && options.clctoprht != "images" && options.clcvrthrz == "horizontal" ? "solid" : "none") + "; \
+			border-left-style: " + (options.clcborder && options.clctoprht == "images" && options.clcvrthrz == "horizontal" ? "solid" : "none") + "; \
+			border-top-style: " + (options.clcborder && options.clctoprht != "images" && options.clcvrthrz == "vertical" && options.vids ? "solid" : "none") + "; \
+			border-bottom-style: " + (options.clcborder && options.clctoprht == "images" && options.clcvrthrz == "vertical" ? "solid" : "none") + "; \
 		} \
 		#ssb { \
 			position: relative; \
@@ -1069,6 +1373,19 @@ function stylesheet_store () {
 		.playing #embedArea { \
 			height: 340px; \
 		} \
+		.playing #embedArea, .imgShowing #embedArea { \
+			border-top-style: " + ((options.imgCtrl || options.vidCtrl) ? 'solid' : 'none') + "; \
+		} \
+		.playing #controlArea, .imgShowing #controlArea { \
+			border-top-style: " + (options.clcborder && (options.imgCtrl || options.vidCtrl) ? 'solid' : 'none') + "; \
+			height: 16px; \
+		} \
+		.playing #controlArea { \
+			display: " + (options.vidCtrl ? 'block' : 'none') + "; \
+		} \
+		.imgShowing #controlArea { \
+			display: " + (options.imgCtrl ? 'block' : 'none') + "; \
+		} \
 		.vid_thumb { \
 			width: " + (options.clcvrthrz == 'horizontal' ? '140px' : '70px') + "; \
 			height: " + (options.clcvrthrz == 'horizontal' ? '100px' : '50px') + "; \
@@ -1080,7 +1397,7 @@ function stylesheet_store () {
 			font-size: 11pt; \
 			border: 1px solid #000000; \
 			margin: 9px; \
-			display: " + (options.clcvrthrz == 'horizontal' ? 'block' : 'inline-block') + "; \
+			display: " + (options.clcvrthrz == 'horizontal' && options.imgs ? 'block' : 'inline-block') + "; \
 			width: " + (options.clcvrthrz == 'horizontal' ? '160px' : '90px') + "; \
 			height: " + (options.clcvrthrz == 'horizontal' ? 'auto' : '105px') + "; \
 			overflow: " + (options.clcvrthrz == 'horizontal' ? '' : 'hidden') + "; \
@@ -1163,24 +1480,30 @@ function stylesheet_store () {
 			margin: 0px auto !important; \
 			padding: 19px 0px; \
 		} \
+		#center_col { \
+			padding-left: 40px; \
+			min-height: 300px; \
+		} \
 		#dock { \
-			position: fixed; \
-			height: 40px; \
-			width: 260px; \
-			border: 1px solid #000000; \
-			border-bottom-style: none; \
-			bottom: 0px; \
-			right: 50%; \
-			margin-right: -130px; \
+			position: absolute; \
+			width: 44px; \
+			border-width: 1px; \
+			border-color: rgb(" + options.dockbdrclr + "); \
+			border-style: " + (options.dockborder ? "solid" : "none") + "; \
+			border-left-style: none; \
+			top: 0px; \
+			left: 160px; \
 			text-align: center; \
-			background-color: #F0F7F9; \
+			background-color: rgb(" + options.dockbgclr + "); \
 		}  \
 		.dockLink { \
-			padding: 1em 1.25em; \
-			display: inline; \
+			padding: .4em 0px; \
+			display: block; \
 			cursor: pointer; \
-			float: left; \
 		}  \
+		.dockLink a { \
+			text-decoration: none; \
+		} \
 		.topHolder { \
 			height: 68px; \
 			overflow: auto; \
@@ -1276,7 +1599,7 @@ function stylesheet_store () {
 
 	this.gen_stylesheet = " \
 		html, body { \
-			background-color: rgb(" + options.genbgclr + "); \
+			background-color: rgb(" + options.resltclr + "); \
 			color: rgb(" + options.restxtclr + "); \
 			margin: 0px; \
 		} \
@@ -1399,16 +1722,9 @@ function stylesheet_store () {
 			background-color: #F0F7F9 !important; \
 		} \
 		#hidePly { \
-			background-color: #FFFFFF; \
-			color: #FF0000; \
-			border-bottom: 1px solid #000000; \
-			border-left: 1px solid #000000; \
-			font-size: 50%; \
 			position: absolute; \
 			top: 0px; \
 			right: 0px; \
-			width: 1.1em; \
-			height: 1.1em; \
 			cursor: pointer; \
 		} \
 		#confTabs { \
@@ -1525,7 +1841,7 @@ function stylesheet_store () {
 			max-width: 90px; \
 			max-height: 90px; \
 			display: inline-block; \
-			margin: 5px; \
+			margin: 4px; \
 		} \
 		.imgSizesmall { \
 			max-width: 50px; \
@@ -1823,6 +2139,12 @@ function allStyles () {
 		dockShow = lists;
 	}
 	
+	GM_addStyle(ssStore.gen_stylesheet);
+	
+	GM_addStyle(ssStore.multisearch_stylesheet);
+	
+	GM_addStyle(ssStore.clrpicker_stylesheet);
+	
 	if (options.styl == "media" && (options.imgs || options.vids)) {
 		GM_addStyle(ssStore.media_stylesheet);
 		$("resOL").parentNode.className = "resBox";
@@ -1840,9 +2162,19 @@ function allStyles () {
 		});
 		var alink = $create("a", {
 			href : "#ssb",
-			id : "searchDock",
-			textContent : "Web"
+			id : "searchDock"
 		});
+		
+		if (options.docknavstl == 'icon' || options.docknavstl == 'both') {
+			alink.appendChild($create('img', {
+				src : image_store.dock_web_icon,
+				alt : 'Web'
+			}));
+		}
+		if(options.docknavstl == 'text' || options.docknavstl == 'both') {
+			alink.innerHTML += "Web";
+		}
+		
 		icon.appendChild(alink);
 		icon.addEventListener("click",function (e) {
 			if ($('resOL').className == "removed") {
@@ -1863,9 +2195,19 @@ function allStyles () {
 			alink = $create("a", {
 				href : "#ssb",
 				id : "wikiDock",
-				textContent : "Wiki",
 				className : "removed"
 			});
+			
+			if (options.docknavstl == 'icon' || options.docknavstl == 'both') {
+				alink.appendChild($create('img', {
+					src : image_store.dock_wiki_icon,
+					alt : 'Wikipedia'
+				}));
+			}
+			if(options.docknavstl == 'text' || options.docknavstl == 'both') {
+				alink.innerHTML += "Wiki";
+			}
+			
 			icon.appendChild(alink);
 			icon.addEventListener("click",function (e) {
 				if ($('wikiDiv') && $('wikiDiv').className == "removed") {
@@ -1887,9 +2229,19 @@ function allStyles () {
 			alink = $create("a", {
 				href : "#ssb",
 				id : "vidDock",
-				textContent : "Video",
 				className : "removed"
 			});
+			
+			if (options.docknavstl == 'icon' || options.docknavstl == 'both') {
+				alink.appendChild($create('img', {
+					src : image_store.dock_video_icon,
+					alt : 'Videos'
+				}));
+			}
+			if(options.docknavstl == 'text' || options.docknavstl == 'both') {
+				alink.innerHTML += "Video";
+			}
+			
 			icon.appendChild(alink);
 			icon.addEventListener("click",function (e) {
 				if ($('videoList') && $('videoList').className == "removed") {
@@ -1911,9 +2263,19 @@ function allStyles () {
 			alink = $create("a", {
 				href : "#ssb",
 				id : "imgDock",
-				textContent : "Image",
 				className : "removed"
 			});
+			
+			if (options.docknavstl == 'icon' || options.docknavstl == 'both') {
+				alink.appendChild($create('img', {
+					src : image_store.dock_image_icon,
+					alt : 'Images'
+				}));
+			}
+			if(options.docknavstl == 'text' || options.docknavstl == 'both') {
+				alink.innerHTML += "Image";
+			}
+			
 			icon.appendChild(alink);
 			icon.addEventListener("click",function (e) {
 				if ($('imageList') && $('imageList').className == "removed") {
@@ -1928,18 +2290,12 @@ function allStyles () {
 			dock.appendChild(icon);
 		}
 		
-		document.body.appendChild(dock);
+		$('center_col').parentNode.insertBefore(dock, $('center_col'));
 	} else if (options.styl == "center") {
 		GM_addStyle(ssStore.center_stylesheet);
 	} else {
 		GM_addStyle(ssStore.classic_stylesheet);
 	}
-	
-	GM_addStyle(ssStore.gen_stylesheet);
-	
-	GM_addStyle(ssStore.multisearch_stylesheet);
-	
-	GM_addStyle(ssStore.clrpicker_stylesheet);
 }
 // Creates a basic right floating box of given id
 function rightBox(idName) {
@@ -1966,30 +2322,33 @@ function makePlayer() {
 function logoToTrans() {
 	var currLogo = $('logo').childNodes[1];
 	
-	try {
-		var canvas = $create('canvas', {
-			id : 'transLogo'
-		});
-		var ctx = canvas.getContext('2d');
-		ctx.drawImage(currLogo, 0, 41,137,49,0,0,137,49);
-		
-		var imgd = ctx.getImageData(0, 0, 137, 49);
-		var pix = imgd.data
-		for (var i = 0, n = pix.length; i < n; i += 4) {
-			pix[i+3] = 255 - Math.min(pix[i],Math.min(pix[i+1],pix[i+2]));
+	if(currLogo) {
+		try {
+			var canvas = $create('canvas', {
+				id : 'transLogo'
+			});
+			var ctx = canvas.getContext('2d');
+			ctx.drawImage(currLogo, 0, 41,137,49,0,0,137,49);
+			
+			var imgd = ctx.getImageData(0, 0, 137, 49);
+			var pix = imgd.data;
+			for (var i = 0, n = pix.length; i < n; i += 4) {
+				pix[i+3] = 255 - Math.min(pix[i],Math.min(pix[i+1],pix[i+2]));
+			}
+			ctx.putImageData(imgd, 0, 0);
+			
+			removeAllChildren($('logo'));
+			$('logo').appendChild(canvas);
+		} catch (_ex) {
+			$('logo').appendChild(currLogo);
 		}
-		ctx.putImageData(imgd, 0, 0);
-		
-		removeAllChildren($('logo'));
-		$('logo').appendChild(canvas);
-	} catch (_ex) {
-		$('logo').appendChild(currLogo);
 	}
 }
 // Change the icon sheet from Google to be transparent
 function iconSheetTrans() {
 	var img = new Image();
 	img.src = "/images/srpr/nav_logo13.png";
+	
 	try {
 		var canvas = $create('canvas', {
 			id : 'transLogo',
@@ -2023,15 +2382,14 @@ function scriptPage() {
 		verNotice();
 	} else if (Date.now() - options.updateCheck >= 86400000 || options.updateCheck === 0) {
 		GM_setValue("updtTime", Date.now().toString());
-		get("http://userscripts.org/scripts/show/33449", chckAgainst, unable);
+		get("http://userscripts.org/scripts/source/33449.meta.js", chckAgainst, unable);
 	}
 }
 //Dummy function for errors
 function unable(response) {}
 // Checks the version number on the script homepage against this version number and informs if a newer version is available
 function chckAgainst(response) {
-	var spage = stringtohtml(response.responseText);
-	var newest = parseFloat(spage.getElementsByTagName('code')[0].textContent);
+	var newest = parseFloat(/\/\/ @version.+/.exec(response.responseText)[0].replace(/\/\/ @version\s+/, ''));
 	// Creates an install link if a newer version is available
 	if (newest > version) {
 		GM_setValue("newver", "" + newest);
@@ -2054,8 +2412,6 @@ function verNotice() {
 		textContent : "Update Google Bump"
 	});
 	divHolder.appendChild(uplink);
-	
-	// divHolder.appendChild($create("textNode", " | "));
 	
 	uplink = $create("a", {
 		href : "http://userscripts.org/scripts/show/33449#full_description",
@@ -2989,7 +3345,6 @@ function style_dialog(popup) {
 		var bgc_set_window = new config_window(bgcTab, 'BgColrs');
 			// Colors
 		var bgc_section = new config_section("Background Colors");
-		bgc_section.sectionOptions.push(new config_colorBox('Body (Mostly for Center Style)', 'genbgclr', options.DEFAULT_GENBGCLR));
 		bgc_section.sectionOptions.push(new config_colorBox('Main Area', 'resltclr', options.DEFAULT_RESLTCLR));
 		bgc_section.sectionOptions.push(new config_colorBox('Google Bar (Top)', 'glbarclr', options.DEFAULT_GLBARCLR));
 		bgc_section.sectionOptions.push(new config_colorBox('Added Items', 'addedclr', options.DEFAULT_ADDEDCLR));
@@ -3013,11 +3368,18 @@ function style_dialog(popup) {
 		// Classic Settings
 		var classic_set_window = new config_window(clcTab, "ClscStyl");
 			// General Settings
-		var classic_section = new config_section();
+		var classic_section = new config_section("General");
 		classic_section.sectionOptions.push(new config_checkBox("Hide Sidebar Ads", "sideads", options.DEFAULT_SIDEADS));
-		classic_section.sectionOptions.push(new config_selectionBox("Display Media Content", "clcvrthrz", ["Horizontally", "Vertically"], ["horizontal", "vertical"], options.DEFAULT_CLCVRTHRZ));
 		//classic_section.sectionOptions.push(new config_desc_section('Coming Soon', 'This section is still under construction. Please excuse our mess.'));
 		classic_set_window.sections.push(classic_section);
+			// Media Content Settings
+		var classic_media_section = new config_section("Media Content");
+		classic_media_section.sectionOptions.push(new config_selectionBox("Orientation", "clcvrthrz", ["Horizontally", "Vertically"], ["horizontal", "vertical"], options.DEFAULT_CLCVRTHRZ));
+		classic_media_section.sectionOptions.push(new config_selectionBox("Right/Top", "clctoprht", ["Images", "Videos"], ["images", "videos"], options.DEFAULT_CLCTOPRHT));
+		classic_media_section.sectionOptions.push(new config_checkBox("Border", "clcborder", options.DEFAULT_CLCBORDER));
+		classic_media_section.sectionOptions.push(new config_colorBox('Border Color', 'clcbdrclr', options.DEFAULT_CLCBDRCLR));
+		classic_set_window.sections.push(classic_media_section);
+		
 		
 		// Media Settings
 		var media_set_window = new config_window(mdaTab, "MdaStyl");
@@ -3028,9 +3390,12 @@ function style_dialog(popup) {
 		
 		// Dock Settings
 		var dock_set_window = new config_window(dckTab, "DockStyl");
-			// General Settings
-		var dock_section = new config_section();
-		dock_section.sectionOptions.push(new config_desc_section('Coming Soon', 'This section is still under construction. Please excuse our mess.'));
+			// Navigation Settings
+		var dock_section = new config_section("Navigation");
+		dock_section.sectionOptions.push(new config_selectionBox("Display", "docknavstl", ["Text", "Icons", "Both"], ["text", "icon", "both"], options.DEFAULT_DOCKNAVSTL));
+		dock_section.sectionOptions.push(new config_checkBox("Border", "dockborder", options.DEFAULT_DOCKBORDER));
+		dock_section.sectionOptions.push(new config_colorBox('Border Color', 'dockbdrclr', options.DEFAULT_DOCKBDRCLR));
+		dock_section.sectionOptions.push(new config_colorBox('Background Color', 'dockbgclr', options.DEFAULT_DOCKBGCLR));
 		dock_set_window.sections.push(dock_section);
 		
 		// Center Settings
@@ -3067,7 +3432,7 @@ function style_dialog(popup) {
 		
 		// Save and default buttons
 		var SR = this;
-		var savebtn = new button("Save", function () { SR.popup.undraw(); location.reload(); });
+		var savebtn = new button("Close", function () { SR.popup.undraw(); location.reload(); });
 		var defbtn = new button("Defaults", function () { SR.setDefaults(); });
 		savebtn.draw(btnwrap);
 		defbtn.draw(btnwrap);
@@ -3197,6 +3562,7 @@ function config_dialog(popup) {
 		var img_section = new config_section("Sidebar Options");
 		img_section.sectionOptions.push(new config_checkBox("Search For Images", "imgs", options.DEFAULT_IMGS));
 		img_section.sectionOptions.push(new config_checkBox("Show in player", "imgPlyr", options.DEFAULT_IMGPLYR));
+		img_section.sectionOptions.push(new config_checkBox("Show Control Bar", "imgCtrl", options.DEFAULT_IMGCTRL));
 		img_section.sectionOptions.push(new config_selectionBox("Number of pages to load", "imgPages", ["1 Pages","2 Pages","3 Pages","4 Pages","5 Pages","7 Pages","10 Pages"], [1, 2, 3, 4, 5, 7, 10], options.DEFAULT_IMGPGS));
 		img_section.sectionOptions.push(new config_selectionBox("Image display size", "imgSize", ["Titles Only","Small","Medium","Large", "Details"], ["title", "small", "medium", "large", "details"], options.DEFAULT_IMGSIZE));
 		img_set_window.sections.push(img_section);
@@ -3219,6 +3585,7 @@ function config_dialog(popup) {
 		vid_set_window.sections.push(vid_section);
 			// Embed Settings
 		var emd_section = new config_section("Embed Options");
+		emd_section.sectionOptions.push(new config_checkBox("Show Extra Controls", "vidCtrl", options.DEFAULT_VIDCTRL));
 		emd_section.sectionOptions.push(new config_checkBox("Embed videos (when available)", "embd", options.DEFAULT_EMBD));
 		emd_section.sectionOptions.push(new config_checkBox("Play in HD (when available)", "hdvd", options.DEFAULT_HDVD));
 		emd_section.sectionOptions.push(new config_checkBox("Enable Fullscreen (when available)", "fsvd", options.DEFAULT_FSVD));
@@ -3292,7 +3659,7 @@ function config_dialog(popup) {
 		
 		// Save and default buttons
 		var SR = this;
-		var savebtn = new button("Save", function () { SR.popup.undraw(); location.reload(); });
+		var savebtn = new button("Close", function () { SR.popup.undraw(); location.reload(); });
 		var defbtn = new button("Defaults", function () { SR.setDefaults(); });
 		savebtn.draw(btnwrap);
 		defbtn.draw(btnwrap);
@@ -4174,6 +4541,17 @@ function didyoumean() {
 		p2.className = "removed";
 		p1.id = "dymTxt";
 		thebar.insertBefore(p1, thebar.childNodes[0]);
+		var anon = function () {
+				var thebar = $('leftnav');
+				p2.className = "removed";
+				p1.id = "dymTxt";
+				thebar.insertBefore(p1, thebar.childNodes[0]);
+			};
+		if($('leftnav')) {
+			anon();
+		} else {
+			var inter = setInterval(function () { if($('leftnav')) { anon(); clearInterval(inter); } },options.delay);
+		}
 	}
 }
 // Moves top content to a new position
@@ -4424,7 +4802,7 @@ function indiv_video_result(src, link, domain, name) {
 		}
 		object.appendChild(embed);
 		
-		embedder.addVideoEmbed(this, true, object)
+		embedder.addVideoEmbed(this, object)
 	};
 	
 	// Handles logic for youtube embeds including extra options
@@ -4530,7 +4908,7 @@ function showvids(response) {
 			}
 		}
 		
-		if ($("imageList")) {
+		if ($("imageList") && (options.clctoprht == 'videos' && options.styl == 'classic')) {
 			$("mBox").insertBefore(box, $("imageList"));
 		} else {
 			$("mBox").appendChild(box);
@@ -4558,7 +4936,7 @@ function youtubeSearched(response) {
 			new_vid.draw(box);
 		}
 		
-		if ($("imageList")) {
+		if ($("imageList") && (options.clctoprht == 'videos' && options.styl == 'classic')) {
 			$("mBox").insertBefore(box, $("imageList"));
 		} else {
 			$("mBox").appendChild(box);
@@ -4672,7 +5050,7 @@ function indiv_img_result(src, link, title, sizeInfo, type, num) {
 				event.preventDefault();
 			}
 			
-			embedder.addImageEmbed(this, true);
+			embedder.addImageEmbed(this);
 		}
 	};
 	

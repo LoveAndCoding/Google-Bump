@@ -1,5 +1,5 @@
 		html, body { \
-			background-color: rgb(" + options.genbgclr + "); \
+			background-color: rgb(" + options.resltclr + "); \
 			color: rgb(" + options.restxtclr + "); \
 			margin: 0px; \
 		} \
@@ -122,16 +122,9 @@
 			background-color: #F0F7F9 !important; \
 		} \
 		#hidePly { \
-			background-color: #FFFFFF; \
-			color: #FF0000; \
-			border-bottom: 1px solid #000000; \
-			border-left: 1px solid #000000; \
-			font-size: 50%; \
 			position: absolute; \
 			top: 0px; \
 			right: 0px; \
-			width: 1.1em; \
-			height: 1.1em; \
 			cursor: pointer; \
 		} \
 		#confTabs { \
@@ -248,7 +241,7 @@
 			max-width: 90px; \
 			max-height: 90px; \
 			display: inline-block; \
-			margin: 5px; \
+			margin: 4px; \
 		} \
 		.imgSizesmall { \
 			max-width: 50px; \

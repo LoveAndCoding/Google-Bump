@@ -22,6 +22,12 @@ function allStyles () {
 		dockShow = lists;
 	}
 	
+	GM_addStyle(ssStore.gen_stylesheet);
+	
+	GM_addStyle(ssStore.multisearch_stylesheet);
+	
+	GM_addStyle(ssStore.clrpicker_stylesheet);
+	
 	if (options.styl == "media" && (options.imgs || options.vids)) {
 		GM_addStyle(ssStore.media_stylesheet);
 		$("resOL").parentNode.className = "resBox";
@@ -39,9 +45,19 @@ function allStyles () {
 		});
 		var alink = $create("a", {
 			href : "#ssb",
-			id : "searchDock",
-			textContent : "Web"
+			id : "searchDock"
 		});
+		
+		if (options.docknavstl == 'icon' || options.docknavstl == 'both') {
+			alink.appendChild($create('img', {
+				src : image_store.dock_web_icon,
+				alt : 'Web'
+			}));
+		}
+		if(options.docknavstl == 'text' || options.docknavstl == 'both') {
+			alink.innerHTML += "Web";
+		}
+		
 		icon.appendChild(alink);
 		icon.addEventListener("click",function (e) {
 			if ($('resOL').className == "removed") {
@@ -62,9 +78,19 @@ function allStyles () {
 			alink = $create("a", {
 				href : "#ssb",
 				id : "wikiDock",
-				textContent : "Wiki",
 				className : "removed"
 			});
+			
+			if (options.docknavstl == 'icon' || options.docknavstl == 'both') {
+				alink.appendChild($create('img', {
+					src : image_store.dock_wiki_icon,
+					alt : 'Wikipedia'
+				}));
+			}
+			if(options.docknavstl == 'text' || options.docknavstl == 'both') {
+				alink.innerHTML += "Wiki";
+			}
+			
 			icon.appendChild(alink);
 			icon.addEventListener("click",function (e) {
 				if ($('wikiDiv') && $('wikiDiv').className == "removed") {
@@ -86,9 +112,19 @@ function allStyles () {
 			alink = $create("a", {
 				href : "#ssb",
 				id : "vidDock",
-				textContent : "Video",
 				className : "removed"
 			});
+			
+			if (options.docknavstl == 'icon' || options.docknavstl == 'both') {
+				alink.appendChild($create('img', {
+					src : image_store.dock_video_icon,
+					alt : 'Videos'
+				}));
+			}
+			if(options.docknavstl == 'text' || options.docknavstl == 'both') {
+				alink.innerHTML += "Video";
+			}
+			
 			icon.appendChild(alink);
 			icon.addEventListener("click",function (e) {
 				if ($('videoList') && $('videoList').className == "removed") {
@@ -110,9 +146,19 @@ function allStyles () {
 			alink = $create("a", {
 				href : "#ssb",
 				id : "imgDock",
-				textContent : "Image",
 				className : "removed"
 			});
+			
+			if (options.docknavstl == 'icon' || options.docknavstl == 'both') {
+				alink.appendChild($create('img', {
+					src : image_store.dock_image_icon,
+					alt : 'Images'
+				}));
+			}
+			if(options.docknavstl == 'text' || options.docknavstl == 'both') {
+				alink.innerHTML += "Image";
+			}
+			
 			icon.appendChild(alink);
 			icon.addEventListener("click",function (e) {
 				if ($('imageList') && $('imageList').className == "removed") {
@@ -127,18 +173,12 @@ function allStyles () {
 			dock.appendChild(icon);
 		}
 		
-		document.body.appendChild(dock);
+		$('center_col').parentNode.insertBefore(dock, $('center_col'));
 	} else if (options.styl == "center") {
 		GM_addStyle(ssStore.center_stylesheet);
 	} else {
 		GM_addStyle(ssStore.classic_stylesheet);
 	}
-	
-	GM_addStyle(ssStore.gen_stylesheet);
-	
-	GM_addStyle(ssStore.multisearch_stylesheet);
-	
-	GM_addStyle(ssStore.clrpicker_stylesheet);
 }
 // Creates a basic right floating box of given id
 function rightBox(idName) {
@@ -165,30 +205,33 @@ function makePlayer() {
 function logoToTrans() {
 	var currLogo = $('logo').childNodes[1];
 	
-	try {
-		var canvas = $create('canvas', {
-			id : 'transLogo'
-		});
-		var ctx = canvas.getContext('2d');
-		ctx.drawImage(currLogo, 0, 41,137,49,0,0,137,49);
-		
-		var imgd = ctx.getImageData(0, 0, 137, 49);
-		var pix = imgd.data
-		for (var i = 0, n = pix.length; i < n; i += 4) {
-			pix[i+3] = 255 - Math.min(pix[i],Math.min(pix[i+1],pix[i+2]));
+	if(currLogo) {
+		try {
+			var canvas = $create('canvas', {
+				id : 'transLogo'
+			});
+			var ctx = canvas.getContext('2d');
+			ctx.drawImage(currLogo, 0, 41,137,49,0,0,137,49);
+			
+			var imgd = ctx.getImageData(0, 0, 137, 49);
+			var pix = imgd.data;
+			for (var i = 0, n = pix.length; i < n; i += 4) {
+				pix[i+3] = 255 - Math.min(pix[i],Math.min(pix[i+1],pix[i+2]));
+			}
+			ctx.putImageData(imgd, 0, 0);
+			
+			removeAllChildren($('logo'));
+			$('logo').appendChild(canvas);
+		} catch (_ex) {
+			$('logo').appendChild(currLogo);
 		}
-		ctx.putImageData(imgd, 0, 0);
-		
-		removeAllChildren($('logo'));
-		$('logo').appendChild(canvas);
-	} catch (_ex) {
-		$('logo').appendChild(currLogo);
 	}
 }
 // Change the icon sheet from Google to be transparent
 function iconSheetTrans() {
 	var img = new Image();
 	img.src = "/images/srpr/nav_logo13.png";
+	
 	try {
 		var canvas = $create('canvas', {
 			id : 'transLogo',

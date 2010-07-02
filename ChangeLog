@@ -1,3 +1,16 @@
+Version 2.04.20100702 - Style Release - 07/02/10
+
+    * Feature: Toggle Video and Image embed controls
+    * Bug: No longer attempts to make logo transparent after first time
+    * Bug: Failure in moving "Did you mean" will no longer cause script to stop
+    * Bug: Empty YouTube results no throws shows error
+    * Improved: More options in Classic Style customization
+    * Improved: More options in Dock Style customization
+    * Improved: Dock Style redone for newer layout
+    * Improved: Center Style video results cleaned up
+    * Improved: New Icons
+    * Improved: Checking for update uses meta.js file now
+
 Version 2.03.20100623 - Feature Release - 06/23/10
 
     * Feature: Able to choose YouTube to search for videos

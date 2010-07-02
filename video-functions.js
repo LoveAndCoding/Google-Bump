@@ -53,7 +53,7 @@ function showvids(response) {
 			}
 		}
 		
-		if ($("imageList")) {
+		if ($("imageList") && (options.clctoprht == 'videos' && options.styl == 'classic')) {
 			$("mBox").insertBefore(box, $("imageList"));
 		} else {
 			$("mBox").appendChild(box);
@@ -81,7 +81,7 @@ function youtubeSearched(response) {
 			new_vid.draw(box);
 		}
 		
-		if ($("imageList")) {
+		if ($("imageList") && (options.clctoprht == 'videos' && options.styl == 'classic')) {
 			$("mBox").insertBefore(box, $("imageList"));
 		} else {
 			$("mBox").appendChild(box);
