@@ -52,6 +52,12 @@
 			top: 0px; \
 			left: 0px; \
 		} \
+		#confTabs { \
+			background-color: #AAAAAA; \
+		} \
+		#confWel, #styleWel, #confBtnWrap, .conf_Tab, .selected_tab #t_AbtConf { \
+			background: #CCCCCC url(" + image_store.config_tabBg + ") scroll repeat-x left top; \
+		} \
 		#gbLoader { \
 			position: absolute; \
 			top: 25px; \
@@ -64,6 +70,28 @@
 		.opli { \
 			display: inline; \
 		} \
+		#confBoxSel { \
+			position: absolute; \
+			top: -22px; \
+			left: 5px; \
+		} \
+		.selBox { \
+			display: inline-block; \
+			height: 20px; \
+			font-size: 14px; \
+			background-color: #CCCCCC; \
+			-moz-border-radius-topleft: 7px; \
+			-moz-border-radius-topright: 7px; \
+			border: 1px solid #000000; \
+			padding: 0px 5px; \
+			margin: 0px 1px; \
+			cursor: pointer; \
+		} \
+		.selBoxOn { \
+			background-color: #E6E6E6; \
+			border-bottom-color: #E6E6E6; \
+			cursor: default; \
+		} \
 		.confTab { \
 			margin: 0px; \
 			padding: 2px 4px; \
@@ -74,7 +102,6 @@
 			font-size: 22pt; \
 			font-family: serif; \
 			text-align: center; \
-			background-color: #F0F7F9; \
 			-moz-border-radius-topleft: 5px; \
 			-moz-border-radius-topright: 5px; \
 		} \
@@ -93,33 +120,27 @@
 			border-bottom: 1px solid grey; \
 		} \
 		#confWrap { \
-			height: 427px; \
+			height: 447px; \
 			border-bottom: 1px solid black; \
-			margin-bottom: 2px; \
+			padding-bottom: 4px; \
 		} \
 		.config_option { \
 			margin: 2px; \
 		} \
 		.config_textField { \
 			display: block; \
-			width: 100%; \
+			width: 80%; \
 			height: 120px; \
+		} \
+		.config_intField { \
+			width: 3em; \
 		} \
 		.sldImgs { \
 			display: block; \
 		} \
-		.keycuts { \
-			width: 100%; \
-		} \
 		.keycuts em { \
 			text-decoration: underline; \
 			font-weight: bold; \
-		} \
-		.conf_Tab, #confTabs { \
-			background-color: #F0F7F9; \
-		} \
-		#t_AbtConf { \
-			background-color: #F0F7F9 !important; \
 		} \
 		#hidePly { \
 			position: absolute; \
@@ -128,24 +149,24 @@
 			cursor: pointer; \
 		} \
 		#confTabs { \
-			height: 19px; \
-			border-bottom: 1px solid #000000; \
-			position: relative; \
-			margin-bottom: 3px; \
+			height: 460px; \
+			margin-right: 10px; \
+			float: left; \
+			border-right: 1px solid black; \
 		} \
 		.conf_Tab { \
 			padding: 0px 0.5em .25em .5em; \
-			margin-top: 4px; \
 			border-bottom: 1px solid black; \
 			border-right: 1px solid black; \
-			display: inline; \
+			display: block; \
 			z-index: 10001; \
 			cursor: pointer; \
 			line-height: 16px; \
+			margin-right: -1px; \
 		} \
 		.selected_tab { \
-			border-bottom-color: #FFFFFF; \
-			background-color: #FFFFFF; \
+			border-right-color: #FFFFFF; \
+			background: #FFFFFF none scroll no-repeat left top; \
 		} \
 		.confTabOn { \
 			margin: .7em; \
@@ -157,17 +178,19 @@
 			margin: .5em 0px; \
 		} \
 		#t_AbtConf { \
-			border-color: #000000 !important; \
+			border-style: none !important; \
+			background: none !important; \
 			display: block; \
 			position: absolute; \
-			top: -4px; \
-			right: 0px; \
-			text-align: right; \
+			bottom: 0px; \
+			right: 3px; \
 			border-right-style: none; \
 			z-index: 10000; \
 		} \
 		#AbtConf p { \
 			margin-top: 0px; \
+			white-space: pre-line; \
+			font-size: 13px; \
 		} \
 		#deapallFault, #sNc { \
 			margin-left: .2em; \
@@ -197,6 +220,10 @@
 			border: 1px solid black; \
 			-moz-border-radius: 5px; \
 			color: #000000 !important; \
+		} \
+		#confBtnWrap { \
+			-moz-border-radius-bottomleft: 5px; \
+			-moz-border-radius-bottomright: 5px; \
 		} \
 		#slideShow { \
 			position: fixed; \

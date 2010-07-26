@@ -39,7 +39,7 @@ function optionlist() {
 	this.DEFAULT_IMGLOAD = true;
 	this.DEFAULT_SKIPERR = true;
 	this.DEFAULT_SLDTM = 4000;
-	this.DEFAULT_IMGPGS = 1;
+	this.DEFAULT_IMGPGS = 21;
 		// Style defaults
 	this.DEFAULT_STYL = "classic";
 	this.DEFAULT_SOOT = false;
@@ -56,6 +56,9 @@ function optionlist() {
 	this.DEFAULT_DOCKBORDER = true;
 	this.DEFAULT_DOCKBDRCLR = "193,211,232";
 	this.DEFAULT_DOCKBGCLR = "240,247,249";
+		// Media Style defaults
+	this.DEFAULT_MDAIMGNUM = 14;
+	this.DEFAULT_MDAEMDPOS = "left";
 		// Color Defaults
 			// Background Colors
 	this.DEFAULT_GENBGCLR = '255,255,255';
@@ -227,6 +230,9 @@ function optionlist() {
 	this.dockborder = GM_getValue("dockborder", this.DEFAULT_DOCKBORDER);
 	this.dockbdrclr = GM_getValue("dockbdrclr", this.DEFAULT_DOCKBDRCLR);
 	this.dockbgclr = GM_getValue("dockbgclr", this.DEFAULT_DOCKBGCLR);
+		// Media Style vars
+	this.mdaimgnum = GM_getValue("mdaimgnum", this.DEFAULT_MDAIMGNUM);
+	this.mdaemdpos = GM_getValue("mdaemdpos", this.DEFAULT_MDAEMDPOS);
 	
 		// Search Engines
 	this.searchengines = eval(GM_getValue("searchengines", this.DEFAULT_SEARCHENGINES));

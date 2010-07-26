@@ -2,7 +2,7 @@
 // @name			Google Bump
 // @namespace		http://userscripts.org/scripts/show/33449
 // @description		Adds some functionality to the Google web search. Main features include Multisearch, Video result extraction, Wikipedia definitions and links, and some clutter cleanup by. All options can be turned off.
-// @version			2.04.20100702
+// @version			2.05.20100726
 // @include			http://www.google.tld/
 // @include			http://www.google.tld/#*
 // @include			http://www.google.tld/search?*
@@ -11,17 +11,25 @@
 
 /*
 	Author: KTaShes
-	Date: July 02 2010
+	Date: July 26 2010
 	
 	Code can now be found on GitHub @ http://github.com/ktsashes/Google-Bump
 	
 	This code uses juicer to compile from several different javascript files.
 	Juicer (C) Christian Johansen - http://cjohansen.no/en/ruby/juicer_a_css_and_javascript_packaging_tool
 */
-var version = "2.04";
+var version = "2.05";
 
 
 var image_store = {
+	
+	config_tabBg :		"data:image/gif;base64,R0lGODlhAQAZA" +
+						"MQAAM3Nzc7Oz%2BDg4Nra2tTU1dDQ0M3Mzd" +
+						"3d3dDPz9HR0dPT0t7e3s7OztnZ2tjY2OXl5" +
+						"dXV1dfX1uDg4eLi4tTU09zc3OPk5Obm5szM" +
+						"zAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAA" +
+						"AAAAALAAAAAABABkAAAUV4PVYkyQsRzU0Tg" +
+						"QRlJIUSMAABhYCADs%3D",
 	
 	multi_upArrow : 	"data:image/png;base64,iVBORw0KGgoAA" +
 						"AANSUhEUgAAAA0AAAAICAYAAAAiJnXPAAAA" +
@@ -422,7 +430,7 @@ function optionlist() {
 	this.DEFAULT_IMGLOAD = true;
 	this.DEFAULT_SKIPERR = true;
 	this.DEFAULT_SLDTM = 4000;
-	this.DEFAULT_IMGPGS = 1;
+	this.DEFAULT_IMGPGS = 21;
 		// Style defaults
 	this.DEFAULT_STYL = "classic";
 	this.DEFAULT_SOOT = false;
@@ -439,6 +447,9 @@ function optionlist() {
 	this.DEFAULT_DOCKBORDER = true;
 	this.DEFAULT_DOCKBDRCLR = "193,211,232";
 	this.DEFAULT_DOCKBGCLR = "240,247,249";
+		// Media Style defaults
+	this.DEFAULT_MDAIMGNUM = 14;
+	this.DEFAULT_MDAEMDPOS = "left";
 		// Color Defaults
 			// Background Colors
 	this.DEFAULT_GENBGCLR = '255,255,255';
@@ -610,6 +621,9 @@ function optionlist() {
 	this.dockborder = GM_getValue("dockborder", this.DEFAULT_DOCKBORDER);
 	this.dockbdrclr = GM_getValue("dockbdrclr", this.DEFAULT_DOCKBDRCLR);
 	this.dockbgclr = GM_getValue("dockbgclr", this.DEFAULT_DOCKBGCLR);
+		// Media Style vars
+	this.mdaimgnum = GM_getValue("mdaimgnum", this.DEFAULT_MDAIMGNUM);
+	this.mdaemdpos = GM_getValue("mdaemdpos", this.DEFAULT_MDAEMDPOS);
 	
 		// Search Engines
 	this.searchengines = eval(GM_getValue("searchengines", this.DEFAULT_SEARCHENGINES));
@@ -1652,6 +1666,12 @@ function stylesheet_store () {
 			top: 0px; \
 			left: 0px; \
 		} \
+		#confTabs { \
+			background-color: #AAAAAA; \
+		} \
+		#confWel, #styleWel, #confBtnWrap, .conf_Tab, .selected_tab #t_AbtConf { \
+			background: #CCCCCC url(" + image_store.config_tabBg + ") scroll repeat-x left top; \
+		} \
 		#gbLoader { \
 			position: absolute; \
 			top: 25px; \
@@ -1664,6 +1684,28 @@ function stylesheet_store () {
 		.opli { \
 			display: inline; \
 		} \
+		#confBoxSel { \
+			position: absolute; \
+			top: -22px; \
+			left: 5px; \
+		} \
+		.selBox { \
+			display: inline-block; \
+			height: 20px; \
+			font-size: 14px; \
+			background-color: #CCCCCC; \
+			-moz-border-radius-topleft: 7px; \
+			-moz-border-radius-topright: 7px; \
+			border: 1px solid #000000; \
+			padding: 0px 5px; \
+			margin: 0px 1px; \
+			cursor: pointer; \
+		} \
+		.selBoxOn { \
+			background-color: #E6E6E6; \
+			border-bottom-color: #E6E6E6; \
+			cursor: default; \
+		} \
 		.confTab { \
 			margin: 0px; \
 			padding: 2px 4px; \
@@ -1674,7 +1716,6 @@ function stylesheet_store () {
 			font-size: 22pt; \
 			font-family: serif; \
 			text-align: center; \
-			background-color: #F0F7F9; \
 			-moz-border-radius-topleft: 5px; \
 			-moz-border-radius-topright: 5px; \
 		} \
@@ -1693,33 +1734,27 @@ function stylesheet_store () {
 			border-bottom: 1px solid grey; \
 		} \
 		#confWrap { \
-			height: 427px; \
+			height: 447px; \
 			border-bottom: 1px solid black; \
-			margin-bottom: 2px; \
+			padding-bottom: 4px; \
 		} \
 		.config_option { \
 			margin: 2px; \
 		} \
 		.config_textField { \
 			display: block; \
-			width: 100%; \
+			width: 80%; \
 			height: 120px; \
+		} \
+		.config_intField { \
+			width: 3em; \
 		} \
 		.sldImgs { \
 			display: block; \
 		} \
-		.keycuts { \
-			width: 100%; \
-		} \
 		.keycuts em { \
 			text-decoration: underline; \
 			font-weight: bold; \
-		} \
-		.conf_Tab, #confTabs { \
-			background-color: #F0F7F9; \
-		} \
-		#t_AbtConf { \
-			background-color: #F0F7F9 !important; \
 		} \
 		#hidePly { \
 			position: absolute; \
@@ -1728,24 +1763,24 @@ function stylesheet_store () {
 			cursor: pointer; \
 		} \
 		#confTabs { \
-			height: 19px; \
-			border-bottom: 1px solid #000000; \
-			position: relative; \
-			margin-bottom: 3px; \
+			height: 460px; \
+			margin-right: 10px; \
+			float: left; \
+			border-right: 1px solid black; \
 		} \
 		.conf_Tab { \
 			padding: 0px 0.5em .25em .5em; \
-			margin-top: 4px; \
 			border-bottom: 1px solid black; \
 			border-right: 1px solid black; \
-			display: inline; \
+			display: block; \
 			z-index: 10001; \
 			cursor: pointer; \
 			line-height: 16px; \
+			margin-right: -1px; \
 		} \
 		.selected_tab { \
-			border-bottom-color: #FFFFFF; \
-			background-color: #FFFFFF; \
+			border-right-color: #FFFFFF; \
+			background: #FFFFFF none scroll no-repeat left top; \
 		} \
 		.confTabOn { \
 			margin: .7em; \
@@ -1757,17 +1792,19 @@ function stylesheet_store () {
 			margin: .5em 0px; \
 		} \
 		#t_AbtConf { \
-			border-color: #000000 !important; \
+			border-style: none !important; \
+			background: none !important; \
 			display: block; \
 			position: absolute; \
-			top: -4px; \
-			right: 0px; \
-			text-align: right; \
+			bottom: 0px; \
+			right: 3px; \
 			border-right-style: none; \
 			z-index: 10000; \
 		} \
 		#AbtConf p { \
 			margin-top: 0px; \
+			white-space: pre-line; \
+			font-size: 13px; \
 		} \
 		#deapallFault, #sNc { \
 			margin-left: .2em; \
@@ -1797,6 +1834,10 @@ function stylesheet_store () {
 			border: 1px solid black; \
 			-moz-border-radius: 5px; \
 			color: #000000 !important; \
+		} \
+		#confBtnWrap { \
+			-moz-border-radius-bottomleft: 5px; \
+			-moz-border-radius-bottomright: 5px; \
 		} \
 		#slideShow { \
 			position: fixed; \
@@ -1869,6 +1910,10 @@ function stylesheet_store () {
 		} /* "; /* End Stylesheet */
 
 	this.media_stylesheet = " \
+		#pBox { \
+			background-color: rgb(" + options.addedclr + "); \
+			color: rgb(" + options.mdatxtclr + "); \
+		} \
 		a, img {  \
 			border-style: none; \
 		} \
@@ -1892,11 +1937,13 @@ function stylesheet_store () {
 			width: " + Math.max(262, maxwidth - 879) + "px; \
 		} \
 		#videoList { \
-			border: 1px solid black;  \
-			overflow: auto; \
-			width: " + ( !options.imgs ? '100%' : '55%' ) + "; \
-			height: auto; \
-			margin-top: 1%; \
+			border: 1px solid black; \
+			border-style: " + (options.imgs && options.mdaemdpos == 'over' ? 'solid solid solid none' : options.imgs ? 'none solid solid solid' : 'solid') + "; \
+			overflow-x: auto; \
+			overflow-y: hidden; \
+			height: " + ( !options.imgs || options.mdaemdpos == 'over' ? '490px' : '240px' ) + "; \
+			padding: 5px 0px; \
+			white-space: " + ( options.mdaemdpos == 'over' ? 'normal' : 'nowrap' ) + "; \
 		} \
 		.vid_thumb { \
 			max-width: 120px; \
@@ -1908,33 +1955,32 @@ function stylesheet_store () {
 			text-decoration: underline; \
 		} \
 		#resOL { \
-			position: absolute; \
-			right: 0px; \
-			top: 24px; \
-			width: 44%; \
-			overflow: auto; \
-			height: " + (!options.vids || !options.imgs ? '500px' : '300px') + "; \
+			clear: both; \
 		} \
 		#imageList { \
 			border: 1px solid black; \
 			overflow: auto; \
-			width: " + (!options.vids ? '100%' : '44%') + "; \
-			height: " + (!options.vids ? '190px' : 'auto') + "; \
-			position: " + (!options.vids ? 'static' : 'absolute') + "; \
-			top: 320px; \
-			right: 3px; \
-			margin-top: " + (!options.vids ? '4px' : '1%') + "; \
+			height: " + ( !options.vids || options.mdaemdpos == 'over' ? '500px' : '249px' ) + "; \
+			width: " + ( options.vids && options.mdaemdpos == 'over' ? '50%' : options.mdaemdpos == 'over' ? '100%' : 'auto' ) + "; \
 			text-align: center; \
+			float: " + ( options.mdaemdpos == 'over' ? 'left' : 'none' ) + "; \
 		} \
 		#imageList img { \
-			margin: " + (!options.vids ? '4px' : '1.4%') + "; \
+			margin: " + (!options.vids ? '4px' : '5px 9px') + "; \
 			padding: " + (!options.vids ? '4px' : '0px') + "; \
+		} \
+		.imgSizelarge { \
+			display: inline-block; \
 		} \
 		#pBox { \
 			border: 1px solid black; \
+			border-right-style: " + (options.mdaemdpos == 'left' ? 'none' : 'solid') + "; \
+			border-left-style: " + (options.mdaemdpos == 'right' ? 'none' : 'solid') + "; \
 			height: 500px; \
 			text-align: center; \
-			width: 55%; \
+			width: " + (options.mdaemdpos != 'over' ? '55%' : '100%') + "; \
+			float: " + (options.mdaemdpos != 'over' ? options.mdaemdpos : 'none') + "; \
+			display: " + (options.mdaemdpos == 'over' ? 'none' : 'block') + "; \
 		} \
 		#embedArea img { \
 			max-width: 95%; \
@@ -1955,7 +2001,11 @@ function stylesheet_store () {
 			height: 468px; \
 		} \
 		#hidePly { \
-			display: none !important; \
+			display: " + (options.mdaemdpos == 'over' ? 'block' : 'none !important') + "; \
+		} \
+		.playing, .imgShowing { \
+			display: block !important; \
+			position: " + (options.mdaemdpos == 'over' ? 'absolute' : 'relative') + "; \
 		} \
 		.removed, .rl-details, .rl-snippet, \
 		.rl-short-snippet, .rl-snippet-grid-view, \
@@ -1979,11 +2029,12 @@ function stylesheet_store () {
 		} \
 		.vid_result, .rl-res { \
 			width: 120px; \
-			margin-left: 2%; \
-			margin-right: 2%; \
+			margin-left: 4px; \
+			margin-right: 4px; \
 			display: inline-table; \
 			height: auto; \
 			text-align: center; \
+			white-space: normal; \
 		} \
 		.thumbnail-img { \
 			width: 100px; \
@@ -2579,9 +2630,13 @@ function config_tab(title, id, on) {
 		
 		this.tab = $create("div", {
 			className : this.on == this ? "conf_Tab selected_tab" : "conf_Tab",
-			id : this.id,
-			textContent : this.title
+			id : this.id
 		});
+		if (typeof this.title == 'string') {
+			this.tab.textContent = this.title;
+		} else {
+			this.tab.appendChild(this.title);
+		}
 		
 		var self = this;
 		this.tab.addEventListener("click", function (event) {
@@ -3047,6 +3102,53 @@ function config_textField(label, id, dflt) {
 }
 
 /**
+  *	Configuration unvalidated text field
+  */
+function config_intField(label, id, dflt) {
+	
+	this.label = label;
+	this.id = id;
+	this.value = GM_getValue(id, dflt);
+	this.defaultVal = dflt;
+	this.tbox;
+	
+	this.draw = function (parentNode) {
+		var lbl = $create("label", {
+			textContent : this.label + ": ",
+			"for" : this.id
+		});
+		this.tbox = $create("input",{
+			name : this.id,
+			id : this.id,
+			className : "config_intField",
+			value : this.value
+		});
+		this.tbox.addEventListener("change", function(event) {
+			if(parseInt(event.target.value) == event.target.value) {
+				GM_setValue(event.target.id, event.target.value);
+			} else {
+				event.target.value = GM_getValue(id, dflt);
+			}
+		}, true);
+		
+		var hldr = $create('div', {
+			className : 'config_option'
+		});
+		
+		hldr.appendChild(lbl);
+		hldr.appendChild(this.tbox);
+		parentNode.appendChild(hldr);
+	};
+	
+	this.setDefault = function () {
+		if (this.tbox) {
+			this.tbox.value = this.defaultVal;
+			GM_setValue(this.id, this.defaultVal);
+		}
+	};
+}
+
+/**
   *	General purpose button object
   */
 function button(value, action) {
@@ -3309,7 +3411,7 @@ function style_dialog(popup) {
 		
 		// The heading to the configuration page
 		var welcome = $create("h1", {
-			textContent : "Google Bump Styles",
+			textContent : "Google Bump",
 			id : "styleWel"
 		});
 		
@@ -3317,12 +3419,31 @@ function style_dialog(popup) {
 		var tabHead = $create("div", {
 			id : "confTabs"
 		});
+		var selectHead = $create("div", {
+			id : "confBoxSel"
+		});
 		var wrapper = $create("div", {
 			id : "confWrap"
 		});
 		var btnwrap = $create("div", {
 			id : "confBtnWrap"
 		});
+		
+		// For selecting which options to use
+		var optSelBox = $create("div", {
+			className : "selBox",
+			textContent : "Options"
+		});
+		var stlSelBox = $create("div", {
+			className : "selBox selBoxOn",
+			textContent : "Styles"
+		});
+		optSelBox.addEventListener('click', function (e) {
+			configurations();
+		}, false);
+		
+		selectHead.appendChild(optSelBox);
+		selectHead.appendChild(stlSelBox);
 		
 		// Creates and appends the navigation tabs
 		var genTab = new config_tab("General", "t_GenStyl");
@@ -3384,8 +3505,9 @@ function style_dialog(popup) {
 		// Media Settings
 		var media_set_window = new config_window(mdaTab, "MdaStyl");
 			// General Settings
-		var media_section = new config_section();
-		media_section.sectionOptions.push(new config_desc_section('Coming Soon', 'This section is still under construction. Please excuse our mess.'));
+		var media_section = new config_section("General");
+		media_section.sectionOptions.push(new config_intField("Images per set", "mdaimgnum", options.DEFAULT_MDAIMGNUM));
+		media_section.sectionOptions.push(new config_selectionBox("Embed area", "mdaemdpos", ["Left", "Right", "Overlay"], ["left", "right", "over"], options.DEFAULT_MDAEMDPOS));
 		media_set_window.sections.push(media_section);
 		
 		// Dock Settings
@@ -3439,6 +3561,7 @@ function style_dialog(popup) {
 		
 		// Appending of all the configurations
 		centDivStyl.appendChild(welcome);
+		centDivStyl.appendChild(selectHead);
 		centDivStyl.appendChild(tabHead);
 		centDivStyl.appendChild(wrapper);
 		centDivStyl.appendChild(btnwrap);
@@ -3495,13 +3618,16 @@ function config_dialog(popup) {
 		
 		// The heading to the configuration page
 		var welcome = $create("h1", {
-			textContent : "Google Bump Configuration",
+			textContent : "Google Bump",
 			id : "confWel"
 		});
 		
 		// Wrappers for the content
 		var tabHead = $create("div", {
 			id : "confTabs"
+		});
+		var selectHead = $create("div", {
+			id : "confBoxSel"
 		});
 		var wrapper = $create("div", {
 			id : "confWrap"
@@ -3510,17 +3636,31 @@ function config_dialog(popup) {
 			id : "confBtnWrap"
 		});
 		
+		// For selecting which options to use
+		var optSelBox = $create("div", {
+			className : "selBox selBoxOn",
+			textContent : "Options"
+		});
+		var stlSelBox = $create("div", {
+			className : "selBox",
+			textContent : "Styles"
+		});
+		stlSelBox.addEventListener('click', function (e) {
+			styler();
+		}, false);
+		
+		selectHead.appendChild(optSelBox);
+		selectHead.appendChild(stlSelBox);
+		
 		// Creates and appends the navigation tabs
 		var genTab = new config_tab("General", "t_GenConf");
-		var abtTab = new config_tab("Created by KTaSh", "t_AbtConf", genTab);
-		var appTab = new config_tab("Clutter", "t_AppConf", genTab);
+		var abtTab = new config_tab("License", "t_AbtConf", genTab);
 		var imgTab = new config_tab("Images", "t_ImgConf", genTab);
 		var vidTab = new config_tab("Videos", "t_VidConf", genTab);
 		var otrTab = new config_tab("Advanced", "t_OtrConf", genTab);
 		
 		abtTab.draw(tabHead);
 		genTab.draw(tabHead);
-		appTab.draw(tabHead);
 		imgTab.draw(tabHead);
 		vidTab.draw(tabHead);
 		otrTab.draw(tabHead);
@@ -3530,40 +3670,47 @@ function config_dialog(popup) {
 		fieldsabt.id = "AbtConf";
 		fieldsabt.className = "removed";
 		var nwp = $create("p");
-		nwp.textContent = "Google Bump was created by me, KTaSh. Any piece of this code can be used by anyone for " + 
-								"any reason. However, if you do use it, I do ask that you let me know. I'd just like " +
-								"to see what you have done with it. Also, please extend this same courtesy, for at least " +
-								"this bit of code, to others. The source for this code can be found ";
+		nwp.textContent = "Copyright (c) 2010 Andrew Hushbeck (ktash)\n\n" +
+
+				"Permission is hereby granted, free of charge, to any person obtaining a copy " +
+				"of this software and associated documentation files (the \"Software\"), to deal " +
+				"in the Software without restriction, including without limitation the rights " +
+				"to use, copy, modify, merge, publish, distribute, sublicense, and/or sell " +
+				"copies of the Software, and to permit persons to whom the Software is " +
+				"furnished to do so, subject to the following conditions:\n\n" +
+
+				"The above copyright notice and this permission notice shall be included in " +
+				"all copies or substantial portions of the Software.\n\n" +
+
+				"THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR " +
+				"IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, " +
+				"FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE " +
+				"AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER " +
+				"LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, " +
+				"OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN " +
+				"THE SOFTWARE.\n\n" +
+				
+				"The source code for this script can always be found ";
 		fieldsabt.appendChild(nwp);
 		var linkToScript = $create("a");
 		linkToScript.textContent = "here.";
 		linkToScript.href = "http://userscripts.org/scripts/review/33449";
 		nwp.appendChild(linkToScript);
 		var sig = $create("p");
-		sig.textContent = "KTaSh";
+		sig.textContent = "ktash";
 		fieldsabt.appendChild(sig);
 		var abtver = $create("p");
 		abtver.textContent = "Version : " + version;
 		fieldsabt.appendChild(abtver);
-		
-		// Appearance Settings
-		var app_set_window = new config_window(appTab, "AppConf");
-			// Settings
-		var app_section = new config_section("Features");
-		// app_section.sectionOptions.push(new config_checkBox("Add Margins", "margs", options.DEFAULT_MARGS));
-		app_section.sectionOptions.push(new config_checkBox("Remove Suggestions", "sugges", options.DEFAULT_SUGGES));
-		app_section.sectionOptions.push(new config_checkBox("Move \"Did you mean\" text", "dym", options.DEFAULT_DYM));
-		app_section.sectionOptions.push(new config_checkBox("Move Top Content (Calculator, Showtimes, Etc.)", "moveTop", options.DEFAULT_MOVETOP));
-		app_set_window.sections.push(app_section);
 		
 		// Image Search Settings
 		var img_set_window = new config_window(imgTab, "ImgConf");
 			// Genearl Settings
 		var img_section = new config_section("Sidebar Options");
 		img_section.sectionOptions.push(new config_checkBox("Search For Images", "imgs", options.DEFAULT_IMGS));
-		img_section.sectionOptions.push(new config_checkBox("Show in player", "imgPlyr", options.DEFAULT_IMGPLYR));
+		img_section.sectionOptions.push(new config_selectionBox("Open in", "imgPlyr", ["This Window", "Player", "Slideshow", "Slideshow (Paused)"], [false, true, "slideshow", "soot"], options.DEFAULT_IMGPLYR));
 		img_section.sectionOptions.push(new config_checkBox("Show Control Bar", "imgCtrl", options.DEFAULT_IMGCTRL));
-		img_section.sectionOptions.push(new config_selectionBox("Number of pages to load", "imgPages", ["1 Pages","2 Pages","3 Pages","4 Pages","5 Pages","7 Pages","10 Pages"], [1, 2, 3, 4, 5, 7, 10], options.DEFAULT_IMGPGS));
+		img_section.sectionOptions.push(new config_intField("Number of images to load", "imgPages", options.DEFAULT_IMGPGS));
 		img_section.sectionOptions.push(new config_selectionBox("Image display size", "imgSize", ["Titles Only","Small","Medium","Large", "Details"], ["title", "small", "medium", "large", "details"], options.DEFAULT_IMGSIZE));
 		img_set_window.sections.push(img_section);
 			// Slideshow Settings
@@ -3618,6 +3765,12 @@ function config_dialog(popup) {
 		// gen_section.sectionOptions.push(new config_checkBox("Use Old Button Size", "oldSize", options.DEFAULT_OLDSIZE));
 		gen_section.sectionOptions.push(new config_checkBox("Enable Keyboard Shorcuts", "keyd", options.DEFAULT_KEYD));
 		gen_set_window.sections.push(gen_section);
+			// Clutter
+		var app_section = new config_section("Clutter");
+		app_section.sectionOptions.push(new config_checkBox("Remove Suggestions", "sugges", options.DEFAULT_SUGGES));
+		app_section.sectionOptions.push(new config_checkBox("Move \"Did you mean\" text", "dym", options.DEFAULT_DYM));
+		app_section.sectionOptions.push(new config_checkBox("Move Top Content (Calculator, Showtimes, Etc.)", "moveTop", options.DEFAULT_MOVETOP));
+		gen_set_window.sections.push(app_section);
 			// Keyboard Shortcut list
 		var kydv = $create('div', {
 			textContent : 'Keyboard shortcuts:'
@@ -3644,14 +3797,12 @@ function config_dialog(popup) {
 		gen_set_window.sections.push(cut_list_section);
 		
 		// Draw the windows
-		app_set_window.draw(wrapper);
 		img_set_window.draw(wrapper);
 		vid_set_window.draw(wrapper);
 		other_set_window.draw(wrapper);
 		gen_set_window.draw(wrapper);
 		
 		// Push them to the windows array
-		this.windows.push(app_set_window);
 		this.windows.push(img_set_window);
 		this.windows.push(vid_set_window);
 		this.windows.push(other_set_window);
@@ -3666,6 +3817,7 @@ function config_dialog(popup) {
 		
 		// Appending of all the configurations
 		centDivConf.appendChild(welcome);
+		centDivConf.appendChild(selectHead);
 		centDivConf.appendChild(tabHead);
 		wrapper.appendChild(fieldsabt);
 		centDivConf.appendChild(wrapper);
@@ -5050,7 +5202,14 @@ function indiv_img_result(src, link, title, sizeInfo, type, num) {
 				event.preventDefault();
 			}
 			
-			embedder.addImageEmbed(this);
+			if(options.imgPlyr == "slideshow" || options.imgPlyr == "soot") {
+				imgSearch.startSlides(this.locNum);
+				if (options.imgPlyr == 'soot') {
+					imgSearch.slideshow.dialog.pause();
+				}
+			} else {
+				embedder.addImageEmbed(this);
+			}
 		}
 	};
 	
@@ -5236,7 +5395,9 @@ function Image_Search(query) {
 	
 	this.buildSets = function () {
 		var perSet;
-		if (options.imgSize == 'large') {
+		if (options.styl == 'media') {
+			perSet = options.mdaimgnum;
+		} else if (options.imgSize == 'large') {
 			perSet = 7;
 		} else if (options.imgSize == 'medium') {
 			perSet = 14;
@@ -5258,10 +5419,7 @@ function Image_Search(query) {
 	
 	this.processPage = function (response) {
 		var na;
-		if (!response.responseText.match(/dyn\.setResults\(\[\[[^]*]\);/)) {
-			return;
-		}
-		eval("na = " + response.responseText.match(/dyn\.setResults\(\[\[[^]*]\);/)[0].substring(14));
+		eval('na = ' + response.responseText);
 		
 		/*
 			var link = $create("a");
@@ -5274,14 +5432,16 @@ function Image_Search(query) {
 			img.title = na[0][i][6];
 		*/
 		
-		if(na[0]) {
-			for(var nao = 0; nao < na.length; nao++) {
-				var img = new indiv_img_result(na[nao][14] + "?q=tbn:" + na[nao][2] + na[nao][3], na[nao][3], na[nao][6], na[nao][9], na[nao][10], this.imgs.length);
+		var res = na.responseData.results;
+		
+		if(res.length > 0) {
+			for(var nao = 0; nao < res.length; nao++) {
+				var img = new indiv_img_result(res[nao].tbUrl, res[nao].unescapedUrl, res[nao].title, res[nao].width + 'x' + res[nao].height, res[nao].visibleUrl, this.imgs.length);
 				this.imgs.push(img);
 				this.slideshow.dialog.add_image(img);
 			}
 			
-			if(this.pages < options.imgPgs) {
+			if(this.pages * 8 < options.imgPgs) {
 				this.search();
 			} else {
 				this.buildSets();
@@ -5302,7 +5462,7 @@ function Image_Search(query) {
 	
 	this.search = function () {
 		var SR = this;
-		get("http://images.google.com/images?q=" + encodeURIComponent(this.query) + "&gbv=2&start=" + (21 * this.pages), function (r) { SR.processPage(r) }, function (r) { SR.errorPage(r) });
+		get("http://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=" + encodeURIComponent(this.query) + "&gbv=2&rsz=" + (Math.min(8, options.imgPgs - (8 * this.pages))) + "&start=" + (8 * this.pages), function (r) { SR.processPage(r) }, function (r) { SR.errorPage(r) });
 		this.pages++;
 	};
 	

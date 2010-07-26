@@ -88,7 +88,14 @@ function indiv_img_result(src, link, title, sizeInfo, type, num) {
 				event.preventDefault();
 			}
 			
-			embedder.addImageEmbed(this);
+			if(options.imgPlyr == "slideshow" || options.imgPlyr == "soot") {
+				imgSearch.startSlides(this.locNum);
+				if (options.imgPlyr == 'soot') {
+					imgSearch.slideshow.dialog.pause();
+				}
+			} else {
+				embedder.addImageEmbed(this);
+			}
 		}
 	};
 	
@@ -274,7 +281,9 @@ function Image_Search(query) {
 	
 	this.buildSets = function () {
 		var perSet;
-		if (options.imgSize == 'large') {
+		if (options.styl == 'media') {
+			perSet = options.mdaimgnum;
+		} else if (options.imgSize == 'large') {
 			perSet = 7;
 		} else if (options.imgSize == 'medium') {
 			perSet = 14;
@@ -296,10 +305,7 @@ function Image_Search(query) {
 	
 	this.processPage = function (response) {
 		var na;
-		if (!response.responseText.match(/dyn\.setResults\(\[\[[^]*]\);/)) {
-			return;
-		}
-		eval("na = " + response.responseText.match(/dyn\.setResults\(\[\[[^]*]\);/)[0].substring(14));
+		eval('na = ' + response.responseText);
 		
 		/*
 			var link = $create("a");
@@ -312,14 +318,16 @@ function Image_Search(query) {
 			img.title = na[0][i][6];
 		*/
 		
-		if(na[0]) {
-			for(var nao = 0; nao < na.length; nao++) {
-				var img = new indiv_img_result(na[nao][14] + "?q=tbn:" + na[nao][2] + na[nao][3], na[nao][3], na[nao][6], na[nao][9], na[nao][10], this.imgs.length);
+		var res = na.responseData.results;
+		
+		if(res.length > 0) {
+			for(var nao = 0; nao < res.length; nao++) {
+				var img = new indiv_img_result(res[nao].tbUrl, res[nao].unescapedUrl, res[nao].title, res[nao].width + 'x' + res[nao].height, res[nao].visibleUrl, this.imgs.length);
 				this.imgs.push(img);
 				this.slideshow.dialog.add_image(img);
 			}
 			
-			if(this.pages < options.imgPgs) {
+			if(this.pages * 8 < options.imgPgs) {
 				this.search();
 			} else {
 				this.buildSets();
@@ -340,7 +348,7 @@ function Image_Search(query) {
 	
 	this.search = function () {
 		var SR = this;
-		get("http://images.google.com/images?q=" + encodeURIComponent(this.query) + "&gbv=2&start=" + (21 * this.pages), function (r) { SR.processPage(r) }, function (r) { SR.errorPage(r) });
+		get("http://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=" + encodeURIComponent(this.query) + "&gbv=2&rsz=" + (Math.min(8, options.imgPgs - (8 * this.pages))) + "&start=" + (8 * this.pages), function (r) { SR.processPage(r) }, function (r) { SR.errorPage(r) });
 		this.pages++;
 	};
 	

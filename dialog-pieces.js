@@ -19,9 +19,13 @@ function config_tab(title, id, on) {
 		
 		this.tab = $create("div", {
 			className : this.on == this ? "conf_Tab selected_tab" : "conf_Tab",
-			id : this.id,
-			textContent : this.title
+			id : this.id
 		});
+		if (typeof this.title == 'string') {
+			this.tab.textContent = this.title;
+		} else {
+			this.tab.appendChild(this.title);
+		}
 		
 		var self = this;
 		this.tab.addEventListener("click", function (event) {
@@ -467,6 +471,53 @@ function config_textField(label, id, dflt) {
 		});
 		this.tbox.addEventListener("change", function(event) {
 			GM_setValue(event.target.id, event.target.value); 
+		}, true);
+		
+		var hldr = $create('div', {
+			className : 'config_option'
+		});
+		
+		hldr.appendChild(lbl);
+		hldr.appendChild(this.tbox);
+		parentNode.appendChild(hldr);
+	};
+	
+	this.setDefault = function () {
+		if (this.tbox) {
+			this.tbox.value = this.defaultVal;
+			GM_setValue(this.id, this.defaultVal);
+		}
+	};
+}
+
+/**
+  *	Configuration unvalidated text field
+  */
+function config_intField(label, id, dflt) {
+	
+	this.label = label;
+	this.id = id;
+	this.value = GM_getValue(id, dflt);
+	this.defaultVal = dflt;
+	this.tbox;
+	
+	this.draw = function (parentNode) {
+		var lbl = $create("label", {
+			textContent : this.label + ": ",
+			"for" : this.id
+		});
+		this.tbox = $create("input",{
+			name : this.id,
+			id : this.id,
+			className : "config_intField",
+			value : this.value
+		});
+		this.tbox.addEventListener("change", function(event) {
+			if(parseInt(event.target.value) == event.target.value) {
+				GM_setValue(event.target.id, event.target.value);
+			} else {
+				event.target.value = GM_getValue(id, dflt);
+			}
 		}, true);
 		
 		var hldr = $create('div', {

@@ -232,7 +232,7 @@ function style_dialog(popup) {
 		
 		// The heading to the configuration page
 		var welcome = $create("h1", {
-			textContent : "Google Bump Styles",
+			textContent : "Google Bump",
 			id : "styleWel"
 		});
 		
@@ -240,12 +240,31 @@ function style_dialog(popup) {
 		var tabHead = $create("div", {
 			id : "confTabs"
 		});
+		var selectHead = $create("div", {
+			id : "confBoxSel"
+		});
 		var wrapper = $create("div", {
 			id : "confWrap"
 		});
 		var btnwrap = $create("div", {
 			id : "confBtnWrap"
 		});
+		
+		// For selecting which options to use
+		var optSelBox = $create("div", {
+			className : "selBox",
+			textContent : "Options"
+		});
+		var stlSelBox = $create("div", {
+			className : "selBox selBoxOn",
+			textContent : "Styles"
+		});
+		optSelBox.addEventListener('click', function (e) {
+			configurations();
+		}, false);
+		
+		selectHead.appendChild(optSelBox);
+		selectHead.appendChild(stlSelBox);
 		
 		// Creates and appends the navigation tabs
 		var genTab = new config_tab("General", "t_GenStyl");
@@ -307,8 +326,9 @@ function style_dialog(popup) {
 		// Media Settings
 		var media_set_window = new config_window(mdaTab, "MdaStyl");
 			// General Settings
-		var media_section = new config_section();
-		media_section.sectionOptions.push(new config_desc_section('Coming Soon', 'This section is still under construction. Please excuse our mess.'));
+		var media_section = new config_section("General");
+		media_section.sectionOptions.push(new config_intField("Images per set", "mdaimgnum", options.DEFAULT_MDAIMGNUM));
+		media_section.sectionOptions.push(new config_selectionBox("Embed area", "mdaemdpos", ["Left", "Right", "Overlay"], ["left", "right", "over"], options.DEFAULT_MDAEMDPOS));
 		media_set_window.sections.push(media_section);
 		
 		// Dock Settings
@@ -362,6 +382,7 @@ function style_dialog(popup) {
 		
 		// Appending of all the configurations
 		centDivStyl.appendChild(welcome);
+		centDivStyl.appendChild(selectHead);
 		centDivStyl.appendChild(tabHead);
 		centDivStyl.appendChild(wrapper);
 		centDivStyl.appendChild(btnwrap);
@@ -418,13 +439,16 @@ function config_dialog(popup) {
 		
 		// The heading to the configuration page
 		var welcome = $create("h1", {
-			textContent : "Google Bump Configuration",
+			textContent : "Google Bump",
 			id : "confWel"
 		});
 		
 		// Wrappers for the content
 		var tabHead = $create("div", {
 			id : "confTabs"
+		});
+		var selectHead = $create("div", {
+			id : "confBoxSel"
 		});
 		var wrapper = $create("div", {
 			id : "confWrap"
@@ -433,17 +457,31 @@ function config_dialog(popup) {
 			id : "confBtnWrap"
 		});
 		
+		// For selecting which options to use
+		var optSelBox = $create("div", {
+			className : "selBox selBoxOn",
+			textContent : "Options"
+		});
+		var stlSelBox = $create("div", {
+			className : "selBox",
+			textContent : "Styles"
+		});
+		stlSelBox.addEventListener('click', function (e) {
+			styler();
+		}, false);
+		
+		selectHead.appendChild(optSelBox);
+		selectHead.appendChild(stlSelBox);
+		
 		// Creates and appends the navigation tabs
 		var genTab = new config_tab("General", "t_GenConf");
-		var abtTab = new config_tab("Created by KTaSh", "t_AbtConf", genTab);
-		var appTab = new config_tab("Clutter", "t_AppConf", genTab);
+		var abtTab = new config_tab("License", "t_AbtConf", genTab);
 		var imgTab = new config_tab("Images", "t_ImgConf", genTab);
 		var vidTab = new config_tab("Videos", "t_VidConf", genTab);
 		var otrTab = new config_tab("Advanced", "t_OtrConf", genTab);
 		
 		abtTab.draw(tabHead);
 		genTab.draw(tabHead);
-		appTab.draw(tabHead);
 		imgTab.draw(tabHead);
 		vidTab.draw(tabHead);
 		otrTab.draw(tabHead);
@@ -453,40 +491,47 @@ function config_dialog(popup) {
 		fieldsabt.id = "AbtConf";
 		fieldsabt.className = "removed";
 		var nwp = $create("p");
-		nwp.textContent = "Google Bump was created by me, KTaSh. Any piece of this code can be used by anyone for " + 
-								"any reason. However, if you do use it, I do ask that you let me know. I'd just like " +
-								"to see what you have done with it. Also, please extend this same courtesy, for at least " +
-								"this bit of code, to others. The source for this code can be found ";
+		nwp.textContent = "Copyright (c) 2010 Andrew Hushbeck (ktash)\n\n" +
+
+				"Permission is hereby granted, free of charge, to any person obtaining a copy " +
+				"of this software and associated documentation files (the \"Software\"), to deal " +
+				"in the Software without restriction, including without limitation the rights " +
+				"to use, copy, modify, merge, publish, distribute, sublicense, and/or sell " +
+				"copies of the Software, and to permit persons to whom the Software is " +
+				"furnished to do so, subject to the following conditions:\n\n" +
+
+				"The above copyright notice and this permission notice shall be included in " +
+				"all copies or substantial portions of the Software.\n\n" +
+
+				"THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR " +
+				"IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, " +
+				"FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE " +
+				"AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER " +
+				"LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, " +
+				"OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN " +
+				"THE SOFTWARE.\n\n" +
+				
+				"The source code for this script can always be found ";
 		fieldsabt.appendChild(nwp);
 		var linkToScript = $create("a");
 		linkToScript.textContent = "here.";
 		linkToScript.href = "http://userscripts.org/scripts/review/33449";
 		nwp.appendChild(linkToScript);
 		var sig = $create("p");
-		sig.textContent = "KTaSh";
+		sig.textContent = "ktash";
 		fieldsabt.appendChild(sig);
 		var abtver = $create("p");
 		abtver.textContent = "Version : " + version;
 		fieldsabt.appendChild(abtver);
-		
-		// Appearance Settings
-		var app_set_window = new config_window(appTab, "AppConf");
-			// Settings
-		var app_section = new config_section("Features");
-		// app_section.sectionOptions.push(new config_checkBox("Add Margins", "margs", options.DEFAULT_MARGS));
-		app_section.sectionOptions.push(new config_checkBox("Remove Suggestions", "sugges", options.DEFAULT_SUGGES));
-		app_section.sectionOptions.push(new config_checkBox("Move \"Did you mean\" text", "dym", options.DEFAULT_DYM));
-		app_section.sectionOptions.push(new config_checkBox("Move Top Content (Calculator, Showtimes, Etc.)", "moveTop", options.DEFAULT_MOVETOP));
-		app_set_window.sections.push(app_section);
 		
 		// Image Search Settings
 		var img_set_window = new config_window(imgTab, "ImgConf");
 			// Genearl Settings
 		var img_section = new config_section("Sidebar Options");
 		img_section.sectionOptions.push(new config_checkBox("Search For Images", "imgs", options.DEFAULT_IMGS));
-		img_section.sectionOptions.push(new config_checkBox("Show in player", "imgPlyr", options.DEFAULT_IMGPLYR));
+		img_section.sectionOptions.push(new config_selectionBox("Open in", "imgPlyr", ["This Window", "Player", "Slideshow", "Slideshow (Paused)"], [false, true, "slideshow", "soot"], options.DEFAULT_IMGPLYR));
 		img_section.sectionOptions.push(new config_checkBox("Show Control Bar", "imgCtrl", options.DEFAULT_IMGCTRL));
-		img_section.sectionOptions.push(new config_selectionBox("Number of pages to load", "imgPages", ["1 Pages","2 Pages","3 Pages","4 Pages","5 Pages","7 Pages","10 Pages"], [1, 2, 3, 4, 5, 7, 10], options.DEFAULT_IMGPGS));
+		img_section.sectionOptions.push(new config_intField("Number of images to load", "imgPages", options.DEFAULT_IMGPGS));
 		img_section.sectionOptions.push(new config_selectionBox("Image display size", "imgSize", ["Titles Only","Small","Medium","Large", "Details"], ["title", "small", "medium", "large", "details"], options.DEFAULT_IMGSIZE));
 		img_set_window.sections.push(img_section);
 			// Slideshow Settings
@@ -541,6 +586,12 @@ function config_dialog(popup) {
 		// gen_section.sectionOptions.push(new config_checkBox("Use Old Button Size", "oldSize", options.DEFAULT_OLDSIZE));
 		gen_section.sectionOptions.push(new config_checkBox("Enable Keyboard Shorcuts", "keyd", options.DEFAULT_KEYD));
 		gen_set_window.sections.push(gen_section);
+			// Clutter
+		var app_section = new config_section("Clutter");
+		app_section.sectionOptions.push(new config_checkBox("Remove Suggestions", "sugges", options.DEFAULT_SUGGES));
+		app_section.sectionOptions.push(new config_checkBox("Move \"Did you mean\" text", "dym", options.DEFAULT_DYM));
+		app_section.sectionOptions.push(new config_checkBox("Move Top Content (Calculator, Showtimes, Etc.)", "moveTop", options.DEFAULT_MOVETOP));
+		gen_set_window.sections.push(app_section);
 			// Keyboard Shortcut list
 		var kydv = $create('div', {
 			textContent : 'Keyboard shortcuts:'
@@ -567,14 +618,12 @@ function config_dialog(popup) {
 		gen_set_window.sections.push(cut_list_section);
 		
 		// Draw the windows
-		app_set_window.draw(wrapper);
 		img_set_window.draw(wrapper);
 		vid_set_window.draw(wrapper);
 		other_set_window.draw(wrapper);
 		gen_set_window.draw(wrapper);
 		
 		// Push them to the windows array
-		this.windows.push(app_set_window);
 		this.windows.push(img_set_window);
 		this.windows.push(vid_set_window);
 		this.windows.push(other_set_window);
@@ -589,6 +638,7 @@ function config_dialog(popup) {
 		
 		// Appending of all the configurations
 		centDivConf.appendChild(welcome);
+		centDivConf.appendChild(selectHead);
 		centDivConf.appendChild(tabHead);
 		wrapper.appendChild(fieldsabt);
 		centDivConf.appendChild(wrapper);

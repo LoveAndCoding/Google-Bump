@@ -1,3 +1,7 @@
+		#pBox { \
+			background-color: rgb(" + options.addedclr + "); \
+			color: rgb(" + options.mdatxtclr + "); \
+		} \
 		a, img {  \
 			border-style: none; \
 		} \
@@ -21,11 +25,13 @@
 			width: " + Math.max(262, maxwidth - 879) + "px; \
 		} \
 		#videoList { \
-			border: 1px solid black;  \
-			overflow: auto; \
-			width: " + ( !options.imgs ? '100%' : '55%' ) + "; \
-			height: auto; \
-			margin-top: 1%; \
+			border: 1px solid black; \
+			border-style: " + (options.imgs && options.mdaemdpos == 'over' ? 'solid solid solid none' : options.imgs ? 'none solid solid solid' : 'solid') + "; \
+			overflow-x: auto; \
+			overflow-y: hidden; \
+			height: " + ( !options.imgs || options.mdaemdpos == 'over' ? '490px' : '240px' ) + "; \
+			padding: 5px 0px; \
+			white-space: " + ( options.mdaemdpos == 'over' ? 'normal' : 'nowrap' ) + "; \
 		} \
 		.vid_thumb { \
 			max-width: 120px; \
@@ -37,33 +43,32 @@
 			text-decoration: underline; \
 		} \
 		#resOL { \
-			position: absolute; \
-			right: 0px; \
-			top: 24px; \
-			width: 44%; \
-			overflow: auto; \
-			height: " + (!options.vids || !options.imgs ? '500px' : '300px') + "; \
+			clear: both; \
 		} \
 		#imageList { \
 			border: 1px solid black; \
 			overflow: auto; \
-			width: " + (!options.vids ? '100%' : '44%') + "; \
-			height: " + (!options.vids ? '190px' : 'auto') + "; \
-			position: " + (!options.vids ? 'static' : 'absolute') + "; \
-			top: 320px; \
-			right: 3px; \
-			margin-top: " + (!options.vids ? '4px' : '1%') + "; \
+			height: " + ( !options.vids || options.mdaemdpos == 'over' ? '500px' : '249px' ) + "; \
+			width: " + ( options.vids && options.mdaemdpos == 'over' ? '50%' : options.mdaemdpos == 'over' ? '100%' : 'auto' ) + "; \
 			text-align: center; \
+			float: " + ( options.mdaemdpos == 'over' ? 'left' : 'none' ) + "; \
 		} \
 		#imageList img { \
-			margin: " + (!options.vids ? '4px' : '1.4%') + "; \
+			margin: " + (!options.vids ? '4px' : '5px 9px') + "; \
 			padding: " + (!options.vids ? '4px' : '0px') + "; \
+		} \
+		.imgSizelarge { \
+			display: inline-block; \
 		} \
 		#pBox { \
 			border: 1px solid black; \
+			border-right-style: " + (options.mdaemdpos == 'left' ? 'none' : 'solid') + "; \
+			border-left-style: " + (options.mdaemdpos == 'right' ? 'none' : 'solid') + "; \
 			height: 500px; \
 			text-align: center; \
-			width: 55%; \
+			width: " + (options.mdaemdpos != 'over' ? '55%' : '100%') + "; \
+			float: " + (options.mdaemdpos != 'over' ? options.mdaemdpos : 'none') + "; \
+			display: " + (options.mdaemdpos == 'over' ? 'none' : 'block') + "; \
 		} \
 		#embedArea img { \
 			max-width: 95%; \
@@ -84,7 +89,11 @@
 			height: 468px; \
 		} \
 		#hidePly { \
-			display: none !important; \
+			display: " + (options.mdaemdpos == 'over' ? 'block' : 'none !important') + "; \
+		} \
+		.playing, .imgShowing { \
+			display: block !important; \
+			position: " + (options.mdaemdpos == 'over' ? 'absolute' : 'relative') + "; \
 		} \
 		.removed, .rl-details, .rl-snippet, \
 		.rl-short-snippet, .rl-snippet-grid-view, \
@@ -108,11 +117,12 @@
 		} \
 		.vid_result, .rl-res { \
 			width: 120px; \
-			margin-left: 2%; \
-			margin-right: 2%; \
+			margin-left: 4px; \
+			margin-right: 4px; \
 			display: inline-table; \
 			height: auto; \
 			text-align: center; \
+			white-space: normal; \
 		} \
 		.thumbnail-img { \
 			width: 100px; \

@@ -1,5 +1,13 @@
 var image_store = {
 	
+	config_tabBg :		"data:image/gif;base64,R0lGODlhAQAZA" +
+						"MQAAM3Nzc7Oz%2BDg4Nra2tTU1dDQ0M3Mzd" +
+						"3d3dDPz9HR0dPT0t7e3s7OztnZ2tjY2OXl5" +
+						"dXV1dfX1uDg4eLi4tTU09zc3OPk5Obm5szM" +
+						"zAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAA" +
+						"AAAAALAAAAAABABkAAAUV4PVYkyQsRzU0Tg" +
+						"QRlJIUSMAABhYCADs%3D",
+	
 	multi_upArrow : 	"data:image/png;base64,iVBORw0KGgoAA" +
 						"AANSUhEUgAAAA0AAAAICAYAAAAiJnXPAAAA" +
 						"GXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJ" +

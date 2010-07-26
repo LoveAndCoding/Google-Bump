@@ -1,9 +1,18 @@
+Version 2.05.20100726 - Bug Fix Release - 07/26/10
+
+    * Feature: Set the number of images to search for
+    * Bug: Image search works again
+    * Improved: Image search uses JSON API
+    * Improved: Configuration redesigned
+    * Improved: Media Style redone for newer layout
+    * License now properly included in script in config area
+
 Version 2.04.20100702 - Style Release - 07/02/10
 
     * Feature: Toggle Video and Image embed controls
     * Bug: No longer attempts to make logo transparent after first time
     * Bug: Failure in moving "Did you mean" will no longer cause script to stop
-    * Bug: Empty YouTube results no throws shows error
+    * Bug: Empty YouTube results no longer throws error
     * Improved: More options in Classic Style customization
     * Improved: More options in Dock Style customization
     * Improved: Dock Style redone for newer layout
