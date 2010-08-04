@@ -16,7 +16,6 @@ function optionlist() {
 	this.DEFAULT_KEYD = true;
 	this.DEFAULT_TABS = false;
 		// Video defaults
-	this.DEFAULT_EXVIDS = true;
 	this.DEFAULT_VIDS = false;
 	this.DEFAULT_VDSRCHR = "google";
 		// Embed defaults
@@ -170,7 +169,6 @@ function optionlist() {
 	this.keyd = GM_getValue("keyd", this.DEFAULT_KEYD);
 	this.tabs = GM_getValue("tabs", this.DEFAULT_TABS);
 		// Video vars
-	this.exvids = GM_getValue("exvids", this.DEFAULT_EXVIDS);
 	this.vids = GM_getValue("vids", this.DEFAULT_VIDS);
 	this.vdsrchr = GM_getValue("vdsrchr", this.DEFAULT_VDSRCHR);
 		// Embed vars

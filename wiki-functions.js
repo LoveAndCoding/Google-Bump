@@ -69,7 +69,7 @@ function foundwikilink(response) {
 	theHeading.appendChild(headLink);
 	defdiv.appendChild(theHeading);
 	defdiv.appendChild(paranew);
-	if (options.vids || options.imgs || options.exvids) {
+	if (options.vids || options.imgs) {
 		$$(statId, dynaId).insertBefore(defdiv,$$(statId, dynaId).childNodes[1]);
 	} else {
 		$$(statId, dynaId).insertBefore(defdiv,$$(statId, dynaId).childNodes[0]);

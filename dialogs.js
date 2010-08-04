@@ -549,7 +549,6 @@ function config_dialog(popup) {
 		var vid_section = new config_section("Sidebar Options");
 		vid_section.sectionOptions.push(new config_checkBox("Search For Videos", "vids", options.DEFAULT_VIDS));
 		vid_section.sectionOptions.push(new config_selectionBox("Search using", "vdsrchr", ["Google","Youtube"], ["google", "youtube"], options.DEFAULT_VDSRCHR));
-		// vid_section.sectionOptions.push(new config_checkBox("Remove Videos from Search Results", "exvids", options.DEFAULT_EXVIDS));
 		vid_set_window.sections.push(vid_section);
 			// Embed Settings
 		var emd_section = new config_section("Embed Options");

@@ -11,7 +11,6 @@
   *	@depends shortcuts.js
   *	@depends text-functions.js
   *	@depends visual-functions.js
-  *	@depends video-extraction.js
   *	@depends video-functions.js
   *	@depends image-functions.js
   *	@depends wiki-functions.js
@@ -87,12 +86,6 @@ function runThrough() {
 	// Shows video results
 	if (options.vids) {
 		menutogglevids(userInput);
-	}
-	// Extract the video results from the search and if videos is not enabled, display them seperate
-	if (options.exvids) {
-		extractVideos(userInput);
-	} else {
-		unextractVids();
 	}
 	
 	// Shows image results
