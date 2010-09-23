@@ -16,6 +16,9 @@
 		#cnt { \
 			min-width: 0px !important; \
 		} \
+        #searchform { \
+            width: auto; \
+        } \
 		#center_col { \
 			margin-right: 0px; \
 		} \
