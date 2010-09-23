@@ -100,11 +100,11 @@ function linkit(theLink, tabit, under) {
 	}
 }
 // Goes up until if finds the proper node, and then returns the given attribute
-function findrightnode(target, clname, att) {
+function findrightnode(target, idname, att) {
 	var checkClass = target;
 	// Loop up and break on finding correct info
 	while (checkClass.parentNode) {
-		if (checkClass.className == clname) {
+		if (checkClass.id == idname) {
 			if(att) {
 				return checkClass.getAttribute(att);
 			} else {

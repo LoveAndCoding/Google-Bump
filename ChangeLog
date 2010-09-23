@@ -1,3 +1,8 @@
+Version 2.06.20100923 - Bug Fix Release - 09/23/10
+
+    * Bug: Logo and Icon transparency restored
+    * Bug: Multisearch now properly displayed when expanded
+
 Version 2.05.20100726 - Bug Fix Release - 07/26/10
 
     * Feature: Set the number of images to search for
