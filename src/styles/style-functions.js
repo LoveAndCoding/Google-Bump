@@ -1,7 +1,7 @@
 /**
   *	Import Dependencies
   *	
-  *	@depends media-embed.js
+  *	@depends ../search/media-embed.js
   *	@depends stylesheet-store.js
   */
   // Start Display Functions ---------------------------------------------------------

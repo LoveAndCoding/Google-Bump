@@ -5,15 +5,15 @@
   *	@depends image-store.js
   *	@depends options-store.js
   *	@depends helper-functions.js
-  *	@depends style-functions.js
+  *	@depends styles/style-functions.js
   *	@depends update.js
-  *	@depends dialog-functions.js
+  *	@depends dialogs/dialog-functions.js
   *	@depends shortcuts.js
   *	@depends text-functions.js
-  *	@depends visual-functions.js
-  *	@depends video-functions.js
-  *	@depends image-functions.js
-  *	@depends wiki-functions.js
+  *	@depends styles/visual-functions.js
+  *	@depends search/video-functions.js
+  *	@depends search/image-functions.js
+  *	@depends search/wiki-functions.js
   */
 	// Start Core Functions -----------------------------------------------------------
 // Redirects user to the scripts homepage

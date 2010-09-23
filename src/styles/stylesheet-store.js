@@ -3,21 +3,21 @@
   *	
   *	@depends style-assignment-header.js
   *	@depends assign-style-center.js
-  *	@depends center-styles.css
+  *	@depends ../css/center-styles.css
   *	@depends assign-style-classic.js
-  *	@depends classic-styles.css
+  *	@depends ../css/classic-styles.css
   *	@depends assign-style-color.js
-  *	@depends color-picker.css
+  *	@depends ../css/color-picker.css
   *	@depends assign-style-column.js
-  *	@depends column-styles.css
+  *	@depends ../css/column-styles.css
   *	@depends assign-style-dock.js
-  *	@depends dock-styles.css
+  *	@depends ../css/dock-styles.css
   *	@depends assign-style-gen.js
-  *	@depends general-styles.css
+  *	@depends ../css/general-styles.css
   *	@depends assign-style-media.js
-  *	@depends media-styles.css
+  *	@depends ../css/media-styles.css
   *	@depends assign-style-multi.js
-  *	@depends multisearch-styles.css
+  *	@depends ../css/multisearch-styles.css
   */
   
 }
