@@ -2,7 +2,7 @@
 // @name			Google Bump
 // @namespace		http://userscripts.org/scripts/show/33449
 // @description		Adds some functionality to the Google web search. Main features include Multisearch, Video result extraction, Wikipedia definitions and links, and some clutter cleanup by. All options can be turned off.
-// @version			2.05.20100726
+// @version			2.06.20100923
 // @include			http://www.google.tld/
 // @include			http://www.google.tld/#*
 // @include			http://www.google.tld/search?*
@@ -11,14 +11,14 @@
 
 /*
 	Author: KTaShes
-	Date: July 26 2010
+	Date: Sept 23 2010
 	
 	Code can now be found on GitHub @ http://github.com/ktsashes/Google-Bump
 	
 	This code uses juicer to compile from several different javascript files.
 	Juicer (C) Christian Johansen - http://cjohansen.no/en/ruby/juicer_a_css_and_javascript_packaging_tool
 */
-var version = "2.05";
+var version = "2.06";
 
 
 var image_store = {
@@ -407,7 +407,6 @@ function optionlist() {
 	this.DEFAULT_KEYD = true;
 	this.DEFAULT_TABS = false;
 		// Video defaults
-	this.DEFAULT_EXVIDS = true;
 	this.DEFAULT_VIDS = false;
 	this.DEFAULT_VDSRCHR = "google";
 		// Embed defaults
@@ -561,7 +560,6 @@ function optionlist() {
 	this.keyd = GM_getValue("keyd", this.DEFAULT_KEYD);
 	this.tabs = GM_getValue("tabs", this.DEFAULT_TABS);
 		// Video vars
-	this.exvids = GM_getValue("exvids", this.DEFAULT_EXVIDS);
 	this.vids = GM_getValue("vids", this.DEFAULT_VIDS);
 	this.vdsrchr = GM_getValue("vdsrchr", this.DEFAULT_VDSRCHR);
 		// Embed vars
@@ -733,11 +731,11 @@ function linkit(theLink, tabit, under) {
 	}
 }
 // Goes up until if finds the proper node, and then returns the given attribute
-function findrightnode(target, clname, att) {
+function findrightnode(target, idname, att) {
 	var checkClass = target;
 	// Loop up and break on finding correct info
 	while (checkClass.parentNode) {
-		if (checkClass.className == clname) {
+		if (checkClass.id == idname) {
 			if(att) {
 				return checkClass.getAttribute(att);
 			} else {
@@ -1094,6 +1092,9 @@ function stylesheet_store () {
 		#cnt { \
 			min-width: 0px !important; \
 		} \
+        #searchform { \
+            width: auto; \
+        } \
 		#center_col { \
 			margin-right: 0px; \
 		} \
@@ -2140,21 +2141,21 @@ function stylesheet_store () {
   *	
   *	@depends style-assignment-header.js
   *	@depends assign-style-center.js
-  *	@depends center-styles.css
+  *	@depends ../css/center-styles.css
   *	@depends assign-style-classic.js
-  *	@depends classic-styles.css
+  *	@depends ../css/classic-styles.css
   *	@depends assign-style-color.js
-  *	@depends color-picker.css
+  *	@depends ../css/color-picker.css
   *	@depends assign-style-column.js
-  *	@depends column-styles.css
+  *	@depends ../css/column-styles.css
   *	@depends assign-style-dock.js
-  *	@depends dock-styles.css
+  *	@depends ../css/dock-styles.css
   *	@depends assign-style-gen.js
-  *	@depends general-styles.css
+  *	@depends ../css/general-styles.css
   *	@depends assign-style-media.js
-  *	@depends media-styles.css
+  *	@depends ../css/media-styles.css
   *	@depends assign-style-multi.js
-  *	@depends multisearch-styles.css
+  *	@depends ../css/multisearch-styles.css
   */
   
 }
@@ -2169,7 +2170,7 @@ var ssStore = new stylesheet_store();
 /**
   *	Import Dependencies
   *	
-  *	@depends media-embed.js
+  *	@depends ../search/media-embed.js
   *	@depends stylesheet-store.js
   */
   // Start Display Functions ---------------------------------------------------------
@@ -2379,9 +2380,9 @@ function logoToTrans() {
 				id : 'transLogo'
 			});
 			var ctx = canvas.getContext('2d');
-			ctx.drawImage(currLogo, 0, 41,137,49,0,0,137,49);
+			ctx.drawImage(currLogo, 0, 145,178,62,0,0,178,62);
 			
-			var imgd = ctx.getImageData(0, 0, 137, 49);
+			var imgd = ctx.getImageData(0, 0, 178, 62);
 			var pix = imgd.data;
 			for (var i = 0, n = pix.length; i < n; i += 4) {
 				pix[i+3] = 255 - Math.min(pix[i],Math.min(pix[i+1],pix[i+2]));
@@ -2398,18 +2399,18 @@ function logoToTrans() {
 // Change the icon sheet from Google to be transparent
 function iconSheetTrans() {
 	var img = new Image();
-	img.src = "/images/srpr/nav_logo13.png";
+	img.src = "/images/nav_logo16.png";
 	
 	try {
 		var canvas = $create('canvas', {
 			id : 'transLogo',
-			width: 167,
-			height: 222
+			width: 178,
+			height: 238
 		});
 		var ctx = canvas.getContext('2d');
-		ctx.drawImage(img, 0, 0,167,222);
+		ctx.drawImage(img, 0, 0,178,238);
 		
-		var imgd = ctx.getImageData(0, 0, 167, 222);
+		var imgd = ctx.getImageData(0, 0,178,238);
 		var pix = imgd.data;
 		for (var i = 0, n = pix.length; i < n; i += 4) {
 			if(pix[i+3] != 0 && (Math.abs(pix[i] - pix[i+1]) < 75 && Math.abs(pix[i+1] - pix[i+2]) < 75) ) {
@@ -2420,7 +2421,7 @@ function iconSheetTrans() {
 		
 		return canvas.toDataURL("image/png");
 	} catch (_ex) {
-		return "/images/srpr/nav_logo13.png";
+		return "/images/nav_logo16.png";
 	}
 }
 	// End Display Functions -----------------------------------------------------------
@@ -3728,7 +3729,6 @@ function config_dialog(popup) {
 		var vid_section = new config_section("Sidebar Options");
 		vid_section.sectionOptions.push(new config_checkBox("Search For Videos", "vids", options.DEFAULT_VIDS));
 		vid_section.sectionOptions.push(new config_selectionBox("Search using", "vdsrchr", ["Google","Youtube"], ["google", "youtube"], options.DEFAULT_VDSRCHR));
-		// vid_section.sectionOptions.push(new config_checkBox("Remove Videos from Search Results", "exvids", options.DEFAULT_EXVIDS));
 		vid_set_window.sections.push(vid_section);
 			// Embed Settings
 		var emd_section = new config_section("Embed Options");
@@ -4212,7 +4212,7 @@ function multisearcher() {
 		theirButton.parentNode.insertBefore(this.origOptionBox, theirButton);
 		theirButton.parentNode.appendChild(this.myButton);
 		
-		this.newSearchWrapper = $cl("lst-td")[0].parentNode.parentNode;
+		this.newSearchWrapper = findrightnode($cl("lst-td")[0], "sftab");
 		
 		var SR = this;
 		this.myButton.addEventListener('click', function (e) {
@@ -4737,72 +4737,6 @@ function topContentMove() {
 }
 	// End Visual Functions ------------------------------------------------------------
 
-	// Start Video Extraction Functions --------------------------------------------
-// Finds videos within the results and sets them aside... literally
-function extractVideos(userSearch) {
-	// Get all elements with the j class, the defining class for videos
-	var vidsr = $cl("ts");
-	if (vidsr.length > 0) {
-		if (!options.vids && !options.imgs) {
-			// Begin base item creation -------------------------------------------------
-			var box = rightBox("exvidlist");
-			var theList = $create("ol");
-			var header = $create("h3");
-			var videosLink = $create("a");
-			videosLink.href = "http://video.google.com/videosearch?q=" + userSearch + "#";
-			videosLink.textContent = "Videos";
-			header.appendChild(videosLink);
-			box.appendChild(header);
-			// End base item creation ----------------------------------------------------
-			var originalLength = vidsr.length;
-			for (var i = 0; i < vidsr.length; i++) {
-				if (vidsr[i].parentNode.childNodes.length == 3 && vidsr[i].parentNode.childNodes[0] == vidsr[i]) { // Tests that it is, in fact, a video result
-					// Get the entire result (the j class is just a <td> and not the whole result)
-					var videoresult = vidsr[i].parentNode;
-					if (videoresult.className.indexOf("g") >= 0) {
-						videoresult.className = "vidRes";
-						
-						// Locates the description of the link and erases it
-						var text = vidsr[i].childNodes[0].childNodes[0].childNodes[1];
-						text.className = "removed";
-						var vidtitle = text.childNodes[1].childNodes[0];
-						vidtitle.className = "vrTitle";
-						
-						// Appends items
-						theList.appendChild(videoresult);
-						theList.appendChild(vidtitle);
-					}
-				} else {
-					vidsr[i].parentNode.parentNode.parentNode.parentNode.parentNode.className = "blocked";
-				}
-				if (vidsr.length < originalLength) {
-					i--;
-					originalLength--;
-				}
-			}
-			box.appendChild(theList);
-			if(theList.childNodes.length < 1) {
-				box.className = "removed";
-			}
-			$$(statId, dynaId).insertBefore(box, $$(statId, dynaId).childNodes[0]);
-		} else {
-			//
-		}
-	}
-}
-// Goes through and reveals the videos that are automatically hidden with all non-result content
-function unextractVids() {
-	var vidss = $cl("ts");
-	if (vidss.length > 0) {
-		for (var rvl = 0; rvl < vidss.length; rvl++) {
-			if (vidss[rvl].parentNode.childNodes.length == 3 && vidss[rvl].parentNode.childNodes[0] == vidss[rvl]) {
-				vidss[rvl].parentNode.className = "g";
-			}
-		}
-	}
-}
-	// End Video Extraction Functions ----------------------------------------------
-
 /**	=================================================================
   *	Video Search
   *	=================================================================
@@ -4848,18 +4782,21 @@ function unextractVids() {
   *			<= Return String =>		Url for the embed
   *	
   */
-function indiv_video_result(src, link, domain, name) {
+function indiv_video_result(src, link, embsrc, domain, name) {
 	
 	// Thumbnail Source
 	this.src = src;
 	// Link to video
 	this.link = link;
+	// Embed URL
+	this.emburl = embsrc.replace(/&.+/, '');
 	// Domain
 	this.domain = domain;
 	// Name of video
 	this.name = name;
 	// Embeddable on page
-	this.embeddable = (domain == 'youtube' || domain == 'google' || domain == 'metacafe' || domain == 'livevideo');
+	// !! Metacafe and livevideo are not available because Google API does not return them
+	this.embeddable = (domain == 'YouTube' || domain == 'Google' || domain == 'metacafe' || domain == 'livevideo'); 
 	
 	// Draw the video result
 	this.draw = function (parentNode) {
@@ -4900,9 +4837,9 @@ function indiv_video_result(src, link, domain, name) {
 		
 		// Embeds the video
 		var src;
-		if (res.domain == "youtube") {
+		if (res.domain == "YouTube") {
 			src = this.youtubeEmbed(res.link);
-		} else if (res.domain == "google") {
+		} else if (res.domain == "Google") {
 			src = this.googleEmbed(res.link);
 		} else if (res.domain == "metacafe") {
 			src = this.metacafeEmbed(res.link);
@@ -4959,10 +4896,8 @@ function indiv_video_result(src, link, domain, name) {
 	
 	// Handles logic for youtube embeds including extra options
 	this.youtubeEmbed = function(link) {
-		var regexUtube = new RegExp("^http:\/\/w{3}\.youtube\.com\/watch");
-		var src = link.replace(regexUtube, "");
-		src = "http://www.youtube" + (options.pmvd ? "-nocookie" : "") + ".com/v/" + src.substr(3) +
-				"?fs=" + Number(options.fsvd) +
+		var src = this.emburl +
+				"&fs=" + Number(options.fsvd) +
 				"&hd=" + Number(options.hdvd) + 
 				"&autoplay=" + Number(options.apvd) +
 				"&loop=" + Number(options.lpvd) +
@@ -4977,10 +4912,12 @@ function indiv_video_result(src, link, domain, name) {
 	this.googleEmbed = function(link) {
 		var regexGoogl = new RegExp("^http:\/\/video\.google\.com\/videoplay");
 		var src = link.replace(regexGoogl, "");
-		src = "http://video.google.com/googleplayer.swf?hl=en&" + src.substr(1) +
+		src = this.emburl +
 				"&fs=" + options.fsvd +
 				"&autoplay=" + options.apvd +
-				"&loop=" + options.lpvd;
+				"&loop=" + options.lpvd +
+				"&playerMode=" + (options.fsvd ? "embedded" : "simple") +
+				"&speedcontrol=0";
 		return src;
 	};
 	
@@ -5026,16 +4963,14 @@ function novids(response) {
 }
 // Show the loaded videos
 function showvids(response) {
-	var code = stringtohtml(response.responseText);
+	var vrs;
+	eval("vrs = " + response.responseText);
 	
+	var vrl = vrs.responseData.results;
 	// Sorts through the video results and puts them in a list
 	var box = rightBox("videoList");
 	
-	var rlitems = code.getElementsByClassName("rl-item");
-	var rlress = code.getElementsByClassName("rl-res");
-	var thbs = code.getElementsByClassName("thumbnail-img");
-	var vts = code.getElementsByClassName("rl-title");
-	if (rlitems.length > 0) {
+	if (vrl.length > 0) {
 		var proc = 0;
 		var limit = 5;
 		if (!options.imgs && options.styl == "media") {
@@ -5044,20 +4979,17 @@ function showvids(response) {
 			limit = 3;
 		}
 		
-		while((proc < limit || limit == -1) && proc < rlress.length) {
-			if (rlitems[proc].className.indexOf('playlist-res') < 0) {
-				var vid_src = getAttribute(rlress[proc], "srcurl");
-				var img_src = thbs[proc].src;
-				var vid_title = vts[proc].textContent.trim();
-				var vid_domain = vid_src.replace(/http:\/\/\w*\./,'').replace(/\..*/,'');
-				
-				var new_vid = new indiv_video_result(img_src, vid_src, vid_domain, vid_title);
-				new_vid.draw(box);
-				
-				proc++;
-			} else {
-				$remove(rlitems[proc]);
-			}
+		while((proc < limit || limit == -1) && proc < vrl.length) {
+			var vid_src = vrl[proc].url.replace(/[^q]+q=/, '').replace(/&.+/, '');
+			var emb_src = vrl[proc].playUrl;
+			var img_src = vrl[proc].tbUrl;
+			var vid_title = vrl[proc].title;
+			var vid_domain = vrl[proc].videoType;
+			
+			var new_vid = new indiv_video_result(img_src, vid_src, emb_src, vid_domain, vid_title);
+			new_vid.draw(box);
+			
+			proc++;
 		}
 		
 		if ($("imageList") && (options.clctoprht == 'videos' && options.styl == 'classic')) {
@@ -5107,7 +5039,7 @@ function menutogglevids(theSearch) {
 	if(options.vdsrchr == "youtube") {
 		get("http://gdata.youtube.com/feeds/api/videos?alt=json-in-script&callback=y&max-results=5&format=5&q=" + encodeURIComponent(theSearch), youtubeSearched, novids);
 	} else {
-		get("http://video.google.com/videosearch?q=" + encodeURIComponent(theSearch), showvids, novids);
+		get("http://ajax.googleapis.com/ajax/services/search/video?v=1.0&gbv=2&rsz=5&start=0&q=" + encodeURIComponent(theSearch), showvids, novids);
 	}
 }
 	// End Video Search Functions --------------------------------------------------
@@ -5196,7 +5128,7 @@ function indiv_img_result(src, link, title, sizeInfo, type, num) {
 	};
 	
 	this.clicked = function (event) {
-		if(options.imgPlyr) {
+		if(options.imgPlyr && options.imgPlyr != "false") {
 			if(event) {
 				event.stopPropagation();
 				event.preventDefault();
@@ -5568,7 +5500,7 @@ function foundwikilink(response) {
 	theHeading.appendChild(headLink);
 	defdiv.appendChild(theHeading);
 	defdiv.appendChild(paranew);
-	if (options.vids || options.imgs || options.exvids) {
+	if (options.vids || options.imgs) {
 		$$(statId, dynaId).insertBefore(defdiv,$$(statId, dynaId).childNodes[1]);
 	} else {
 		$$(statId, dynaId).insertBefore(defdiv,$$(statId, dynaId).childNodes[0]);
@@ -5635,16 +5567,15 @@ function menutogglewiki(theSearch) {
   *	@depends image-store.js
   *	@depends options-store.js
   *	@depends helper-functions.js
-  *	@depends style-functions.js
+  *	@depends styles/style-functions.js
   *	@depends update.js
-  *	@depends dialog-functions.js
+  *	@depends dialogs/dialog-functions.js
   *	@depends shortcuts.js
   *	@depends text-functions.js
-  *	@depends visual-functions.js
-  *	@depends video-extraction.js
-  *	@depends video-functions.js
-  *	@depends image-functions.js
-  *	@depends wiki-functions.js
+  *	@depends styles/visual-functions.js
+  *	@depends search/video-functions.js
+  *	@depends search/image-functions.js
+  *	@depends search/wiki-functions.js
   */
 	// Start Core Functions -----------------------------------------------------------
 // Redirects user to the scripts homepage
@@ -5717,12 +5648,6 @@ function runThrough() {
 	// Shows video results
 	if (options.vids) {
 		menutogglevids(userInput);
-	}
-	// Extract the video results from the search and if videos is not enabled, display them seperate
-	if (options.exvids) {
-		extractVideos(userInput);
-	} else {
-		unextractVids();
 	}
 	
 	// Shows image results
