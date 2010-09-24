@@ -19,16 +19,14 @@ function novids(response) {
 }
 // Show the loaded videos
 function showvids(response) {
-	var code = stringtohtml(response.responseText);
+	var vrs;
+	eval("vrs = " + response.responseText);
 	
+	var vrl = vrs.responseData.results;
 	// Sorts through the video results and puts them in a list
 	var box = rightBox("videoList");
 	
-	var rlitems = code.getElementsByClassName("rl-item");
-	var rlress = code.getElementsByClassName("rl-res");
-	var thbs = code.getElementsByClassName("thumbnail-img");
-	var vts = code.getElementsByClassName("rl-title");
-	if (rlitems.length > 0) {
+	if (vrl.length > 0) {
 		var proc = 0;
 		var limit = 5;
 		if (!options.imgs && options.styl == "media") {
@@ -37,20 +35,17 @@ function showvids(response) {
 			limit = 3;
 		}
 		
-		while((proc < limit || limit == -1) && proc < rlress.length) {
-			if (rlitems[proc].className.indexOf('playlist-res') < 0) {
-				var vid_src = getAttribute(rlress[proc], "srcurl");
-				var img_src = thbs[proc].src;
-				var vid_title = vts[proc].textContent.trim();
-				var vid_domain = vid_src.replace(/http:\/\/\w*\./,'').replace(/\..*/,'');
-				
-				var new_vid = new indiv_video_result(img_src, vid_src, vid_domain, vid_title);
-				new_vid.draw(box);
-				
-				proc++;
-			} else {
-				$remove(rlitems[proc]);
-			}
+		while((proc < limit || limit == -1) && proc < vrl.length) {
+			var vid_src = vrl[proc].url.replace(/[^q]+q=/, '').replace(/&.+/, '');
+			var emb_src = vrl[proc].playUrl;
+			var img_src = vrl[proc].tbUrl;
+			var vid_title = vrl[proc].title;
+			var vid_domain = vrl[proc].videoType;
+			
+			var new_vid = new indiv_video_result(img_src, vid_src, emb_src, vid_domain, vid_title);
+			new_vid.draw(box);
+			
+			proc++;
 		}
 		
 		if ($("imageList") && (options.clctoprht == 'videos' && options.styl == 'classic')) {
@@ -100,7 +95,7 @@ function menutogglevids(theSearch) {
 	if(options.vdsrchr == "youtube") {
 		get("http://gdata.youtube.com/feeds/api/videos?alt=json-in-script&callback=y&max-results=5&format=5&q=" + encodeURIComponent(theSearch), youtubeSearched, novids);
 	} else {
-		get("http://video.google.com/videosearch?q=" + encodeURIComponent(theSearch), showvids, novids);
+		get("http://ajax.googleapis.com/ajax/services/search/video?v=1.0&gbv=2&rsz=5&start=0&q=" + encodeURIComponent(theSearch), showvids, novids);
 	}
 }
 	// End Video Search Functions --------------------------------------------------

@@ -43,18 +43,21 @@
   *			<= Return String =>		Url for the embed
   *	
   */
-function indiv_video_result(src, link, domain, name) {
+function indiv_video_result(src, link, embsrc, domain, name) {
 	
 	// Thumbnail Source
 	this.src = src;
 	// Link to video
 	this.link = link;
+	// Embed URL
+	this.emburl = embsrc.replace(/&.+/, '');
 	// Domain
 	this.domain = domain;
 	// Name of video
 	this.name = name;
 	// Embeddable on page
-	this.embeddable = (domain == 'youtube' || domain == 'google' || domain == 'metacafe' || domain == 'livevideo');
+	// !! Metacafe and livevideo are not available because Google API does not return them
+	this.embeddable = (domain == 'YouTube' || domain == 'Google' || domain == 'metacafe' || domain == 'livevideo'); 
 	
 	// Draw the video result
 	this.draw = function (parentNode) {
@@ -95,9 +98,9 @@ function indiv_video_result(src, link, domain, name) {
 		
 		// Embeds the video
 		var src;
-		if (res.domain == "youtube") {
+		if (res.domain == "YouTube") {
 			src = this.youtubeEmbed(res.link);
-		} else if (res.domain == "google") {
+		} else if (res.domain == "Google") {
 			src = this.googleEmbed(res.link);
 		} else if (res.domain == "metacafe") {
 			src = this.metacafeEmbed(res.link);
@@ -154,10 +157,8 @@ function indiv_video_result(src, link, domain, name) {
 	
 	// Handles logic for youtube embeds including extra options
 	this.youtubeEmbed = function(link) {
-		var regexUtube = new RegExp("^http:\/\/w{3}\.youtube\.com\/watch");
-		var src = link.replace(regexUtube, "");
-		src = "http://www.youtube" + (options.pmvd ? "-nocookie" : "") + ".com/v/" + src.substr(3) +
-				"?fs=" + Number(options.fsvd) +
+		var src = this.emburl +
+				"&fs=" + Number(options.fsvd) +
 				"&hd=" + Number(options.hdvd) + 
 				"&autoplay=" + Number(options.apvd) +
 				"&loop=" + Number(options.lpvd) +
@@ -172,10 +173,12 @@ function indiv_video_result(src, link, domain, name) {
 	this.googleEmbed = function(link) {
 		var regexGoogl = new RegExp("^http:\/\/video\.google\.com\/videoplay");
 		var src = link.replace(regexGoogl, "");
-		src = "http://video.google.com/googleplayer.swf?hl=en&" + src.substr(1) +
+		src = this.emburl +
 				"&fs=" + options.fsvd +
 				"&autoplay=" + options.apvd +
-				"&loop=" + options.lpvd;
+				"&loop=" + options.lpvd +
+				"&playerMode=" + (options.fsvd ? "embedded" : "simple") +
+				"&speedcontrol=0";
 		return src;
 	};
 	

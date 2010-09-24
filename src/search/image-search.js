@@ -82,7 +82,7 @@ function indiv_img_result(src, link, title, sizeInfo, type, num) {
 	};
 	
 	this.clicked = function (event) {
-		if(options.imgPlyr) {
+		if(options.imgPlyr && options.imgPlyr != "false") {
 			if(event) {
 				event.stopPropagation();
 				event.preventDefault();
