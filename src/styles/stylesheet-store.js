@@ -21,8 +21,6 @@
   */
   
 }
-  
-var ssStore = new stylesheet_store();
 
 /**	=================================================================
   *	End Style Store

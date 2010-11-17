@@ -123,6 +123,7 @@ GM_registerMenuCommand("Styles", styler, "y", "control shift");
 GM_registerMenuCommand("Script Info (Opens in New Tab)", redirInfo);
 
 var popupManager = new popup_manager();
+var ssStore;
 // Finds and saves what the user looks for  and saves the url-- Currently returns incorrect value if back button is used
 var userInput = setupText();
 var currUrl = location.href;
@@ -133,6 +134,7 @@ var statId = 'ires';
 
 // Starts the process
 if($$(statId, dynaId) && $$(statId, dynaId).children.length > 0 && !/.*&tbs=.*/.test(location.href)) {
+	ssStore = new stylesheet_store();
 	runThrough();
 } else {
 	delayed = true;
@@ -143,6 +145,7 @@ function waitingForPage() {
 	if($$(statId, dynaId) && $$(statId, dynaId).children.length > 0 && !/.*&tbs=.*/.test(location.href)) {
 		userInput = setupText();
 		currUrl = location.href;
+		ssStore = new stylesheet_store();
 		runThrough();
 	} else {
 		setTimeout(waitingForPage, options.delay);

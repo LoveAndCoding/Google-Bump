@@ -54,7 +54,7 @@ function multisearcher() {
 		theirButton.parentNode.insertBefore(this.origOptionBox, theirButton);
 		theirButton.parentNode.appendChild(this.myButton);
 		
-		this.newSearchWrapper = findrightnode($cl("lst-td")[0], "sftab");
+		this.newSearchWrapper = findrightnode($cl("lst-td")[0], "sftab") || $cl("lst-td")[0].parentNode.parentNode.parentNode;
 		
 		var SR = this;
 		this.myButton.addEventListener('click', function (e) {

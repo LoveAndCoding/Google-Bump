@@ -644,7 +644,12 @@ function $$(first, second) {
 }
 // Shortcut for document.getElementsByClassName
 function $cl(cname) {
-	return document.getElementsByClassName(cname);
+	var classlist = document.evaluate('//*[contains(concat(" ", @class, " "), " ' + cname + ' ")]', document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+	var items = [];
+	for(var ci = 0, cl = classlist.snapshotLength; ci < cl; ci++) {
+		items.push(classlist.snapshotItem(ci));
+	}
+	return items;
 }
 // Shortcut for document.createElement
 function $create(type, attributes) {
@@ -1250,6 +1255,10 @@ function stylesheet_store () {
 		} /* "; /* End Stylesheet */
 
 	this.classic_stylesheet = " \
+		div.vsc, .knavi table { \
+			display: block !important; \
+			width: auto !important; \
+		} \
 		#mBox, #pBox, #videoList, #imageList, #controlArea, #embedArea { \
 			border: 1px none rgb(" + options.clcbdrclr + "); \
 		} \
@@ -1276,6 +1285,8 @@ function stylesheet_store () {
 			margin-right: " + ( options.sideads ? 0 : 250) + "px; \
 			float: " + (options.clcvrthrz == 'horizontal' ? '' : 'right') + "; \
 			border-style: " + (options.clcborder ? 'solid' : 'none') + "; \
+			z-index: 20; \
+			position: relative; \
 		} \
 		#pBox { \
 			vertical-align: middle; \
@@ -2159,8 +2170,6 @@ function stylesheet_store () {
   */
   
 }
-  
-var ssStore = new stylesheet_store();
 
 /**	=================================================================
   *	End Style Store
@@ -2372,7 +2381,8 @@ function makePlayer() {
 }
 // Change the Google logo to be transparent
 function logoToTrans() {
-	var currLogo = $('logo').childNodes[1];
+	var attchpoint = $('logo') ? $('logo') : $('logocont').childNodes[0];
+	var currLogo = $('logo') ? attchpoint.childNodes[1] : attchpoint.childNodes[0];
 	
 	if(currLogo) {
 		try {
@@ -2380,9 +2390,15 @@ function logoToTrans() {
 				id : 'transLogo'
 			});
 			var ctx = canvas.getContext('2d');
-			ctx.drawImage(currLogo, 0, 145,178,62,0,0,178,62);
+			if($('logo')) {
+				ctx.drawImage(currLogo, 0, 145,178,62,0,0,178,62);
+			} else {
+				ctx.drawImage(currLogo, 0, 0,attchpoint.width,attchpoint.height,0,0,attchpoint.width,attchpoint.height);
+				$('logocont').width = currLogo.width;
+				$('logocont').height = "72px";
+			}
 			
-			var imgd = ctx.getImageData(0, 0, 178, 62);
+			var imgd = ctx.getImageData(0, 0, canvas.width, canvas.height);
 			var pix = imgd.data;
 			for (var i = 0, n = pix.length; i < n; i += 4) {
 				pix[i+3] = 255 - Math.min(pix[i],Math.min(pix[i+1],pix[i+2]));
@@ -2399,18 +2415,17 @@ function logoToTrans() {
 // Change the icon sheet from Google to be transparent
 function iconSheetTrans() {
 	var img = new Image();
-	img.src = "/images/nav_logo16.png";
-	
+	img.src = unsafeWindow.getComputedStyle($cl('micon')[0], null).backgroundImage.replace(/^url\("/,'').replace(/"\)$/,'');
 	try {
 		var canvas = $create('canvas', {
 			id : 'transLogo',
-			width: 178,
-			height: 238
+			width: img.width,
+			height: img.height
 		});
 		var ctx = canvas.getContext('2d');
-		ctx.drawImage(img, 0, 0,178,238);
+		ctx.drawImage(img, 0, 0,img.width,img.height);
 		
-		var imgd = ctx.getImageData(0, 0,178,238);
+		var imgd = ctx.getImageData(0, 0,img.width,img.height);
 		var pix = imgd.data;
 		for (var i = 0, n = pix.length; i < n; i += 4) {
 			if(pix[i+3] != 0 && (Math.abs(pix[i] - pix[i+1]) < 75 && Math.abs(pix[i+1] - pix[i+2]) < 75) ) {
@@ -2421,7 +2436,7 @@ function iconSheetTrans() {
 		
 		return canvas.toDataURL("image/png");
 	} catch (_ex) {
-		return "/images/nav_logo16.png";
+		return img.src;
 	}
 }
 	// End Display Functions -----------------------------------------------------------
@@ -4212,7 +4227,7 @@ function multisearcher() {
 		theirButton.parentNode.insertBefore(this.origOptionBox, theirButton);
 		theirButton.parentNode.appendChild(this.myButton);
 		
-		this.newSearchWrapper = findrightnode($cl("lst-td")[0], "sftab");
+		this.newSearchWrapper = findrightnode($cl("lst-td")[0], "sftab") || $cl("lst-td")[0].parentNode.parentNode.parentNode;
 		
 		var SR = this;
 		this.myButton.addEventListener('click', function (e) {
@@ -4562,18 +4577,8 @@ function redirgo(theList, tablast) {
 function setupText(preset) {
 	var search;
 	var params;
-	if (!location.href.match("/search?[^#]*q=")) {
-		params = location.hash.split("&").join("#").split("#");
-	} else {
-		// Extracts the search value from the URL
-		params = location.search.split("&").join("?").split("?");
-	}
-	for (var p = params.length - 1; p >= 0; p--) {
-		if(params[p].indexOf("q=") === 0) {
-			search = unescape(params[p].substr(2).split("+").join(" "));
-			break;
-		}
-	}
+	var locsrch = location.href.match(/[?&]q=[^&#]+/g);
+	var search = locsrch[locsrch.length - 1].split("+").join(" ").substr(3);
 	
 	if(search == undefined) { return; }
 	// Checks for google specific syntax
@@ -5685,6 +5690,7 @@ GM_registerMenuCommand("Styles", styler, "y", "control shift");
 GM_registerMenuCommand("Script Info (Opens in New Tab)", redirInfo);
 
 var popupManager = new popup_manager();
+var ssStore;
 // Finds and saves what the user looks for  and saves the url-- Currently returns incorrect value if back button is used
 var userInput = setupText();
 var currUrl = location.href;
@@ -5695,6 +5701,7 @@ var statId = 'ires';
 
 // Starts the process
 if($$(statId, dynaId) && $$(statId, dynaId).children.length > 0 && !/.*&tbs=.*/.test(location.href)) {
+	ssStore = new stylesheet_store();
 	runThrough();
 } else {
 	delayed = true;
@@ -5705,6 +5712,7 @@ function waitingForPage() {
 	if($$(statId, dynaId) && $$(statId, dynaId).children.length > 0 && !/.*&tbs=.*/.test(location.href)) {
 		userInput = setupText();
 		currUrl = location.href;
+		ssStore = new stylesheet_store();
 		runThrough();
 	} else {
 		setTimeout(waitingForPage, options.delay);

@@ -203,7 +203,8 @@ function makePlayer() {
 }
 // Change the Google logo to be transparent
 function logoToTrans() {
-	var currLogo = $('logo').childNodes[1];
+	var attchpoint = $('logo') ? $('logo') : $('logocont').childNodes[0];
+	var currLogo = $('logo') ? attchpoint.childNodes[1] : attchpoint.childNodes[0];
 	
 	if(currLogo) {
 		try {
@@ -211,9 +212,15 @@ function logoToTrans() {
 				id : 'transLogo'
 			});
 			var ctx = canvas.getContext('2d');
-			ctx.drawImage(currLogo, 0, 145,178,62,0,0,178,62);
+			if($('logo')) {
+				ctx.drawImage(currLogo, 0, 145,178,62,0,0,178,62);
+			} else {
+				ctx.drawImage(currLogo, 0, 0,attchpoint.width,attchpoint.height,0,0,attchpoint.width,attchpoint.height);
+				$('logocont').width = currLogo.width;
+				$('logocont').height = "72px";
+			}
 			
-			var imgd = ctx.getImageData(0, 0, 178, 62);
+			var imgd = ctx.getImageData(0, 0, canvas.width, canvas.height);
 			var pix = imgd.data;
 			for (var i = 0, n = pix.length; i < n; i += 4) {
 				pix[i+3] = 255 - Math.min(pix[i],Math.min(pix[i+1],pix[i+2]));
@@ -230,18 +237,17 @@ function logoToTrans() {
 // Change the icon sheet from Google to be transparent
 function iconSheetTrans() {
 	var img = new Image();
-	img.src = "/images/nav_logo16.png";
-	
+	img.src = unsafeWindow.getComputedStyle($cl('micon')[0], null).backgroundImage.replace(/^url\("/,'').replace(/"\)$/,'');
 	try {
 		var canvas = $create('canvas', {
 			id : 'transLogo',
-			width: 178,
-			height: 238
+			width: img.width,
+			height: img.height
 		});
 		var ctx = canvas.getContext('2d');
-		ctx.drawImage(img, 0, 0,178,238);
+		ctx.drawImage(img, 0, 0,img.width,img.height);
 		
-		var imgd = ctx.getImageData(0, 0,178,238);
+		var imgd = ctx.getImageData(0, 0,img.width,img.height);
 		var pix = imgd.data;
 		for (var i = 0, n = pix.length; i < n; i += 4) {
 			if(pix[i+3] != 0 && (Math.abs(pix[i] - pix[i+1]) < 75 && Math.abs(pix[i+1] - pix[i+2]) < 75) ) {
@@ -252,7 +258,7 @@ function iconSheetTrans() {
 		
 		return canvas.toDataURL("image/png");
 	} catch (_ex) {
-		return "/images/nav_logo16.png";
+		return img.src;
 	}
 }
 	// End Display Functions -----------------------------------------------------------
