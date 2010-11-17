@@ -1,3 +1,7 @@
+		div.vsc, .knavi table { \
+			display: block !important; \
+			width: auto !important; \
+		} \
 		#mBox, #pBox, #videoList, #imageList, #controlArea, #embedArea { \
 			border: 1px none rgb(" + options.clcbdrclr + "); \
 		} \
@@ -24,6 +28,8 @@
 			margin-right: " + ( options.sideads ? 0 : 250) + "px; \
 			float: " + (options.clcvrthrz == 'horizontal' ? '' : 'right') + "; \
 			border-style: " + (options.clcborder ? 'solid' : 'none') + "; \
+			z-index: 20; \
+			position: relative; \
 		} \
 		#pBox { \
 			vertical-align: middle; \
