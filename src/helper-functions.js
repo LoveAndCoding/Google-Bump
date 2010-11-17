@@ -13,7 +13,12 @@ function $$(first, second) {
 }
 // Shortcut for document.getElementsByClassName
 function $cl(cname) {
-	return document.getElementsByClassName(cname);
+	var classlist = document.evaluate('//*[contains(concat(" ", @class, " "), " ' + cname + ' ")]', document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+	var items = [];
+	for(var ci = 0, cl = classlist.snapshotLength; ci < cl; ci++) {
+		items.push(classlist.snapshotItem(ci));
+	}
+	return items;
 }
 // Shortcut for document.createElement
 function $create(type, attributes) {

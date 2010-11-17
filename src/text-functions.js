@@ -23,18 +23,8 @@ function redirgo(theList, tablast) {
 function setupText(preset) {
 	var search;
 	var params;
-	if (!location.href.match("/search?[^#]*q=")) {
-		params = location.hash.split("&").join("#").split("#");
-	} else {
-		// Extracts the search value from the URL
-		params = location.search.split("&").join("?").split("?");
-	}
-	for (var p = params.length - 1; p >= 0; p--) {
-		if(params[p].indexOf("q=") === 0) {
-			search = unescape(params[p].substr(2).split("+").join(" "));
-			break;
-		}
-	}
+	var locsrch = location.href.match(/[?&]q=[^&#]+/g);
+	var search = locsrch[locsrch.length - 1].split("+").join(" ").substr(3);
 	
 	if(search == undefined) { return; }
 	// Checks for google specific syntax
