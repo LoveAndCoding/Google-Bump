@@ -2,7 +2,7 @@
 			background-color: rgb(" + options.genbgclr + "); \
 		} \
 		body { \
-			width: 760px; \
+			width: 960px; \
 			margin: 0px auto !important; \
 			border: 1px solid #000000; \
 			border-top-style: none; \
@@ -16,8 +16,12 @@
 		#cnt { \
 			min-width: 0px !important; \
 		} \
+        #rcnt { \
+            margin-top: 250px; \
+        } \
         #searchform { \
-            width: auto; \
+            width: 900px; \
+            padding-right: 60px; \
         } \
 		#center_col { \
 			margin-right: 0px; \
@@ -26,7 +30,10 @@
 			margin: 0px auto !important; \
 			padding: 19px 0px; \
 		} \
-		.tsf-p, #foot { \
+        .tsf-p { \
+            padding-right: 0px !important; \
+        } \
+		#foot { \
 			margin-right: 72px !important; \
 		} \
 		.gbh { \
@@ -39,11 +46,12 @@
 			padding-bottom: 0px; \
 		} \
 		#mBox { \
-			position: relative; \
+			position: absolute; \
 			height: 238px; \
 			overflow: hidden; \
-			border-bottom: 1px solid #6B90DA; \
-			border-top: 1px solid #6B90DA; \
+			border-bottom: 1px solid #E5E5E5; \
+            width: 960px; \
+            top: 101px; \
 		} \
 		#wikiDiv { \
 			min-height: 122px; \
@@ -97,11 +105,11 @@
 		#videoList { \
 			float: left; \
 			height: 238px; \
-			width: 270px; \
+			width: 500px; \
 			overflow-y: auto; \
 			overflow-x: hidden; \
 			border-right: 1px solid #6B90DA; \
-		}\
+		} \
 		#vidTag, #imageTag, #playerTag { \
 			text-align: center; \
 			margin: 0px; \
@@ -136,7 +144,7 @@
 		#imageList { \
 			text-align: center; \
 			height: 238px; \
-			width: 270px; \
+			width: 450px; \
 			float: right; \
 			z-index: 1001; \
 			overflow-y: auto; \

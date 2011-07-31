@@ -25,12 +25,21 @@
 		} \
 		#mBox { \
 			width: 400px; \
-			margin-right: " + ( options.sideads ? 0 : 250) + "px; \
-			float: " + (options.clcvrthrz == 'horizontal' ? '' : 'right') + "; \
+			right: " + ( options.sideads ? 0 : 250) + "px; \
 			border-style: " + (options.clcborder ? 'solid' : 'none') + "; \
+            top: 101px; \
 			z-index: 20; \
-			position: relative; \
+			position: absolute; \
+            border-right-style: none; \
+            border-top-style: none; \
 		} \
+        #search, #ires { \
+            padding-right: 420px; \
+        } \
+        #rhs_map { \
+            position: relative; \
+            right: "+( options.imgs || options.vids ? '401' : '0' )+"px; \
+        } \
 		#pBox { \
 			vertical-align: middle; \
 			overflow: hidden; \

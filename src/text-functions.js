@@ -35,7 +35,7 @@ function setupText(preset) {
 		var indiv = checkforcolon[k].split(" ");
 		var checker = indiv[indiv.length - 1];
 		// Finds google search sytnax and removes it (when it is properly formatted)
-		if (regexColon.test(checker)) {
+		if (regexColon.test(checker) && checkforcolon[k + 1]) {
 			indiv = indiv.slice(0,indiv.length - 1);
 			checkforcolon[k + 1] = checkforcolon[k + 1].split(" ").slice(1,checkforcolon[k + 1].length).join(" ");
 			checkforcolon[k] = indiv.join(" ");
@@ -47,7 +47,7 @@ function setupText(preset) {
 	for (var i = 0; i < search.length; i++) {
 		search[i] = search[i].charAt(0).toUpperCase() + search[i].substr(1).toLowerCase();
 	}
-	return search.join(" ");
+	return decodeURIComponent(search.join(" "));
 }
 // Setup the expanded multisearch search box
 function multiSearchSetup() {

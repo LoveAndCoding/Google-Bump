@@ -231,6 +231,13 @@ function Image_Search(query) {
 		this.search();
 	};
 	
+	this.undraw = function () {
+		
+		this.slideshow.undraw();
+		if(this.div.parentNode) this.div.parentNode.removeChild(this.div);
+		
+	};
+	
 	this.next = function () {
 		if(this.setOn < this.sets.length - 1) {
 			if(this.setOn == 0) {

@@ -61,13 +61,16 @@ function optionlist() {
 		// Color Defaults
 			// Background Colors
 	this.DEFAULT_GENBGCLR = '255,255,255';
+	this.DEFAULT_SCHBGCLR = '245,245,245';
 	this.DEFAULT_RESLTCLR = '255,255,255';
-	this.DEFAULT_GLBARCLR = '255,255,255';
+	this.DEFAULT_GLBARCLR = '45,45,45';
 	this.DEFAULT_ADDEDCLR = '240,247,249';
 	this.DEFAULT_PLYBLCLR = '255,255,255';
 	this.DEFAULT_OVRLYCLR = '0,0,0';
 			// Text Colors
 	this.DEFAULT_RESTXTCLR = '0,0,0';
+	this.DEFAULT_GBRTXTCLR = '204,204,204';
+	this.DEFAULT_GBOTXTCLR = '255,255,255';
 	this.DEFAULT_LNKTXTCLR = '17,17,204';
 	this.DEFAULT_URLTXTCLR = '34,136,34';
 	this.DEFAULT_SIMTXTCLR = '66,114,219';
@@ -204,6 +207,7 @@ function optionlist() {
 	
 		// Color vars
 	this.genbgclr = GM_getValue("genbgclr", this.DEFAULT_GENBGCLR);
+	this.schbgclr = GM_getValue("schbgclr", this.DEFAULT_SCHBGCLR);
 	this.resltclr = GM_getValue("resltclr", this.DEFAULT_RESLTCLR);
 	this.glbarclr = GM_getValue("glbarclr", this.DEFAULT_GLBARCLR);
 	this.addedclr = GM_getValue("addedclr", this.DEFAULT_ADDEDCLR);
@@ -211,6 +215,8 @@ function optionlist() {
 	this.ovrlyclr = GM_getValue("ovrlyclr", this.DEFAULT_OVRLYCLR);
 		// Text Color vars
 	this.restxtclr = GM_getValue("restxtclr", this.DEFAULT_RESTXTCLR);
+	this.gbrtxtclr = GM_getValue("gbrtxtclr", this.DEFAULT_GBRTXTCLR);
+	this.gbotxtclr = GM_getValue("gbotxtclr", this.DEFAULT_GBOTXTCLR);
 	this.lnktxtclr = GM_getValue("lnktxtclr", this.DEFAULT_LNKTXTCLR);
 	this.urltxtclr = GM_getValue("urltxtclr", this.DEFAULT_URLTXTCLR);
 	this.simtxtclr = GM_getValue("simtxtclr", this.DEFAULT_SIMTXTCLR);

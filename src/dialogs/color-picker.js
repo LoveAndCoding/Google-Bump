@@ -15,16 +15,18 @@ function color_picker(color) {
 		this.container = $create('div', {
 			'className' : 'colorContainer'
 		});
-		this.drawBW(this.color);
+		
+		var realtone = this.color;
+		var tone = this.getBaseColor(realtone);
+		this.drawBW(tone, realtone);
 		this.drawCB(0);
 		
 		document.body.appendChild(this.container);
 	};
 	
-	this.drawBW = function (tone) {
-		if(!tone) {
-			tone = '255,0,0';
-		}
+	this.drawBW = function (tone, realtone) {
+		tone = tone || '255,0,0';
+		realtone = realtone || '255,255,255';
 		
 		this.bwCanvas = $create('canvas', {
 			'className' : 'colorToneToBlack'
@@ -52,6 +54,20 @@ function color_picker(color) {
 		btw.addColorStop(1,'rgb(0,0,0)');
 		this.bwCtx.fillStyle = btw;
 		this.bwCtx.fillRect(0,0,255,255);
+	};
+	
+	this.getBaseColor = function (color) {
+		colors = color.split(/,\s?/);
+		for (var c = 0; c < colors.length; c++) {
+			if (parseInt(colors[c]) > 130) {
+				colors[c] = 255;
+			} else {
+				colors[c] = 0;
+			}
+		}
+		if(colors[0] == colors[1] && colors[1] == colors[2])
+			return '255,0,0'
+		return colors.join(',');
 	};
 	
 	this.drawCB = function (yOffset) {

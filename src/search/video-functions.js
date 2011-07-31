@@ -92,6 +92,7 @@ function youtubeSearched(response) {
 }
 // Searches for videos based on what the user is searching for
 function menutogglevids(theSearch) {
+	if($('videoList')) $('videoList').parentNode.removeChild($('videoList'));
 	if(options.vdsrchr == "youtube") {
 		get("http://gdata.youtube.com/feeds/api/videos?alt=json-in-script&callback=y&max-results=5&format=5&q=" + encodeURIComponent(theSearch), youtubeSearched, novids);
 	} else {

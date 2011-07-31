@@ -1,192 +1,207 @@
+Version 2.10.20110731 - Fix Release - 07/31/11
+
+	* Feature: Video persists through new search (though still not through paging)
+	* Feature: Add a few new controls for color changing
+	* Bug: Styled for new layout
+	* Bug: No longer triggers on non websearch pages
+	* Bug: Fixed issues with multisearch
+	* Bug: Fixed issues with logo
+	* Bug: Now works with Instant search
+	* Bug: Fixed some background and text color changing
+	* Bug: Fixed issue with media searches with queries containing special characters
+	* Disabled Dock and Media styles for now
+	* Support for older versions of Firefox dropped. 4+ is expected at the moment
+	* Note: Sometimes Google displays the older style, for which this does not display well. Upon closing and opening it should be back to normal
+
 Version 2.07.20101117 - Bug Fix Release - 11/17/10
 
-    * Bug: Logo and Icon transparency restored, hopefully for good this time
-    * Bug: Search Results no longer pushed to the bottom of the page
-    * Bug: Improved compatilibility with dynamically generated pages
+	* Bug: Logo and Icon transparency restored, hopefully for good this time
+	* Bug: Search Results no longer pushed to the bottom of the page
+	* Bug: Improved compatilibility with dynamically generated pages
 
 Version 2.06.20100923 - Bug Fix Release - 09/23/10
 
-    * Bug: Logo and Icon transparency restored
-    * Bug: Multisearch now properly displayed when expanded
-    * Bug: Google Video Search is now working again
-    * Bug: Clicking on an image now properly opens a new window when option is set to open in new window
+	* Bug: Logo and Icon transparency restored
+	* Bug: Multisearch now properly displayed when expanded
+	* Bug: Google Video Search is now working again
+	* Bug: Clicking on an image now properly opens a new window when option is set to open in new window
 
 Version 2.05.20100726 - Bug Fix Release - 07/26/10
 
-    * Feature: Set the number of images to search for
-    * Bug: Image search works again
-    * Improved: Image search uses JSON API
-    * Improved: Configuration redesigned
-    * Improved: Media Style redone for newer layout
-    * License now properly included in script in config area
+	* Feature: Set the number of images to search for
+	* Bug: Image search works again
+	* Improved: Image search uses JSON API
+	* Improved: Configuration redesigned
+	* Improved: Media Style redone for newer layout
+	* License now properly included in script in config area
 
 Version 2.04.20100702 - Style Release - 07/02/10
 
-    * Feature: Toggle Video and Image embed controls
-    * Bug: No longer attempts to make logo transparent after first time
-    * Bug: Failure in moving "Did you mean" will no longer cause script to stop
-    * Bug: Empty YouTube results no longer throws error
-    * Improved: More options in Classic Style customization
-    * Improved: More options in Dock Style customization
-    * Improved: Dock Style redone for newer layout
-    * Improved: Center Style video results cleaned up
-    * Improved: New Icons
-    * Improved: Checking for update uses meta.js file now
+	* Feature: Toggle Video and Image embed controls
+	* Bug: No longer attempts to make logo transparent after first time
+	* Bug: Failure in moving "Did you mean" will no longer cause script to stop
+	* Bug: Empty YouTube results no longer throws error
+	* Improved: More options in Classic Style customization
+	* Improved: More options in Dock Style customization
+	* Improved: Dock Style redone for newer layout
+	* Improved: Center Style video results cleaned up
+	* Improved: New Icons
+	* Improved: Checking for update uses meta.js file now
 
 Version 2.03.20100623 - Feature Release - 06/23/10
 
-    * Feature: Able to choose YouTube to search for videos
-    * Feature: Able to add and remove search engines from Multisearch
-    * Improved: Logic for exclusion rules
-    * Improved: Multisearch now fits new Google style
+	* Feature: Able to choose YouTube to search for videos
+	* Feature: Able to add and remove search engines from Multisearch
+	* Improved: Logic for exclusion rules
+	* Improved: Multisearch now fits new Google style
 
 Version 2.02.20100609 - Bug Fix Release - 06/09/10
 
-    * Feature: Ability to move top content
-    * Feature: One option to Classic Style options (Re-add Ads)
-    * Feature: One option to Center Style options (Background Color)
-    * Bug: No longer trigger on video search
-    * Bug: Canvas issue in FF 3.5.9 now has workaround
-    * Bug: No longer an error in Error Console if no images were found
-    * Improved: Logic for exclusion rules
+	* Feature: Ability to move top content
+	* Feature: One option to Classic Style options (Re-add Ads)
+	* Feature: One option to Center Style options (Background Color)
+	* Bug: No longer trigger on video search
+	* Bug: Canvas issue in FF 3.5.9 now has workaround
+	* Bug: No longer an error in Error Console if no images were found
+	* Improved: Logic for exclusion rules
 
 Version 2.01.20100604 - Bug Fix Release - 06/04/10
 
-    * BUG: Dynamic page is now handled properly
-    * BUG: Media style is no longer scrunched
-    * BUG: Fixed video thumbnail in media mode
-    * Improved: Transparency for Google's navigation and logo.
+	* BUG: Dynamic page is now handled properly
+	* BUG: Media style is no longer scrunched
+	* BUG: Fixed video thumbnail in media mode
+	* Improved: Transparency for Google's navigation and logo.
 
 Version 2.00.20100526 - Version Release - 05/26/10
 
-    * Feature: Style customization
-    * Feature: Color Changer
-    * Feature: Embed Toolbar
-    * Feature: Extra Video Embed Options Availabe
-    * Feature: Image Search Size Configurable
-    * Feature: Keyboard Shortcuts
-    * Feature: Slideshow Controls
-    * BUG: Works with both versions of Google.com search now!
-    * BUG: Updated for the new layout
-    * BUG: Cleaned up options that no longer worked.
-    * Improved: Most major pieces of code are now Objects
-    * Improved: Ability to see embeddable videos
-    * Improved: Many controls now use icons
-    * Note: Code is now hosted at GitHub, see above
-    * Note: Configuration script is almost entirely independent and can be extracted and used easily.
+	* Feature: Style customization
+	* Feature: Color Changer
+	* Feature: Embed Toolbar
+	* Feature: Extra Video Embed Options Availabe
+	* Feature: Image Search Size Configurable
+	* Feature: Keyboard Shortcuts
+	* Feature: Slideshow Controls
+	* BUG: Works with both versions of Google.com search now!
+	* BUG: Updated for the new layout
+	* BUG: Cleaned up options that no longer worked.
+	* Improved: Most major pieces of code are now Objects
+	* Improved: Ability to see embeddable videos
+	* Improved: Many controls now use icons
+	* Note: Code is now hosted at GitHub, see above
+	* Note: Configuration script is almost entirely independent and can be extracted and used easily.
 
 Version 1.19 - Bug Fix Release - 04/07/10
 
-    * BUG: Updated so that searching for videos and other items doesn't cause script to run.
+	* BUG: Updated so that searching for videos and other items doesn't cause script to run.
 
 Version 1.18 - Bug Fix Release - 09/19/09
 
-    * BUG: Misspelling caused center to not load entirely correctly. Fixed
+	* BUG: Misspelling caused center to not load entirely correctly. Fixed
 
 Version 1.17 - Style Release - 09/19/09
 
-    * STYLE: Dock - A non-modified version with a selectable dock navigation.
-    * STYLE: Center - For both smaller resolutions and those who like things centered.
-    * REMOVAL: Search Shortcuts are no longer available. Multisearch is used for multipage searching.
+	* STYLE: Dock - A non-modified version with a selectable dock navigation.
+	* STYLE: Center - For both smaller resolutions and those who like things centered.
+	* REMOVAL: Search Shortcuts are no longer available. Multisearch is used for multipage searching.
 
 Version 1.16 - Bug Fix Release - 08/06/09
 
-    * BUG: Everything should be appropriately positioned again.
+	* BUG: Everything should be appropriately positioned again.
 
 Version 1.15 - Bug Fix Release - 07/25/09
 
-    * BUG: Image search will no longer cause script to go into infinite loop
-    * FEATURE: Image search now includes a loading dialog
-    * How images are found in an image search has been almost completely rewritten, and it should now find images easier and be far less likely to break.
+	* BUG: Image search will no longer cause script to go into infinite loop
+	* FEATURE: Image search now includes a loading dialog
+	* How images are found in an image search has been almost completely rewritten, and it should now find images easier and be far less likely to break.
 
 Version 1.14 - Bug Fix Release - 07/16/09
 
-    * BUG: International Pages will now display mutlisearch properly. (Reported by: James)
+	* BUG: International Pages will now display mutlisearch properly. (Reported by: James)
 
 Version 1.13 - Bug Fix Release - 07/01/09
 
-    * BUG: Slight visual modification as Google code changes.
+	* BUG: Slight visual modification as Google code changes.
 
 Version 1.12 - Bug Fix Release - 04/22/09
 
-    * BUG: Video results will display the proper information again
+	* BUG: Video results will display the proper information again
 
 Version 1.11 - Bug Fix Release - 04/15/09
 
-    * BUG: Calculator and no result searches will no longer display configuration
-    * BUG: Tabbed clicking results are working again
+	* BUG: Calculator and no result searches will no longer display configuration
+	* BUG: Tabbed clicking results are working again
 
 Version 1.10 - Feature Release - 03/11/09
 
-    * FEATURE: Added the ability to choose different styles
-    * FEATURE: Changed multisearch to be easier to use
-    * BUG: Now only checks for an update once a day (Sorry US.O)
-    * BUG: No longer shows two results when back button is used
-    * BUG: More efficiently finds what user searched for
-    * Cleaned up code
+	* FEATURE: Added the ability to choose different styles
+	* FEATURE: Changed multisearch to be easier to use
+	* BUG: Now only checks for an update once a day (Sorry US.O)
+	* BUG: No longer shows two results when back button is used
+	* BUG: More efficiently finds what user searched for
+	* Cleaned up code
 
 Version 1.08 - Bug Fix Release - 02/12/09
 
-    * BUG: Search bar is no longer removed when Remove Suggestions is turned on.
-    * NOTE: Suggestions are not properly removed at the moment. This will be taken care of.
+	* BUG: Search bar is no longer removed when Remove Suggestions is turned on.
+	* NOTE: Suggestions are not properly removed at the moment. This will be taken care of.
 
 Version 1.07 - Bug Fix Release - 02/06/09
 
-    * BUG: Using the middle mouse button to open in a new tab will now work properly.
+	* BUG: Using the middle mouse button to open in a new tab will now work properly.
 
 Version 1.06 - Bug Fix Release - 01/14/09
 
-    * BUG: Using the Ctrl Click, Shift Click, and Ctrl Shift Click shortcuts will now work properly.
+	* BUG: Using the Ctrl Click, Shift Click, and Ctrl Shift Click shortcuts will now work properly.
 
 Version 1.05 - Bug Fix Release - 01/08/09
 
-    * BUG: No longer removes some legitimate search results.
+	* BUG: No longer removes some legitimate search results.
 
 Version 1.04 - Update Release - 01/05/09
 
-    * International support added
-    * FEATURE: Notification of updates
-    * BUG: Image search works better
-    * BUG: Minor display issues with slideshow
-    * Improved configuration page
+	* International support added
+	* FEATURE: Notification of updates
+	* BUG: Image search works better
+	* BUG: Minor display issues with slideshow
+	* Improved configuration page
 
 Version 1.03 - INTERNAL RELEASE ONLY - Not Released
 
-    * Code clean up
-    * Comment expansion
-    * Very minor optimizations
+	* Code clean up
+	* Comment expansion
+	* Very minor optimizations
 
 Version 1.02 - Bug Fix Release - Oct 23, 2008
 
-    * BUG: Image search now fixed for Google's new image search code. Again.
+	* BUG: Image search now fixed for Google's new image search code. Again.
 
 Version 1.01 - Bug Fix Release - Oct 13, 2008
 
-    * BUG: Image search now fixed for Google's new image search code.
+	* BUG: Image search now fixed for Google's new image search code.
 
 Version 1.00 - Initial Release - Sept 28, 2008
 
-    * FEATURE: Added a slideshow for the image search results
-    * FEATURE: Added multipage image search feature
+	* FEATURE: Added a slideshow for the image search results
+	* FEATURE: Added multipage image search feature
 
 Version 0.99 - Beta Phase Release 5 - Sept 24, 2008
 
-    * BUG: Recoded to work with the new Google searching code
-    * FEATURE: Added a configuration script
-    * Redesign of code so as to work with new Google search style and format
+	* BUG: Recoded to work with the new Google searching code
+	* FEATURE: Added a configuration script
+	* Redesign of code so as to work with new Google search style and format
 
 Version 0.98 - Beta Phase Release 4 - Sept 14, 2008
 
-    * BUG: Fixed minor display error with video extraction results and video search results
-    * FEATURE: Added image searching and viewing to the main page
-    * FEATURE: Added ability to open all links in a new tab, including multisearches
-    * CHANGE: Player is now shown when no video or image is active (with instructions)
-    * Massive redesign of coding and comment layout, though most core code remains the same
+	* BUG: Fixed minor display error with video extraction results and video search results
+	* FEATURE: Added image searching and viewing to the main page
+	* FEATURE: Added ability to open all links in a new tab, including multisearches
+	* CHANGE: Player is now shown when no video or image is active (with instructions)
+	* Massive redesign of coding and comment layout, though most core code remains the same
 
 Version 0.97 - Beta Phase Release 3 - Sept 12, 2008
 
-    * BUG: Fixed major error with videos not linking correctly (now links to the video player)
-    * BUG: Typing in the search shortcut code only no longer redirects you to that page
-    * FEATURE: Added video player for video search results (Google Video, Youtube, and MetaCafe currently supported)
-    * CHANGE: Some search shortcut codes were changed, see above for details (you can now search google for 'flickr')
-    * UPDATED: Google changed their sidebar ads code, so it should filter out correctly now
+	* BUG: Fixed major error with videos not linking correctly (now links to the video player)
+	* BUG: Typing in the search shortcut code only no longer redirects you to that page
+	* FEATURE: Added video player for video search results (Google Video, Youtube, and MetaCafe currently supported)
+	* CHANGE: Some search shortcut codes were changed, see above for details (you can now search google for 'flickr')
+	* UPDATED: Google changed their sidebar ads code, so it should filter out correctly now

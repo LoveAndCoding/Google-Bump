@@ -22,64 +22,87 @@ function redirInfo() {
 }
 // Checks toggles and calls requested functions
 function runThrough() {
-	var q = document.evaluate('//*[@name="q"]', document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
-	queryBox = q.snapshotItem(0);
-	
-	logoToTrans();
-	
-	if ($("preload")) {
-		resetPg();
-	} else {
-		var pdiv = $create("div", {
-			id : "preload"
-		});
-		document.body.appendChild(pdiv);
-	}
-	setupConf();
-	if(options.tabs) {
-		clickd();
-	}
-	if(options.keyd) {
-		keycuts();
-	}
-	allStyles();
-	
-	// Setup for first loading.
-	if (GM_getValue("loadBefore", false)) {
-		conf.undraw();
-	} else {
-		GM_setValue("loadBefore", true);
-	}
-	
-	// Visual Fixes
-	if (options.sugges) {
-		noSuggestions();
-	}
-	if (options.dym) {
-		didyoumean();
-	}
-	if (options.sideads || options.styl != 'classic') {
-		removeSideAds();
-	} else {
-		showSideAds();
-	}
-	if(options.moveTop) {
-		topContentMove();
-	}
-	
-	// Creates the player if either a video or image search is active
-	if (options.vids || options.imgs) {
+	if (!initialized) {
+		// Checks for script updates
+		scriptPage();
 		
-		var mBox = rightBox("mBox");
-		if ($$(statId, dynaId).childNodes) {
-			$$(statId, dynaId).insertBefore(mBox, $$(statId, dynaId).childNodes[0]);
+		var q = document.evaluate('//*[@name="q"]', document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+		queryBox = q.snapshotItem(0);
+		
+		if ($("preload")) {
+			resetPg();
 		} else {
-			$$(statId, dynaId).appendChild(mBox);
+			var pdiv = $create("div", {
+				id : "preload"
+			});
+			document.body.appendChild(pdiv);
+		}
+		setupConf();
+		if(options.tabs) {
+			clickd();
+		}
+		if(options.keyd) {
+			keycuts();
+		}
+		allStyles();
+		
+		// Setup for first loading.
+		if (GM_getValue("loadBefore", false)) {
+			conf.undraw();
+		} else {
+			GM_setValue("loadBefore", true);
 		}
 		
-		if (options.imgPlyr || options.embd) {
-			makePlayer();
+		// Visual Fixes
+		if (options.sugges) {
+			noSuggestions();
 		}
+		if (options.dym) {
+			didyoumean();
+		}
+		if (options.sideads || options.styl != 'classic') {
+			removeSideAds();
+		} else {
+			showSideAds();
+		}
+		if(options.moveTop) {
+			topContentMove();
+		}
+		
+		// Creates the player if either a video or image search is active
+		if (options.vids || options.imgs) {
+			
+			mBox = rightBox("mBox");
+			// if ($$(statId, dynaId).childNodes) {
+				// $$(statId, dynaId).insertBefore(mBox, $$(statId, dynaId).childNodes[0]);
+			// } else {
+				// $$(statId, dynaId).appendChild(mBox);
+			// }
+			document.body.appendChild(mBox);
+			
+			if (options.imgPlyr || options.embd) {
+				makePlayer();
+			}
+		}
+		
+		if (options.scuts && !$('allSearches')) {
+			multiSearchSetup();
+		}
+		
+		var settings = $create('span', {
+			className : 'gbump_btn',
+			id : 'gbump_settings'
+		});
+		settings.addEventListener('click', function (e) {
+			conf.draw();
+		}, false);
+		var theirButton = $('sblsbb');
+		theirButton.parentNode.appendChild(document.createTextNode(' '));
+		theirButton.parentNode.appendChild(settings);
+		
+		// New google search code doesn't reload page. This checks for changes and redoes all actions
+		var checkpage = setInterval(checknonreload, options.delay);
+		initialized = true;
 	}
 	
 	// Main features
@@ -98,18 +121,6 @@ function runThrough() {
 	} else {
 		nowikilink();
 	}
-	
-	if (options.scuts && !$('allSearches')) {
-		multiSearchSetup();
-	}
-	
-	if (delayed) {
-		// New google search code doesn't reload page. This checks for changes and redoes all actions
-		var checkpage = setInterval(checknonreload, options.delay);
-	}
-	
-	// Checks for script updates
-	scriptPage();
 }
 	// End Core Functions -------------------------------------------------------------
 // End Functions --------------------------------------------------------------------
@@ -131,9 +142,11 @@ var delayed = false;
 
 var dynaId = 'search';
 var statId = 'ires';
+var mBox;
+var initialized = false;
 
 // Starts the process
-if($$(statId, dynaId) && $$(statId, dynaId).children.length > 0 && !/.*&tbs=.*/.test(location.href)) {
+if($$(statId, dynaId) && $$(statId, dynaId).children.length > 0 && extractPage() == 'web') {
 	ssStore = new stylesheet_store();
 	runThrough();
 } else {
@@ -142,7 +155,7 @@ if($$(statId, dynaId) && $$(statId, dynaId).children.length > 0 && !/.*&tbs=.*/.
 }
 
 function waitingForPage() {
-	if($$(statId, dynaId) && $$(statId, dynaId).children.length > 0 && !/.*&tbs=.*/.test(location.href)) {
+	if($$(statId, dynaId) && $$(statId, dynaId).children.length > 0 && extractPage() == 'web') {
 		userInput = setupText();
 		currUrl = location.href;
 		ssStore = new stylesheet_store();

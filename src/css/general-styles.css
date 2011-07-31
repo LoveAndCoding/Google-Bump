@@ -3,21 +3,36 @@
 			color: rgb(" + options.restxtclr + "); \
 			margin: 0px; \
 		} \
-		.csb, .ss, #logo span, .play_icon, .mini_play_icon, .micon, .close_btn, #tbp, .mbi { \
+		.csb, .ss, .play_icon, .mini_play_icon, .micon, .close_btn, #tbp, .mbi { \
 			background-image: url(" + iconSheetTrans() + "); \
+		} \
+		#logo { \
+			color: transparent; \
+		} \
+		#logo img { \
+			background-color: transparent; \
 		} \
 		#gbar, #guser { \
 			background-color: rgb(" + options.glbarclr + "); \
 			padding-top: 3px !important; \
 		} \
+		.gbts { \
+			color: rgb("+ options.gbrtxtclr +"); \
+		} \
+		.gbz0l .gbts { \
+			color: rgb("+ options.gbotxtclr +"); \
+		} \
 		#guser { \
 			margin-right: 0px; \
 			padding-right: 8px; \
 		} \
+		.sfbgg, #newVer { \
+			background-color: rgb("+ options.schbgclr +"); \
+		} \
 		#cnt, #leftnav, #tbd, #atd, #tsf, #hidden_modes, #hmp { \
 			background-color: rgb(" + options.resltclr + "); \
 		} \
-		#wikiHeader a, #wikiHeader, #mBox, .detailedImgInfo, #newVer { \
+		#wikiHeader a, #wikiHeader, #mBox, .detailedImgInfo { \
 			background-color: rgb(" + options.addedclr + "); \
 			color: rgb(" + options.mdatxtclr + "); \
 		} \
@@ -42,6 +57,24 @@
 		.removed { \
 			display: none !important; \
 		} \
+		.gbump_btn { \
+			overflow: hidden; \
+			height: 27px; \
+			border-radius: 2px; \
+			border: 1px solid #3079ED; \
+			display: inline-block; \
+			vertical-align: bottom; \
+			background-color: #4787ED; \
+			background-image: -moz-linear-gradient(center top , #4D90FE, #4787ED); \
+			background-repeat: no-repeat; \
+			cursor: pointer; \
+			color: #FFFFFF; \
+		} \
+		#gbump_settings { \
+			background-image: url("+ image_store.settings +"), -moz-linear-gradient(center top , #4D90FE, #4787ED); \
+			width: 27px; \
+			background-position: center center; \
+		} \
 		#greyOut { \
 			background-color: rgb(" + options.ovrlyclr + "); \
 			opacity: .6; \
@@ -56,7 +89,7 @@
 			background-color: #AAAAAA; \
 		} \
 		#confWel, #styleWel, #confBtnWrap, .conf_Tab, .selected_tab #t_AbtConf { \
-			background: #CCCCCC url(" + image_store.config_tabBg + ") scroll repeat-x left top; \
+			background: #CCCCCC -moz-linear-gradient(top, #E6E6E6, #CCCCCC) scroll repeat-x left top; \
 		} \
 		#gbLoader { \
 			position: absolute; \
@@ -135,6 +168,30 @@
 		.config_intField { \
 			width: 3em; \
 		} \
+		.confKeyVal { \
+			max-height: 300px; \
+			overflow: auto; \
+			padding: 5px 0px; \
+		} \
+		.confKeyValTbl { \
+			font-size: 9pt; \
+		} \
+		.confKeyValPair td { \
+			border-bottom: 1px solid #CCCCF5; \
+		} \
+		.confKeyValPair:last-child td { \
+			border-bottom-style: none; \
+		} \
+		.confKey { \
+			border-right: 1px solid #CCCCF5; \
+			font-weight: bold; \
+		} \
+		.confValHighlight { \
+			color: #FF0000; \
+		} \
+		.confKeyValHighlightedRow { \
+			background-color: #0000FF; \
+		} \
 		.sldImgs { \
 			display: block; \
 		} \
@@ -190,15 +247,22 @@
 		#AbtConf p { \
 			margin-top: 0px; \
 			white-space: pre-line; \
-			font-size: 13px; \
+			font-size: 12px; \
 		} \
 		#deapallFault, #sNc { \
 			margin-left: .2em; \
 		} \
 		#newVer { \
 			text-align: center; \
-			font-size: 90%; \
-			padding: 1px; \
+			font-size: 12px; \
+			padding: 0px 5px 10px; \
+			position: absolute; \
+			top: 100px; \
+			left: 20px; \
+			width: 175px; \
+			border: 1px solid #E5E5E5; \
+			border-top-width: 0px; \
+			z-index: 150; \
 		} \
 		#newVer a  { \
 			display: block; \

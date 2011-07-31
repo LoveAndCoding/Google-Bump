@@ -84,9 +84,9 @@ function post(url, data, cb) {
 		// End Grease Monkey Code Snippets ------------------------------------------------------------
 //	Decoed HTML Entities
 function html_entity_decode(str) {
-    //jd-tech.net
-    var tarea = $create('textarea');
-    tarea.innerHTML = str;
+	//jd-tech.net
+	var tarea = $create('textarea');
+	tarea.innerHTML = str;
 	return tarea.value;
 }
 // Converts an html string into a working html tag
@@ -148,7 +148,7 @@ function checknonreload() {
 		if($$(statId, dynaId)) {
 			// Restart process if it is not
 			resetPg();
-			if(!/.*#.*&tbs=/.test(location.href)) {
+			if(extractPage() == 'web') {
 				userInput = setupText();
 				runThrough();
 			} else {
@@ -164,18 +164,22 @@ function resetPg() {
 	if (wdiv) {
 		wdiv.parentNode.removeChild(wdiv);
 	}
-	var mdiv = $("mBox");
-	if (mdiv) {
-		mdiv.parentNode.removeChild(mdiv);
-	}
-	var xdiv = $("exvidlist");
-	if (xdiv) {
-		xdiv.parentNode.removeChild(xdiv);
-	}
-	var wldiv = $("wikiLink");
-	if (wldiv) {
-		wldiv.parentNode.removeChild(wldiv);
-	}
+	// var mdiv = $("mBox");
+	// if (mdiv) {
+		// mdiv.parentNode.removeChild(mdiv);
+	// }
+	// var gset = $('gbump_settings');
+	// if (gset) {
+		// gset.parentNode.removeChild(gset);
+	// }
+	// var xdiv = $("exvidlist");
+	// if (xdiv) {
+		// xdiv.parentNode.removeChild(xdiv);
+	// }
+	// var wldiv = $("wikiLink");
+	// if (wldiv) {
+		// wldiv.parentNode.removeChild(wldiv);
+	// }
 	var gup = $("greyOut");
 	if (gup) {
 		closeEx();
@@ -194,5 +198,13 @@ function removeAllChildren(node) {
 // Closes all features that display on top with a grey background
 function closeEx() {
 	popupManager.closeAll();
+}
+// Gets the page on from the URL
+function extractPage() {
+	var queryarr = ((location.hash && location.hash.indexOf('q=') >= 0) ? location.hash : location.search).substr(1).split('&');
+	var qobj = [];
+	for(var i = queryarr.length - 1; i >= 0; i--)
+		qobj[queryarr[i].split('=')[0]] = queryarr[i].split('=')[1];
+	return qobj['tbm'] || 'web';
 }
 	// End Helper Functions ------------------------------------------------------------

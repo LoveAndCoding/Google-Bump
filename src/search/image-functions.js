@@ -12,6 +12,7 @@ function startslides() {
 }
 // Searches for images based on what the user is searching for
 function menutoggleimages(theSearch) {
+	if(imgSearch) imgSearch.undraw();
 	imgSearch = new Image_Search(theSearch);
 	imgSearch.draw($("mBox"));
 	

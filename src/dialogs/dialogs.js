@@ -288,7 +288,8 @@ function style_dialog(popup) {
 			// Colors
 		var bgc_section = new config_section("Background Colors");
 		bgc_section.sectionOptions.push(new config_colorBox('Main Area', 'resltclr', options.DEFAULT_RESLTCLR));
-		bgc_section.sectionOptions.push(new config_colorBox('Google Bar (Top)', 'glbarclr', options.DEFAULT_GLBARCLR));
+		bgc_section.sectionOptions.push(new config_colorBox('Google Bar', 'glbarclr', options.DEFAULT_GLBARCLR));
+		bgc_section.sectionOptions.push(new config_colorBox('Search Area', 'schbgclr', options.DEFAULT_SCHBGCLR));
 		bgc_section.sectionOptions.push(new config_colorBox('Added Items', 'addedclr', options.DEFAULT_ADDEDCLR));
 		bgc_section.sectionOptions.push(new config_colorBox('Embedable Videos', 'plyblclr', options.DEFAULT_PLYBLCLR));
 		bgc_section.sectionOptions.push(new config_colorBox('Overlay', 'ovrlyclr', options.DEFAULT_OVRLYCLR));
@@ -299,6 +300,8 @@ function style_dialog(popup) {
 			// Colors
 		var txc_section = new config_section("Text Colors");
 		txc_section.sectionOptions.push(new config_colorBox('General', 'restxtclr', options.DEFAULT_RESTXTCLR));
+		txc_section.sectionOptions.push(new config_colorBox('Google Bar Links', 'gbrtxtclr', options.DEFAULT_GBRTXTCLR));
+		txc_section.sectionOptions.push(new config_colorBox('Google Bar Selected', 'gbotxtclr', options.DEFAULT_GBOTXTCLR));
 		txc_section.sectionOptions.push(new config_colorBox('Links', 'lnktxtclr', options.DEFAULT_LNKTXTCLR));
 		txc_section.sectionOptions.push(new config_colorBox('Result URL', 'urltxtclr', options.DEFAULT_URLTXTCLR));
 		txc_section.sectionOptions.push(new config_colorBox('Similar and Paging Links', 'simtxtclr', options.DEFAULT_SIMTXTCLR));
@@ -352,7 +355,7 @@ function style_dialog(popup) {
 		var gen_set_window = new config_window(genTab, "GenStyl");
 			// Styles
 		var gen_section = new config_section("Style");
-		gen_section.sectionOptions.push(new config_selectionBox("Layout Style", "style", ["Classic", "Media", "Dock",/* "Columns",*/ "Centered"], ["classic", "media", "dock",/* "column",*/ "center"], options.DEFAULT_STYL));
+		gen_section.sectionOptions.push(new config_selectionBox("Layout Style", "style", ["Classic", "Media (Disabled)", "Dock (Disabled)",/* "Columns",*/ "Centered"], ["classic", "media", "dock",/* "column",*/ "center"], options.DEFAULT_STYL));
 		gen_set_window.sections.push(gen_section);
 		
 		// Draw the windows
@@ -473,17 +476,26 @@ function config_dialog(popup) {
 		selectHead.appendChild(optSelBox);
 		selectHead.appendChild(stlSelBox);
 		
+		var keyslist = [];
+		var valslist = [];
+		for (var se = 0; se < options.searchengines.length; se++){
+			keyslist.push(options.searchengines[se]['Name']);
+			valslist.push(options.searchengines[se]['url_before'] + '**Search**' + options.searchengines[se]['url_after']);
+		}
+		
 		// Creates and appends the navigation tabs
 		var genTab = new config_tab("General", "t_GenConf");
 		var abtTab = new config_tab("License", "t_AbtConf", genTab);
 		var imgTab = new config_tab("Images", "t_ImgConf", genTab);
 		var vidTab = new config_tab("Videos", "t_VidConf", genTab);
+		var mltTab = new config_tab("MultiSearch", "t_MltConf", genTab);
 		var otrTab = new config_tab("Advanced", "t_OtrConf", genTab);
 		
 		abtTab.draw(tabHead);
 		genTab.draw(tabHead);
 		imgTab.draw(tabHead);
 		vidTab.draw(tabHead);
+		mltTab.draw(tabHead);
 		otrTab.draw(tabHead);
 		
 		// About Us Section
@@ -491,7 +503,7 @@ function config_dialog(popup) {
 		fieldsabt.id = "AbtConf";
 		fieldsabt.className = "removed";
 		var nwp = $create("p");
-		nwp.textContent = "Copyright (c) 2010 Andrew Hushbeck (ktash)\n\n" +
+		nwp.textContent = "Copyright (c) 2011 Andrew Hushbeck (KTaShes)\n\n" +
 
 				"Permission is hereby granted, free of charge, to any person obtaining a copy " +
 				"of this software and associated documentation files (the \"Software\"), to deal " +
@@ -563,13 +575,18 @@ function config_dialog(popup) {
 		emd_section.sectionOptions.push(new config_checkBox("Youtube Annotations", "ivvd", options.DEFAULT_IVVD));
 		vid_set_window.sections.push(emd_section);
 		
+		// Multisearch Settings
+		var multi_set_window = new config_window(mltTab, "MltConf");
+			// SearchEngines
+		var mlt_section = new config_section("Search Engines");
+		mlt_section.sectionOptions.push(new config_keyvalTable("Search Engines", "searchengines", keyslist, valslist, options.DEFAULT_SEARCHENGINES));
+		multi_set_window.sections.push(mlt_section);
+		
 		// Other Settings
 		var other_set_window = new config_window(otrTab, "OtrConf");
 			// Advanced
 		var adv_section = new config_section();
 		adv_section.sectionOptions.push(new config_selectionBox("Millisecond delay for page (Only change if you have load issues)", "delay", ["100 ms","200 ms","300 ms","400 ms","500 ms","700 ms","1000 ms"], [100, 200, 300, 400, 500, 700, 1000], options.DEFAULT_DELAY));
-		adv_section.sectionOptions.push(new config_desc_section('Search Engines', 'The search engines are an array of JavaScript objects with the values Name, url_before, and url_after. To add or remove a search engine, just edit the content below.'));
-		adv_section.sectionOptions.push(new config_textField("Search Engines", "searchengines", options.DEFAULT_SEARCHENGINES));
 		other_set_window.sections.push(adv_section);
 		
 		// General Settings
@@ -598,7 +615,7 @@ function config_dialog(popup) {
 		var kytbl = $create('table', { className : 'keycuts' } );
 		var skeys = {
 			'_O_ptions' : 'CTRL + SHIFT + O',
-			//'St_y_ler' : 'CTRL + SHIFT + Y',
+			'St_y_ler' : 'CTRL + SHIFT + Y',
 			'Start Sl_i_deshow' : 'CTRL + SHIFT + I',
 			'Jump to Se_a_rch' : 'CTRL + SHIFT + A',
 			'Expand M_u_ltiSearch Box' : 'CTRL + SHIFT + U'
@@ -619,12 +636,14 @@ function config_dialog(popup) {
 		// Draw the windows
 		img_set_window.draw(wrapper);
 		vid_set_window.draw(wrapper);
+		multi_set_window.draw(wrapper);
 		other_set_window.draw(wrapper);
 		gen_set_window.draw(wrapper);
 		
 		// Push them to the windows array
 		this.windows.push(img_set_window);
 		this.windows.push(vid_set_window);
+		this.windows.push(multi_set_window);
 		this.windows.push(other_set_window);
 		this.windows.push(gen_set_window);
 		

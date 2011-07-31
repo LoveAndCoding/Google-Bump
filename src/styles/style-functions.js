@@ -28,12 +28,12 @@ function allStyles () {
 	
 	GM_addStyle(ssStore.clrpicker_stylesheet);
 	
-	if (options.styl == "media" && (options.imgs || options.vids)) {
+	if (options.styl == "media" && (options.imgs || options.vids) && false) {
 		GM_addStyle(ssStore.media_stylesheet);
 		$("resOL").parentNode.className = "resBox";
 		$("resOL").parentNode.appendChild($("nav"));
 		
-	} else if (options.styl == "dock") {
+	} else if (options.styl == "dock" && false) {
 		GM_addStyle(ssStore.dock_stylesheet);
 		
 		var dock = $create("div", {
@@ -200,39 +200,6 @@ function greydout() {
 function makePlayer() {
 	embedder = new Media_Embed();
 	embedder.draw($('mBox'));
-}
-// Change the Google logo to be transparent
-function logoToTrans() {
-	var attchpoint = $('logo') ? $('logo') : $('logocont').childNodes[0];
-	var currLogo = $('logo') ? attchpoint.childNodes[1] : attchpoint.childNodes[0];
-	
-	if(currLogo) {
-		try {
-			var canvas = $create('canvas', {
-				id : 'transLogo'
-			});
-			var ctx = canvas.getContext('2d');
-			if($('logo')) {
-				ctx.drawImage(currLogo, 0, 145,178,62,0,0,178,62);
-			} else {
-				ctx.drawImage(currLogo, 0, 0,attchpoint.width,attchpoint.height,0,0,attchpoint.width,attchpoint.height);
-				$('logocont').width = currLogo.width;
-				$('logocont').height = "72px";
-			}
-			
-			var imgd = ctx.getImageData(0, 0, canvas.width, canvas.height);
-			var pix = imgd.data;
-			for (var i = 0, n = pix.length; i < n; i += 4) {
-				pix[i+3] = 255 - Math.min(pix[i],Math.min(pix[i+1],pix[i+2]));
-			}
-			ctx.putImageData(imgd, 0, 0);
-			
-			removeAllChildren($('logo'));
-			$('logo').appendChild(canvas);
-		} catch (_ex) {
-			$('logo').appendChild(currLogo);
-		}
-	}
 }
 // Change the icon sheet from Google to be transparent
 function iconSheetTrans() {

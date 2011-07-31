@@ -315,7 +315,7 @@ function config_colorBox(label, id, dflt) {
 		});
 		this.box.style.backgroundColor = 'rgb(' + this.currentValue + ')';
 		
-		this.popout = popupManager.newColor();
+		this.popout = popupManager.newColor(this.currentValue);
 		
 		var SR = this;
 		this.box.addEventListener("click", function(event) { 
@@ -337,7 +337,7 @@ function config_colorBox(label, id, dflt) {
 			
 			document.addEventListener('click', function (e) {
 				if(e.target.className != 'colorContainer' && (e.target.parentNode && e.target.parentNode.className != 'colorContainer')) {
-					popupManager.closeColor();
+					//popupManager.closeColor();
 					document.removeEventListener('click', arguments.callee, false);
 				} else {
 					e.stopPropagation();
@@ -379,9 +379,41 @@ function config_keyvalTable(label, id, keys, vals, dflt) {
 	this.defaultVal = dflt;
 	this.keys = keys;
 	this.values = vals;
-	this.list;
+	this.divwrap;
+	this.tbl;
+	this.hlgtrow;
 	
 	this.draw = function (parentNode) {
+		this.divwrap = $create('div', {
+			className : 'confKeyVal'
+		});
+		
+		this.tbl = $create('table', {
+			className : 'confKeyValTbl'
+		});
+		
+		for(var kv = 0, len = this.keys.length; kv < len; kv++) {
+			var tr = $create('tr', {
+				className : 'confKeyValPair'
+			});
+			var keytd = $create('td', {
+				className : 'confKey',
+				textContent : this.keys[kv]
+			});
+			var valtd = $create('td', {
+				className : 'confVal',
+				innerHTML : this.values[kv].replace(/\*\*(\w+)\*\*/g,'<span class="confValHighlight">$1</span>')
+			});
+			tr.appendChild(keytd);
+			tr.appendChild(valtd);
+			this.tbl.appendChild(tr);
+		}
+		
+		this.divwrap.appendChild(this.tbl);
+		parentNode.appendChild(this.divwrap);
+		
+		// Commented out.....########################################
+		return;
 		var disp = $create("p", {
 			textContent : this.label + ": ",
 			className : "confLbl"
@@ -444,7 +476,11 @@ function config_keyvalTable(label, id, keys, vals, dflt) {
 			}
 		}
 		return strStore + "]";
-	}
+	};
+	
+	this.highlightrow = function (e) {
+		e.target.className += 'confKeyValHighlightedRow';
+	};
 }
 
 /**

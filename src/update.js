@@ -43,6 +43,7 @@ function verNotice() {
 	});
 	divHolder.appendChild(uplink);
 	
-	$("leftnav").insertBefore(divHolder, $('leftnav').childNodes[0]);
+	document.body.appendChild(divHolder);
+	GM_addStyle("#leftnav { padding-top: 80px; } ");
 }
 	// End Update Script -----------------------------------------------------------------

@@ -1,17 +1,68 @@
 		#currentSearch { \
 			margin-top: 0px !important; \
 		} \
-		.lsbb { \
+		#sbds  { \
 			white-space: nowrap; \
-			background-image: url(/images/srpr/nav_logo13.png); \
-			background-position: center bottom; \
 		} \
-		.multiExp, .siteSelector, .multiBtn { \
+		#gbump_moreOptsBtn { \
+			width: 27px; \
+			text-indent: -1000px; \
+			background-color: #4787ED; \
+			background-image: url("+ image_store.plus_minus +"), -moz-linear-gradient(center top , #4D90FE, #4787ED); \
+			background-repeat: no-repeat; \
+			background-position: center -2px, center top; \
+		} \
+		#gbump_moreOptsBtn:hover, .gbump_multiSrchBtn:hover, .gbump_multiRemove:hover { \
+			background-color: #357ae8; \
+			border-color: #2F5BB7; \
+			box-shadow: 0px 1px 1px rgba(0,0,0,0.1); \
+		} \
+		#gbump_moreOptsBtn:hover, .gbump_multiSrchBtn:hover { \
+			background-image: url("+ image_store.plus_minus +"), -moz-linear-gradient(center top , #4D90FE, #357ae8); \
+		} \
+		.gbump_multiRemove { \
+			background-image: -moz-linear-gradient(center top , #4D90FE, #4787ED); \
+			font-weight: bold; \
+			font-size: 16px; \
+			line-height: 27px; \
+			height: 27px; \
+			width: 27px; \
+			margin-left: 3px; \
+		} \
+		.gbump_multiRemove:hover { \
+			background-image: -moz-linear-gradient(center top , #4D90FE, #357ae8); \
+		} \
+		#gbump_moreOptsBtn.opened { \
+			background-position: center -32px;\
+		} \
+		.multiBtn { \
 			border-color: #CCCCCC; \
 			border-width: 1px; \
 		} \
-		.multiExp { \
-			border-left-style: solid; \
+		.gbump_multiExp { \
+			position: absolute; \
+			top: 1px; \
+			text-indent: -1000px; \
+			overflow: hidden; \
+			width: 20px; \
+			height: 28px; \
+			border: none; \
+			background-repeat: no-repeat; \
+			background-position: center center; \
+			background-color: transparent; \
+			cursor: pointer; \
+		} \
+		.gbump_multiFill { \
+			right: 28px; \
+			background-image: url("+ image_store.multi_fill +"); \
+		} \
+		.gbump_multiClear { \
+			right: 7px; \
+			background-image: url("+ image_store.clear_box +"); \
+		} \
+		.gbump_msBar { \
+			white-space: nowrap; \
+			margin-left: 16px; \
 		} \
 		#allSearches { \
 		} \
@@ -43,16 +94,55 @@
 		.fullWidthTD { \
 			width: 100%; \
 		} \
-		.siteSelector { \
-			padding: 6px 4px 4px 0px; \
+		.gbump_siteSelector { \
+			background-color: transparent; \
+			height: 29px; \
+			line-height: 21px; \
+			vertical-align: bottom; \
+			display: inline-block; \
+			border: 1px solid #3079ED; \
+			background-color: #4787ED; \
+			background-image: -moz-linear-gradient(center top , #4D90FE, #4787ED); \
+			background-repeat: no-repeat; \
+			background-position: center -2px, center top; \
+			padding: 4px 2px 4px 0px; \
+			margin-right: 4px; \
+			border-radius: 2px; \
+			color: #FFFFFF; \
 		} \
-		.siteSelector, .multiBtn { \
-			border-right-style: solid; \
+		.gbump_multiSrchBtn { \
+			overflow: hidden; \
+			height: 27px; \
+			border-radius: 2px; \
+			border: 1px solid #3079ED; \
+			display: inline-block; \
+			vertical-align: bottom; \
+			background-color: #4787ED; \
+			background-image: url("+ image_store.search_glass +"), -moz-linear-gradient(center top , #4D90FE, #4787ED); \
+			background-repeat: no-repeat; \
+			background-position: center center; \
+			cursor: pointer; \
+			text-indent: -1000px; \
+			width: 103px; \
 		} \
-		.siteSelector option { \
-			background-color: #EEEEEE !important; \
+		.gbump_multiSrchBtn:hover { \
+			background-image: url("+ image_store.search_glass +"), -moz-linear-gradient(center top , #4D90FE, #357ae8); \
 		} \
-		.searchBoxes { \
+		.gbump_multiSrchBtn:active { \
+			box-shadow: 0px 1px 2px rgba(0,0,0,0.3) inset; \
+		} \
+		.gbump_multiBtn { \
+			margin: 0px 3px; \
+		} \
+		.gbump_searchBoxes { \
+			height: 25px; \
+			width: 100%; \
+			outline: 1px solid #C0C0C0; \
+			border: none; \
+			line-height: 23px; \
+			margin: 2px 0px; \
+			text-indent: 8px; \
+			font-size: 17px; \
 		} \
 		.closeBtn { \
 			color: red; \
@@ -84,6 +174,9 @@
 			border: 1px solid #D0D0D0 !important; \
 			border-top-style: none !important; \
 		} \
-		.ts td { \
-			padding-left: 4px !important; \
+		.gbump_multiSearchBar td > * { \
+			margin-top: 6px; \
+		} \
+		.tsf-p { \
+			padding-right: 220px !important; \
 		} /* "; /* End Stylesheet */

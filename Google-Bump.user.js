@@ -2,7 +2,7 @@
 // @name			Google Bump
 // @namespace		http://userscripts.org/scripts/show/33449
 // @description		Adds some functionality to the Google web search. Main features include Multisearch, Video result extraction, Wikipedia definitions and links, and some clutter cleanup by. All options can be turned off.
-// @version			2.07.20101117
+// @version			2.10.20110731
 // @include			http://www.google.tld/
 // @include			http://www.google.tld/#*
 // @include			http://www.google.tld/search?*
@@ -11,17 +11,104 @@
 
 /*
 	Author: KTaShes
-	Date: Nov 17 2010
+	Date: Jul 31 2011
 	
-	Code can now be found on GitHub @ http://github.com/ktsashes/Google-Bump
+	Code can be found on GitHub @ http://github.com/ktsashes/Google-Bump
 	
 	This code uses juicer to compile from several different javascript files.
 	Juicer (C) Christian Johansen - http://cjohansen.no/en/ruby/juicer_a_css_and_javascript_packaging_tool
 */
-var version = "2.07";
-
+var version = "2.10";
 
 var image_store = {
+	
+	plus_minus :		"data:image/gif;base64,R0lGODlhEAA8A" +
+						"IABAP%2F%2F%2FwAAACH5BAEAAAEALAAAAA" +
+						"AQADwAAAI7jI%2Bpy%2B0Po5y0RoABzPrxn" +
+						"TXciCEkaZ7foYbM6sCiG9PWjef6zvf%2BDw" +
+						"wKh5NWiWXsGJLKQJIIjUqnvQIAOw%3D%3D",
+	
+	clear_box :		 	"data:image/gif;base64,R0lGODlhFAAeA" +
+						"IABAKG57QAAACH5BAEAAAEALAAAAAAUAB4A" +
+						"AAIwjI%2Bpy%2B0Po5y02ggAy5unrHWhAT5" +
+						"lcJqgh6UtC61wc7qLayN5To6ffwkKh8Si8V" +
+						"gAADs%3D",
+	
+	search_glass :	  	"data:image/png;base64,iVBORw0KGgoAA" +
+						"AANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAA" +
+						"GXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJ" +
+						"lYWR5ccllPAAAAL9JREFUeNpiYICC%2F%2F" +
+						"%2F%2FGwLxQSD%2B8h8CQPQRkDgDPgBUkAH" +
+						"Ev%2F9jByDxDFwaQTb%2Bgiq8DcQxQCwHpW" +
+						"9DxX9hdQFQcD9UwV0cht%2BFyu%2FHJvkVK" +
+						"hmAQ3MAVP4rNsm%2FUElJHJolofJ%2F0eWY" +
+						"gPgHlG2MIzxh4j%2BwmXyQSD8fxCZpihRNo" +
+						"NCNAGIRKH0bKcpyyYlnZLAalwGm0BT1Darw" +
+						"G5RfQpQBeFLgOqobwESsZkZGxiAgtR5JiJm" +
+						"BVAB1wToQGyDAAMRybMgDdvwFAAAAAElFTk" +
+						"SuQmCC",
+	
+	settings :		  	"data:image/png;base64,iVBORw0KGgoAA" +
+						"AANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAA" +
+						"GXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJ" +
+						"lYWR5ccllPAAAAZVJREFUeNrs1rtLAzEcwP" +
+						"E%2BLFixQkeFLqJQEHHR0ccmIuriX%2BDkI" +
+						"E7ugoPOjiIqigiK0EEQdCuddBFFEBEsPsBB" +
+						"SuujgvRxfiMplJC7trGg4AU%2BHHf3I7%2F" +
+						"%2BkktSr2VZnt9oXjexm%2FivJG7CEPoRRg" +
+						"5pXCCGQtU9icRV8mHb0rdDBGroy%2BOrodo" +
+						"ijmyqOpXVz2EHoXpUvIhZWVEn3jUVPyKBjL" +
+						"yPo8Wp30pJJ8s6v8azVX1bM00sfvGNZd7y6" +
+						"DOZ4xF02LxLYQlTWEFeE%2BPHjMkcr9pU8o" +
+						"JBJVZ8A0UlTozWsclQ92AMJ0qHu5rYIO6Uu" +
+						"IjpcjrHAR40w6y2T2SVZ%2BMYNRnqeVziVa" +
+						"nkSrNUevFhMzU1Vyy2wi7NZhDFFrrRjAFsI" +
+						"KjpI2dScTuyDstFvLtHwSEmYVLxLfYrHBgR" +
+						"OPWxbLplRpEqq%2BDMocKkrLA0SptoMN0yh" +
+						"Qn5kS3I%2B3WbxNPy%2FTD20PiTvbokLK%2" +
+						"BteLJJHENIxvnrdSym5bUNSbzJY%2FJ7tpC" +
+						"R6zggnxXc%2F1xu4v%2BX%2BEuAAQDZc6PF" +
+						"EgS%2FKAAAAABJRU5ErkJggg%3D%3D",
+	
+	multi_add :		 	"data:image/png;base64,iVBORw0KGgoAA" +
+						"AANSUhEUgAAACgAAAAeCAYAAABe3VzdAAAA" +
+						"GXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJ" +
+						"lYWR5ccllPAAAAbBJREFUeNrsV8lOAkEQrZ" +
+						"6ZoOwuBOJBTTTBeMJEw8lEj3r0h%2FwlT36" +
+						"AiQfXAyeXxLhwEVxxFALO0HY1FolkBoRZ4D" +
+						"Av6RRdXZk83lRX1TDOOYwyFBhxBAQDggHBH" +
+						"tC6nDmtP7ti3Yp1Ida52wTb5F51E04vv%2B" +
+						"DlwwTD5KCpDKbiKuSXo9IO9RVfF%2Buwf1S" +
+						"B0pshySHQlt8N6cfzob1iVO5EKIeNJh5RIb" +
+						"cYhsykJskWbmqgV1vnqQnNUyVtFTy7qkITy" +
+						"YUV2FlPwsJMCKLjirS4Rz%2BeY5wD8F65bk" +
+						"vwuWJIu7YUsTwnP8X5rqDZbP2xVNI6C8hPc" +
+						"b4TVBUmLd5eK5Cf4nwnOJ1oJT6WGCuQn%2B" +
+						"L6zLnO3LPz2xNczUaACXH0WhP2Ditw99iA%" +
+						"2BjeXFvfoR8xnQp4qyGwGVk518Pi31HQDkt" +
+						"zIxQbpJPRkNlChzs6OwXY%2BAWlR6yjX0OI" +
+						"eFSbclxpwUPj0vRe3b%2BuWIGmFJ9FRHsqN" +
+						"PyQtlBzeNLO5EoO5dMhTJR2PW50k%2B%2Fw" +
+						"GY93yz7V5kEjiwt9%2B5CDrdx50m9h%2FLo" +
+						"m3LSL4JgkIBgTdwY8AAwBonKzcA4VYSgAAA" +
+						"ABJRU5ErkJggg%3D%3D",
+	
+	multi_fill :		"data:image/png;base64,iVBORw0KGgoAA" +
+						"AANSUhEUgAAABQAAAAeCAYAAAAsEj5rAAAA" +
+						"GXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJ" +
+						"lYWR5ccllPAAAAQhJREFUeNpi%2FP%2F%2F" +
+						"PwM1ARMDlQHVDWRBF1i06x2MaQzEZ4DYFYj" +
+						"34DMkzk2IKBe%2Bh9Jp1PIyyKCzQBwKxIJI" +
+						"4h1A%2FB%2BKz6DJ4TRQEGpgOhDfQ3NlBRA" +
+						"zQjFInQsxBqZBDQK5cBaagSD2O6gLldBdyI" +
+						"LDdeVQGjmRhkIjZyZSRO0mJgzToBEihOS1P" +
+						"WiuvAe1kCgXglyyGimWYeF2BhpeoCC4CzX0" +
+						"PTR5wQHjCM96SNkODtRl2FHC5OaTn4z4sh4" +
+						"LIRu%2F%2FvhHWeGADj5%2Fp7KBH7%2F%2B" +
+						"HVzlITGJEpsaRlwuZCTDUYyEvMxIrmH4wpC" +
+						"RHMMIRQojOXJMZLiCkdJkw0hKUIzA4ovqBg" +
+						"IEGAB1Rj50T3f%2F%2FgAAAABJRU5ErkJgg" +
+						"g%3D%3D",
 	
 	config_tabBg :		"data:image/gif;base64,R0lGODlhAQAZA" +
 						"MQAAM3Nzc7Oz%2BDg4Nra2tTU1dDQ0M3Mzd" +
@@ -30,38 +117,6 @@ var image_store = {
 						"zAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAA" +
 						"AAAAALAAAAAABABkAAAUV4PVYkyQsRzU0Tg" +
 						"QRlJIUSMAABhYCADs%3D",
-	
-	multi_upArrow : 	"data:image/png;base64,iVBORw0KGgoAA" +
-						"AANSUhEUgAAAA0AAAAICAYAAAAiJnXPAAAA" +
-						"GXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJ" +
-						"lYWR5ccllPAAAAOJJREFUeNpi%2BP%2F%2F" +
-						"PwM6BgIuILYC0VjlcWmQCG04hksjdg1hjUd" +
-						"VG%2FZ%2FBdHYNDJCFTMwMjKCNBhIx%2FZ0" +
-						"8GjZGTOxcXH9%2B%2FXt25drh84%2BXVxSA" +
-						"ZS7AFT7DawWrBOqQTZ1eguvtqMZEwcvN1AQ" +
-						"5AyGfz8%2Bf%2F18df%2Bpx7Mza2AaGaFOM" +
-						"pDPWdjIq%2B9mwczOy8PExMgAkgC54d%2B%" +
-						"2F%2Fwx%2Ff37%2B8vnirhMPp8TXgzSC5Kx" +
-						"Uilc2sDEzM7KzMjNxADErCxMjM9D6v0Bjf%" +
-						"2F%2F59%2F%2FH77%2F%2FfgLxr79%2F%2F" +
-						"9%2FpDW%2BA28RAPLgAEGAAY5%2Bk2Ib1C%" +
-						"2BEAAAAASUVORK5CYII%3D",
-	
-	multi_downArrow :	"data:image/png;base64,iVBORw0KGgoAA" +
-						"AANSUhEUgAAAA0AAAAICAYAAAAiJnXPAAAA" +
-						"GXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJ" +
-						"lYWR5ccllPAAAAOJJREFUeNpiZGBg4AJiAw" +
-						"biwQUWkAbZ9FnN%2F%2F%2F8Yvr%2F6yfz%" +
-						"2F39%2FGP%2F%2F%2FcXE8B8owwhEzGz%2F" +
-						"GJlY%2FjOysf9lZGH793hmWi0jzCb57IWNP" +
-						"Jq2lkBF3ECNDAz%2FgboYGRmAGhiAhnz9cv" +
-						"3w8YdT4%2BtBNjH%2BB0oyMjKCNSoXrWzg0" +
-						"nayZGLl5GGAWvXv9%2Fcv367uO363L7wBpA" +
-						"Go%2FhsTyJEgBkgAJMH58OhpfqYfX%2Fk5m" +
-						"BlANIiPrIEBqgGOoU61cu%2Fccch79buvIB" +
-						"rEB4mjqEPmIGv06d15BJsGrJqQNWLTAMIAA" +
-						"QYAJLynOOE%2FN%2BkAAAAASUVORK5CYII%" +
-						"3D",
 	
 	vid_popout : 		"data:image/png;base64,iVBORw0KGgoAA" +
 						"AANSUhEUgAAABAAAAAQCAYAAAAf8%2F9hAA" +
@@ -452,13 +507,16 @@ function optionlist() {
 		// Color Defaults
 			// Background Colors
 	this.DEFAULT_GENBGCLR = '255,255,255';
+	this.DEFAULT_SCHBGCLR = '245,245,245';
 	this.DEFAULT_RESLTCLR = '255,255,255';
-	this.DEFAULT_GLBARCLR = '255,255,255';
+	this.DEFAULT_GLBARCLR = '45,45,45';
 	this.DEFAULT_ADDEDCLR = '240,247,249';
 	this.DEFAULT_PLYBLCLR = '255,255,255';
 	this.DEFAULT_OVRLYCLR = '0,0,0';
 			// Text Colors
 	this.DEFAULT_RESTXTCLR = '0,0,0';
+	this.DEFAULT_GBRTXTCLR = '204,204,204';
+	this.DEFAULT_GBOTXTCLR = '255,255,255';
 	this.DEFAULT_LNKTXTCLR = '17,17,204';
 	this.DEFAULT_URLTXTCLR = '34,136,34';
 	this.DEFAULT_SIMTXTCLR = '66,114,219';
@@ -595,6 +653,7 @@ function optionlist() {
 	
 		// Color vars
 	this.genbgclr = GM_getValue("genbgclr", this.DEFAULT_GENBGCLR);
+	this.schbgclr = GM_getValue("schbgclr", this.DEFAULT_SCHBGCLR);
 	this.resltclr = GM_getValue("resltclr", this.DEFAULT_RESLTCLR);
 	this.glbarclr = GM_getValue("glbarclr", this.DEFAULT_GLBARCLR);
 	this.addedclr = GM_getValue("addedclr", this.DEFAULT_ADDEDCLR);
@@ -602,6 +661,8 @@ function optionlist() {
 	this.ovrlyclr = GM_getValue("ovrlyclr", this.DEFAULT_OVRLYCLR);
 		// Text Color vars
 	this.restxtclr = GM_getValue("restxtclr", this.DEFAULT_RESTXTCLR);
+	this.gbrtxtclr = GM_getValue("gbrtxtclr", this.DEFAULT_GBRTXTCLR);
+	this.gbotxtclr = GM_getValue("gbotxtclr", this.DEFAULT_GBOTXTCLR);
 	this.lnktxtclr = GM_getValue("lnktxtclr", this.DEFAULT_LNKTXTCLR);
 	this.urltxtclr = GM_getValue("urltxtclr", this.DEFAULT_URLTXTCLR);
 	this.simtxtclr = GM_getValue("simtxtclr", this.DEFAULT_SIMTXTCLR);
@@ -715,9 +776,9 @@ function post(url, data, cb) {
 		// End Grease Monkey Code Snippets ------------------------------------------------------------
 //	Decoed HTML Entities
 function html_entity_decode(str) {
-    //jd-tech.net
-    var tarea = $create('textarea');
-    tarea.innerHTML = str;
+	//jd-tech.net
+	var tarea = $create('textarea');
+	tarea.innerHTML = str;
 	return tarea.value;
 }
 // Converts an html string into a working html tag
@@ -779,7 +840,7 @@ function checknonreload() {
 		if($$(statId, dynaId)) {
 			// Restart process if it is not
 			resetPg();
-			if(!/.*#.*&tbs=/.test(location.href)) {
+			if(extractPage() == 'web') {
 				userInput = setupText();
 				runThrough();
 			} else {
@@ -795,18 +856,22 @@ function resetPg() {
 	if (wdiv) {
 		wdiv.parentNode.removeChild(wdiv);
 	}
-	var mdiv = $("mBox");
-	if (mdiv) {
-		mdiv.parentNode.removeChild(mdiv);
-	}
-	var xdiv = $("exvidlist");
-	if (xdiv) {
-		xdiv.parentNode.removeChild(xdiv);
-	}
-	var wldiv = $("wikiLink");
-	if (wldiv) {
-		wldiv.parentNode.removeChild(wldiv);
-	}
+	// var mdiv = $("mBox");
+	// if (mdiv) {
+		// mdiv.parentNode.removeChild(mdiv);
+	// }
+	// var gset = $('gbump_settings');
+	// if (gset) {
+		// gset.parentNode.removeChild(gset);
+	// }
+	// var xdiv = $("exvidlist");
+	// if (xdiv) {
+		// xdiv.parentNode.removeChild(xdiv);
+	// }
+	// var wldiv = $("wikiLink");
+	// if (wldiv) {
+		// wldiv.parentNode.removeChild(wldiv);
+	// }
 	var gup = $("greyOut");
 	if (gup) {
 		closeEx();
@@ -825,6 +890,14 @@ function removeAllChildren(node) {
 // Closes all features that display on top with a grey background
 function closeEx() {
 	popupManager.closeAll();
+}
+// Gets the page on from the URL
+function extractPage() {
+	var queryarr = ((location.hash && location.hash.indexOf('q=') >= 0) ? location.hash : location.search).substr(1).split('&');
+	var qobj = [];
+	for(var i = queryarr.length - 1; i >= 0; i--)
+		qobj[queryarr[i].split('=')[0]] = queryarr[i].split('=')[1];
+	return qobj['tbm'] || 'web';
 }
 	// End Helper Functions ------------------------------------------------------------
 
@@ -1083,7 +1156,7 @@ function stylesheet_store () {
 			background-color: rgb(" + options.genbgclr + "); \
 		} \
 		body { \
-			width: 760px; \
+			width: 960px; \
 			margin: 0px auto !important; \
 			border: 1px solid #000000; \
 			border-top-style: none; \
@@ -1097,8 +1170,12 @@ function stylesheet_store () {
 		#cnt { \
 			min-width: 0px !important; \
 		} \
+        #rcnt { \
+            margin-top: 250px; \
+        } \
         #searchform { \
-            width: auto; \
+            width: 900px; \
+            padding-right: 60px; \
         } \
 		#center_col { \
 			margin-right: 0px; \
@@ -1107,7 +1184,10 @@ function stylesheet_store () {
 			margin: 0px auto !important; \
 			padding: 19px 0px; \
 		} \
-		.tsf-p, #foot { \
+        .tsf-p { \
+            padding-right: 0px !important; \
+        } \
+		#foot { \
 			margin-right: 72px !important; \
 		} \
 		.gbh { \
@@ -1120,11 +1200,12 @@ function stylesheet_store () {
 			padding-bottom: 0px; \
 		} \
 		#mBox { \
-			position: relative; \
+			position: absolute; \
 			height: 238px; \
 			overflow: hidden; \
-			border-bottom: 1px solid #6B90DA; \
-			border-top: 1px solid #6B90DA; \
+			border-bottom: 1px solid #E5E5E5; \
+            width: 960px; \
+            top: 101px; \
 		} \
 		#wikiDiv { \
 			min-height: 122px; \
@@ -1178,11 +1259,11 @@ function stylesheet_store () {
 		#videoList { \
 			float: left; \
 			height: 238px; \
-			width: 270px; \
+			width: 500px; \
 			overflow-y: auto; \
 			overflow-x: hidden; \
 			border-right: 1px solid #6B90DA; \
-		}\
+		} \
 		#vidTag, #imageTag, #playerTag { \
 			text-align: center; \
 			margin: 0px; \
@@ -1217,7 +1298,7 @@ function stylesheet_store () {
 		#imageList { \
 			text-align: center; \
 			height: 238px; \
-			width: 270px; \
+			width: 450px; \
 			float: right; \
 			z-index: 1001; \
 			overflow-y: auto; \
@@ -1282,12 +1363,21 @@ function stylesheet_store () {
 		} \
 		#mBox { \
 			width: 400px; \
-			margin-right: " + ( options.sideads ? 0 : 250) + "px; \
-			float: " + (options.clcvrthrz == 'horizontal' ? '' : 'right') + "; \
+			right: " + ( options.sideads ? 0 : 250) + "px; \
 			border-style: " + (options.clcborder ? 'solid' : 'none') + "; \
+            top: 101px; \
 			z-index: 20; \
-			position: relative; \
+			position: absolute; \
+            border-right-style: none; \
+            border-top-style: none; \
 		} \
+        #search, #ires { \
+            padding-right: 420px; \
+        } \
+        #rhs_map { \
+            position: relative; \
+            right: "+( options.imgs || options.vids ? '401' : '0' )+"px; \
+        } \
 		#pBox { \
 			vertical-align: middle; \
 			overflow: hidden; \
@@ -1629,21 +1719,36 @@ function stylesheet_store () {
 			color: rgb(" + options.restxtclr + "); \
 			margin: 0px; \
 		} \
-		.csb, .ss, #logo span, .play_icon, .mini_play_icon, .micon, .close_btn, #tbp, .mbi { \
+		.csb, .ss, .play_icon, .mini_play_icon, .micon, .close_btn, #tbp, .mbi { \
 			background-image: url(" + iconSheetTrans() + "); \
+		} \
+		#logo { \
+			color: transparent; \
+		} \
+		#logo img { \
+			background-color: transparent; \
 		} \
 		#gbar, #guser { \
 			background-color: rgb(" + options.glbarclr + "); \
 			padding-top: 3px !important; \
 		} \
+		.gbts { \
+			color: rgb("+ options.gbrtxtclr +"); \
+		} \
+		.gbz0l .gbts { \
+			color: rgb("+ options.gbotxtclr +"); \
+		} \
 		#guser { \
 			margin-right: 0px; \
 			padding-right: 8px; \
 		} \
+		.sfbgg, #newVer { \
+			background-color: rgb("+ options.schbgclr +"); \
+		} \
 		#cnt, #leftnav, #tbd, #atd, #tsf, #hidden_modes, #hmp { \
 			background-color: rgb(" + options.resltclr + "); \
 		} \
-		#wikiHeader a, #wikiHeader, #mBox, .detailedImgInfo, #newVer { \
+		#wikiHeader a, #wikiHeader, #mBox, .detailedImgInfo { \
 			background-color: rgb(" + options.addedclr + "); \
 			color: rgb(" + options.mdatxtclr + "); \
 		} \
@@ -1668,6 +1773,24 @@ function stylesheet_store () {
 		.removed { \
 			display: none !important; \
 		} \
+		.gbump_btn { \
+			overflow: hidden; \
+			height: 27px; \
+			border-radius: 2px; \
+			border: 1px solid #3079ED; \
+			display: inline-block; \
+			vertical-align: bottom; \
+			background-color: #4787ED; \
+			background-image: -moz-linear-gradient(center top , #4D90FE, #4787ED); \
+			background-repeat: no-repeat; \
+			cursor: pointer; \
+			color: #FFFFFF; \
+		} \
+		#gbump_settings { \
+			background-image: url("+ image_store.settings +"), -moz-linear-gradient(center top , #4D90FE, #4787ED); \
+			width: 27px; \
+			background-position: center center; \
+		} \
 		#greyOut { \
 			background-color: rgb(" + options.ovrlyclr + "); \
 			opacity: .6; \
@@ -1682,7 +1805,7 @@ function stylesheet_store () {
 			background-color: #AAAAAA; \
 		} \
 		#confWel, #styleWel, #confBtnWrap, .conf_Tab, .selected_tab #t_AbtConf { \
-			background: #CCCCCC url(" + image_store.config_tabBg + ") scroll repeat-x left top; \
+			background: #CCCCCC -moz-linear-gradient(top, #E6E6E6, #CCCCCC) scroll repeat-x left top; \
 		} \
 		#gbLoader { \
 			position: absolute; \
@@ -1761,6 +1884,30 @@ function stylesheet_store () {
 		.config_intField { \
 			width: 3em; \
 		} \
+		.confKeyVal { \
+			max-height: 300px; \
+			overflow: auto; \
+			padding: 5px 0px; \
+		} \
+		.confKeyValTbl { \
+			font-size: 9pt; \
+		} \
+		.confKeyValPair td { \
+			border-bottom: 1px solid #CCCCF5; \
+		} \
+		.confKeyValPair:last-child td { \
+			border-bottom-style: none; \
+		} \
+		.confKey { \
+			border-right: 1px solid #CCCCF5; \
+			font-weight: bold; \
+		} \
+		.confValHighlight { \
+			color: #FF0000; \
+		} \
+		.confKeyValHighlightedRow { \
+			background-color: #0000FF; \
+		} \
 		.sldImgs { \
 			display: block; \
 		} \
@@ -1816,15 +1963,22 @@ function stylesheet_store () {
 		#AbtConf p { \
 			margin-top: 0px; \
 			white-space: pre-line; \
-			font-size: 13px; \
+			font-size: 12px; \
 		} \
 		#deapallFault, #sNc { \
 			margin-left: .2em; \
 		} \
 		#newVer { \
 			text-align: center; \
-			font-size: 90%; \
-			padding: 1px; \
+			font-size: 12px; \
+			padding: 0px 5px 10px; \
+			position: absolute; \
+			top: 100px; \
+			left: 20px; \
+			width: 175px; \
+			border: 1px solid #E5E5E5; \
+			border-top-width: 0px; \
+			z-index: 150; \
 		} \
 		#newVer a  { \
 			display: block; \
@@ -2061,17 +2215,68 @@ function stylesheet_store () {
 		#currentSearch { \
 			margin-top: 0px !important; \
 		} \
-		.lsbb { \
+		#sbds  { \
 			white-space: nowrap; \
-			background-image: url(/images/srpr/nav_logo13.png); \
-			background-position: center bottom; \
 		} \
-		.multiExp, .siteSelector, .multiBtn { \
+		#gbump_moreOptsBtn { \
+			width: 27px; \
+			text-indent: -1000px; \
+			background-color: #4787ED; \
+			background-image: url("+ image_store.plus_minus +"), -moz-linear-gradient(center top , #4D90FE, #4787ED); \
+			background-repeat: no-repeat; \
+			background-position: center -2px, center top; \
+		} \
+		#gbump_moreOptsBtn:hover, .gbump_multiSrchBtn:hover, .gbump_multiRemove:hover { \
+			background-color: #357ae8; \
+			border-color: #2F5BB7; \
+			box-shadow: 0px 1px 1px rgba(0,0,0,0.1); \
+		} \
+		#gbump_moreOptsBtn:hover, .gbump_multiSrchBtn:hover { \
+			background-image: url("+ image_store.plus_minus +"), -moz-linear-gradient(center top , #4D90FE, #357ae8); \
+		} \
+		.gbump_multiRemove { \
+			background-image: -moz-linear-gradient(center top , #4D90FE, #4787ED); \
+			font-weight: bold; \
+			font-size: 16px; \
+			line-height: 27px; \
+			height: 27px; \
+			width: 27px; \
+			margin-left: 3px; \
+		} \
+		.gbump_multiRemove:hover { \
+			background-image: -moz-linear-gradient(center top , #4D90FE, #357ae8); \
+		} \
+		#gbump_moreOptsBtn.opened { \
+			background-position: center -32px;\
+		} \
+		.multiBtn { \
 			border-color: #CCCCCC; \
 			border-width: 1px; \
 		} \
-		.multiExp { \
-			border-left-style: solid; \
+		.gbump_multiExp { \
+			position: absolute; \
+			top: 1px; \
+			text-indent: -1000px; \
+			overflow: hidden; \
+			width: 20px; \
+			height: 28px; \
+			border: none; \
+			background-repeat: no-repeat; \
+			background-position: center center; \
+			background-color: transparent; \
+			cursor: pointer; \
+		} \
+		.gbump_multiFill { \
+			right: 28px; \
+			background-image: url("+ image_store.multi_fill +"); \
+		} \
+		.gbump_multiClear { \
+			right: 7px; \
+			background-image: url("+ image_store.clear_box +"); \
+		} \
+		.gbump_msBar { \
+			white-space: nowrap; \
+			margin-left: 16px; \
 		} \
 		#allSearches { \
 		} \
@@ -2103,16 +2308,55 @@ function stylesheet_store () {
 		.fullWidthTD { \
 			width: 100%; \
 		} \
-		.siteSelector { \
-			padding: 6px 4px 4px 0px; \
+		.gbump_siteSelector { \
+			background-color: transparent; \
+			height: 29px; \
+			line-height: 21px; \
+			vertical-align: bottom; \
+			display: inline-block; \
+			border: 1px solid #3079ED; \
+			background-color: #4787ED; \
+			background-image: -moz-linear-gradient(center top , #4D90FE, #4787ED); \
+			background-repeat: no-repeat; \
+			background-position: center -2px, center top; \
+			padding: 4px 2px 4px 0px; \
+			margin-right: 4px; \
+			border-radius: 2px; \
+			color: #FFFFFF; \
 		} \
-		.siteSelector, .multiBtn { \
-			border-right-style: solid; \
+		.gbump_multiSrchBtn { \
+			overflow: hidden; \
+			height: 27px; \
+			border-radius: 2px; \
+			border: 1px solid #3079ED; \
+			display: inline-block; \
+			vertical-align: bottom; \
+			background-color: #4787ED; \
+			background-image: url("+ image_store.search_glass +"), -moz-linear-gradient(center top , #4D90FE, #4787ED); \
+			background-repeat: no-repeat; \
+			background-position: center center; \
+			cursor: pointer; \
+			text-indent: -1000px; \
+			width: 103px; \
 		} \
-		.siteSelector option { \
-			background-color: #EEEEEE !important; \
+		.gbump_multiSrchBtn:hover { \
+			background-image: url("+ image_store.search_glass +"), -moz-linear-gradient(center top , #4D90FE, #357ae8); \
 		} \
-		.searchBoxes { \
+		.gbump_multiSrchBtn:active { \
+			box-shadow: 0px 1px 2px rgba(0,0,0,0.3) inset; \
+		} \
+		.gbump_multiBtn { \
+			margin: 0px 3px; \
+		} \
+		.gbump_searchBoxes { \
+			height: 25px; \
+			width: 100%; \
+			outline: 1px solid #C0C0C0; \
+			border: none; \
+			line-height: 23px; \
+			margin: 2px 0px; \
+			text-indent: 8px; \
+			font-size: 17px; \
 		} \
 		.closeBtn { \
 			color: red; \
@@ -2144,8 +2388,11 @@ function stylesheet_store () {
 			border: 1px solid #D0D0D0 !important; \
 			border-top-style: none !important; \
 		} \
-		.ts td { \
-			padding-left: 4px !important; \
+		.gbump_multiSearchBar td > * { \
+			margin-top: 6px; \
+		} \
+		.tsf-p { \
+			padding-right: 220px !important; \
 		} /* "; /* End Stylesheet */
 /**	
   *	Relies on importing for retrieving stylesheets
@@ -2206,12 +2453,12 @@ function allStyles () {
 	
 	GM_addStyle(ssStore.clrpicker_stylesheet);
 	
-	if (options.styl == "media" && (options.imgs || options.vids)) {
+	if (options.styl == "media" && (options.imgs || options.vids) && false) {
 		GM_addStyle(ssStore.media_stylesheet);
 		$("resOL").parentNode.className = "resBox";
 		$("resOL").parentNode.appendChild($("nav"));
 		
-	} else if (options.styl == "dock") {
+	} else if (options.styl == "dock" && false) {
 		GM_addStyle(ssStore.dock_stylesheet);
 		
 		var dock = $create("div", {
@@ -2379,39 +2626,6 @@ function makePlayer() {
 	embedder = new Media_Embed();
 	embedder.draw($('mBox'));
 }
-// Change the Google logo to be transparent
-function logoToTrans() {
-	var attchpoint = $('logo') ? $('logo') : $('logocont').childNodes[0];
-	var currLogo = $('logo') ? attchpoint.childNodes[1] : attchpoint.childNodes[0];
-	
-	if(currLogo) {
-		try {
-			var canvas = $create('canvas', {
-				id : 'transLogo'
-			});
-			var ctx = canvas.getContext('2d');
-			if($('logo')) {
-				ctx.drawImage(currLogo, 0, 145,178,62,0,0,178,62);
-			} else {
-				ctx.drawImage(currLogo, 0, 0,attchpoint.width,attchpoint.height,0,0,attchpoint.width,attchpoint.height);
-				$('logocont').width = currLogo.width;
-				$('logocont').height = "72px";
-			}
-			
-			var imgd = ctx.getImageData(0, 0, canvas.width, canvas.height);
-			var pix = imgd.data;
-			for (var i = 0, n = pix.length; i < n; i += 4) {
-				pix[i+3] = 255 - Math.min(pix[i],Math.min(pix[i+1],pix[i+2]));
-			}
-			ctx.putImageData(imgd, 0, 0);
-			
-			removeAllChildren($('logo'));
-			$('logo').appendChild(canvas);
-		} catch (_ex) {
-			$('logo').appendChild(currLogo);
-		}
-	}
-}
 // Change the icon sheet from Google to be transparent
 function iconSheetTrans() {
 	var img = new Image();
@@ -2486,7 +2700,8 @@ function verNotice() {
 	});
 	divHolder.appendChild(uplink);
 	
-	$("leftnav").insertBefore(divHolder, $('leftnav').childNodes[0]);
+	document.body.appendChild(divHolder);
+	GM_addStyle("#leftnav { padding-top: 80px; } ");
 }
 	// End Update Script -----------------------------------------------------------------
 
@@ -2507,16 +2722,18 @@ function color_picker(color) {
 		this.container = $create('div', {
 			'className' : 'colorContainer'
 		});
-		this.drawBW(this.color);
+		
+		var realtone = this.color;
+		var tone = this.getBaseColor(realtone);
+		this.drawBW(tone, realtone);
 		this.drawCB(0);
 		
 		document.body.appendChild(this.container);
 	};
 	
-	this.drawBW = function (tone) {
-		if(!tone) {
-			tone = '255,0,0';
-		}
+	this.drawBW = function (tone, realtone) {
+		tone = tone || '255,0,0';
+		realtone = realtone || '255,255,255';
 		
 		this.bwCanvas = $create('canvas', {
 			'className' : 'colorToneToBlack'
@@ -2544,6 +2761,20 @@ function color_picker(color) {
 		btw.addColorStop(1,'rgb(0,0,0)');
 		this.bwCtx.fillStyle = btw;
 		this.bwCtx.fillRect(0,0,255,255);
+	};
+	
+	this.getBaseColor = function (color) {
+		colors = color.split(/,\s?/);
+		for (var c = 0; c < colors.length; c++) {
+			if (parseInt(colors[c]) > 130) {
+				colors[c] = 255;
+			} else {
+				colors[c] = 0;
+			}
+		}
+		if(colors[0] == colors[1] && colors[1] == colors[2])
+			return '255,0,0'
+		return colors.join(',');
 	};
 	
 	this.drawCB = function (yOffset) {
@@ -2942,7 +3173,7 @@ function config_colorBox(label, id, dflt) {
 		});
 		this.box.style.backgroundColor = 'rgb(' + this.currentValue + ')';
 		
-		this.popout = popupManager.newColor();
+		this.popout = popupManager.newColor(this.currentValue);
 		
 		var SR = this;
 		this.box.addEventListener("click", function(event) { 
@@ -2964,7 +3195,7 @@ function config_colorBox(label, id, dflt) {
 			
 			document.addEventListener('click', function (e) {
 				if(e.target.className != 'colorContainer' && (e.target.parentNode && e.target.parentNode.className != 'colorContainer')) {
-					popupManager.closeColor();
+					//popupManager.closeColor();
 					document.removeEventListener('click', arguments.callee, false);
 				} else {
 					e.stopPropagation();
@@ -3006,9 +3237,41 @@ function config_keyvalTable(label, id, keys, vals, dflt) {
 	this.defaultVal = dflt;
 	this.keys = keys;
 	this.values = vals;
-	this.list;
+	this.divwrap;
+	this.tbl;
+	this.hlgtrow;
 	
 	this.draw = function (parentNode) {
+		this.divwrap = $create('div', {
+			className : 'confKeyVal'
+		});
+		
+		this.tbl = $create('table', {
+			className : 'confKeyValTbl'
+		});
+		
+		for(var kv = 0, len = this.keys.length; kv < len; kv++) {
+			var tr = $create('tr', {
+				className : 'confKeyValPair'
+			});
+			var keytd = $create('td', {
+				className : 'confKey',
+				textContent : this.keys[kv]
+			});
+			var valtd = $create('td', {
+				className : 'confVal',
+				innerHTML : this.values[kv].replace(/\*\*(\w+)\*\*/g,'<span class="confValHighlight">$1</span>')
+			});
+			tr.appendChild(keytd);
+			tr.appendChild(valtd);
+			this.tbl.appendChild(tr);
+		}
+		
+		this.divwrap.appendChild(this.tbl);
+		parentNode.appendChild(this.divwrap);
+		
+		// Commented out.....########################################
+		return;
 		var disp = $create("p", {
 			textContent : this.label + ": ",
 			className : "confLbl"
@@ -3071,7 +3334,11 @@ function config_keyvalTable(label, id, keys, vals, dflt) {
 			}
 		}
 		return strStore + "]";
-	}
+	};
+	
+	this.highlightrow = function (e) {
+		e.target.className += 'confKeyValHighlightedRow';
+	};
 }
 
 /**
@@ -3483,7 +3750,8 @@ function style_dialog(popup) {
 			// Colors
 		var bgc_section = new config_section("Background Colors");
 		bgc_section.sectionOptions.push(new config_colorBox('Main Area', 'resltclr', options.DEFAULT_RESLTCLR));
-		bgc_section.sectionOptions.push(new config_colorBox('Google Bar (Top)', 'glbarclr', options.DEFAULT_GLBARCLR));
+		bgc_section.sectionOptions.push(new config_colorBox('Google Bar', 'glbarclr', options.DEFAULT_GLBARCLR));
+		bgc_section.sectionOptions.push(new config_colorBox('Search Area', 'schbgclr', options.DEFAULT_SCHBGCLR));
 		bgc_section.sectionOptions.push(new config_colorBox('Added Items', 'addedclr', options.DEFAULT_ADDEDCLR));
 		bgc_section.sectionOptions.push(new config_colorBox('Embedable Videos', 'plyblclr', options.DEFAULT_PLYBLCLR));
 		bgc_section.sectionOptions.push(new config_colorBox('Overlay', 'ovrlyclr', options.DEFAULT_OVRLYCLR));
@@ -3494,6 +3762,8 @@ function style_dialog(popup) {
 			// Colors
 		var txc_section = new config_section("Text Colors");
 		txc_section.sectionOptions.push(new config_colorBox('General', 'restxtclr', options.DEFAULT_RESTXTCLR));
+		txc_section.sectionOptions.push(new config_colorBox('Google Bar Links', 'gbrtxtclr', options.DEFAULT_GBRTXTCLR));
+		txc_section.sectionOptions.push(new config_colorBox('Google Bar Selected', 'gbotxtclr', options.DEFAULT_GBOTXTCLR));
 		txc_section.sectionOptions.push(new config_colorBox('Links', 'lnktxtclr', options.DEFAULT_LNKTXTCLR));
 		txc_section.sectionOptions.push(new config_colorBox('Result URL', 'urltxtclr', options.DEFAULT_URLTXTCLR));
 		txc_section.sectionOptions.push(new config_colorBox('Similar and Paging Links', 'simtxtclr', options.DEFAULT_SIMTXTCLR));
@@ -3547,7 +3817,7 @@ function style_dialog(popup) {
 		var gen_set_window = new config_window(genTab, "GenStyl");
 			// Styles
 		var gen_section = new config_section("Style");
-		gen_section.sectionOptions.push(new config_selectionBox("Layout Style", "style", ["Classic", "Media", "Dock",/* "Columns",*/ "Centered"], ["classic", "media", "dock",/* "column",*/ "center"], options.DEFAULT_STYL));
+		gen_section.sectionOptions.push(new config_selectionBox("Layout Style", "style", ["Classic", "Media (Disabled)", "Dock (Disabled)",/* "Columns",*/ "Centered"], ["classic", "media", "dock",/* "column",*/ "center"], options.DEFAULT_STYL));
 		gen_set_window.sections.push(gen_section);
 		
 		// Draw the windows
@@ -3668,17 +3938,26 @@ function config_dialog(popup) {
 		selectHead.appendChild(optSelBox);
 		selectHead.appendChild(stlSelBox);
 		
+		var keyslist = [];
+		var valslist = [];
+		for (var se = 0; se < options.searchengines.length; se++){
+			keyslist.push(options.searchengines[se]['Name']);
+			valslist.push(options.searchengines[se]['url_before'] + '**Search**' + options.searchengines[se]['url_after']);
+		}
+		
 		// Creates and appends the navigation tabs
 		var genTab = new config_tab("General", "t_GenConf");
 		var abtTab = new config_tab("License", "t_AbtConf", genTab);
 		var imgTab = new config_tab("Images", "t_ImgConf", genTab);
 		var vidTab = new config_tab("Videos", "t_VidConf", genTab);
+		var mltTab = new config_tab("MultiSearch", "t_MltConf", genTab);
 		var otrTab = new config_tab("Advanced", "t_OtrConf", genTab);
 		
 		abtTab.draw(tabHead);
 		genTab.draw(tabHead);
 		imgTab.draw(tabHead);
 		vidTab.draw(tabHead);
+		mltTab.draw(tabHead);
 		otrTab.draw(tabHead);
 		
 		// About Us Section
@@ -3686,7 +3965,7 @@ function config_dialog(popup) {
 		fieldsabt.id = "AbtConf";
 		fieldsabt.className = "removed";
 		var nwp = $create("p");
-		nwp.textContent = "Copyright (c) 2010 Andrew Hushbeck (ktash)\n\n" +
+		nwp.textContent = "Copyright (c) 2011 Andrew Hushbeck (KTaShes)\n\n" +
 
 				"Permission is hereby granted, free of charge, to any person obtaining a copy " +
 				"of this software and associated documentation files (the \"Software\"), to deal " +
@@ -3758,13 +4037,18 @@ function config_dialog(popup) {
 		emd_section.sectionOptions.push(new config_checkBox("Youtube Annotations", "ivvd", options.DEFAULT_IVVD));
 		vid_set_window.sections.push(emd_section);
 		
+		// Multisearch Settings
+		var multi_set_window = new config_window(mltTab, "MltConf");
+			// SearchEngines
+		var mlt_section = new config_section("Search Engines");
+		mlt_section.sectionOptions.push(new config_keyvalTable("Search Engines", "searchengines", keyslist, valslist, options.DEFAULT_SEARCHENGINES));
+		multi_set_window.sections.push(mlt_section);
+		
 		// Other Settings
 		var other_set_window = new config_window(otrTab, "OtrConf");
 			// Advanced
 		var adv_section = new config_section();
 		adv_section.sectionOptions.push(new config_selectionBox("Millisecond delay for page (Only change if you have load issues)", "delay", ["100 ms","200 ms","300 ms","400 ms","500 ms","700 ms","1000 ms"], [100, 200, 300, 400, 500, 700, 1000], options.DEFAULT_DELAY));
-		adv_section.sectionOptions.push(new config_desc_section('Search Engines', 'The search engines are an array of JavaScript objects with the values Name, url_before, and url_after. To add or remove a search engine, just edit the content below.'));
-		adv_section.sectionOptions.push(new config_textField("Search Engines", "searchengines", options.DEFAULT_SEARCHENGINES));
 		other_set_window.sections.push(adv_section);
 		
 		// General Settings
@@ -3793,7 +4077,7 @@ function config_dialog(popup) {
 		var kytbl = $create('table', { className : 'keycuts' } );
 		var skeys = {
 			'_O_ptions' : 'CTRL + SHIFT + O',
-			//'St_y_ler' : 'CTRL + SHIFT + Y',
+			'St_y_ler' : 'CTRL + SHIFT + Y',
 			'Start Sl_i_deshow' : 'CTRL + SHIFT + I',
 			'Jump to Se_a_rch' : 'CTRL + SHIFT + A',
 			'Expand M_u_ltiSearch Box' : 'CTRL + SHIFT + U'
@@ -3814,12 +4098,14 @@ function config_dialog(popup) {
 		// Draw the windows
 		img_set_window.draw(wrapper);
 		vid_set_window.draw(wrapper);
+		multi_set_window.draw(wrapper);
 		other_set_window.draw(wrapper);
 		gen_set_window.draw(wrapper);
 		
 		// Push them to the windows array
 		this.windows.push(img_set_window);
 		this.windows.push(vid_set_window);
+		this.windows.push(multi_set_window);
 		this.windows.push(other_set_window);
 		this.windows.push(gen_set_window);
 		
@@ -4217,17 +4503,19 @@ function multisearcher() {
 		var theirButton = $cl('lsb')[0];
 		this.myButton = $create('input', {
 			type : 'button',
-			className : 'lsb multiExp',
+			className : 'gbump_btn',
 			value : 'More Options',
+			title : 'More Options',
+			id : 'gbump_moreOptsBtn'
 		});
 		
 		this.origOptionBox = new multisearchbox(null).getOptBox();
 		this.origOptionBox.className += " removed";
 		
-		theirButton.parentNode.insertBefore(this.origOptionBox, theirButton);
-		theirButton.parentNode.appendChild(this.myButton);
+		theirButton.parentNode.parentNode.insertBefore(this.origOptionBox, theirButton.parentNode);
+		theirButton.parentNode.parentNode.appendChild(this.myButton);
 		
-		this.newSearchWrapper = findrightnode($cl("lst-td")[0], "sftab") || $cl("lst-td")[0].parentNode.parentNode.parentNode;
+		this.newSearchWrapper = findrightnode($cl("lst-td")[0], "sftab").parentNode.parentNode || $cl("lst-td")[0].parentNode.parentNode.parentNode;
 		
 		var SR = this;
 		this.myButton.addEventListener('click', function (e) {
@@ -4252,36 +4540,32 @@ function multisearcher() {
 		}
 		
 		var rs1 = $create('div', {
-			className : 'ds'
-		});
-		var rs2 = $create('div', {
-			className : 'lsbb'
+			className : ''
 		});
 		
 		var adder = $create("button", {
 			textContent : "Add More",
-			className : "lsb multiBtn"
+			className : "gbump_btn gbump_multiBtn"
 		});
-		rs2.appendChild(adder);
+		rs1.appendChild(adder);
 		
 		var srchAll = $create("button", {
 			textContent : "Search All",
-			className : "lsb multiBtn"
+			className : "gbump_btn gbump_multiBtn"
 		});
-		rs2.appendChild(srchAll);
+		rs1.appendChild(srchAll);
 		
 		var srchNew = $create("button", {
 			textContent : "Search New",
-			className : "lsb multiBtn"
+			className : "gbump_btn gbump_multiBtn"
 		});
-		rs2.appendChild(srchNew);
+		rs1.appendChild(srchNew);
 		
 		var fillOutAll = $create('button', {
 			textContent : 'Fill All',
-			className : "lsb multiBtn"
+			className : "gbump_btn gbump_multiBtn"
 		});
-		rs2.appendChild(fillOutAll);
-		rs1.appendChild(rs2);
+		rs1.appendChild(fillOutAll);
 		this.multiwrapper.appendChild(rs1);
 		
 		adder.addEventListener("click", function (event) {
@@ -4290,11 +4574,11 @@ function multisearcher() {
 			SR.addBox();
 		}, false);
 		
-		$("tsf").addEventListener("submit", function (event) {
+		theirButton.parentNode.addEventListener("click", function (event) {
 			if (SR.expanded) {
 				event.stopPropagation();
 				event.preventDefault();
-				redirgo([SR.origOptionBox.value, $cl('lst')[0].value], false);
+				redirgo([SR.origOptionBox.value, $('lst-ib').value], false);
 			}
 		}, false);
 		
@@ -4314,7 +4598,7 @@ function multisearcher() {
 			event.stopPropagation();
 			event.preventDefault();
 			var sbs = SR.boxes;
-			var val = $cl('lst')[0].value;
+			var val = $('lst-ib').value;
 			for (sb in sbs) {
 				sbs[sb].setValue(val);
 			}
@@ -4330,12 +4614,15 @@ function multisearcher() {
 		this.boxes.push(msb);
 		GM_setValue("numMulti", parseInt(GM_getValue("numMulti", 2)) + 1);
 		this.newSearchWrapper.appendChild(this.wrapper);
+		this.recalcHeight();
 	};
 	
 	this.expandCollapse = function () {
 		if (!this.expanded) {
 			this.wrapper.appendChild(this.multiwrapper);
 			this.myButton.value = "Less Options";
+			this.myButton.title = "Less Options";
+			this.myButton.classList.add("opened");
 			this.origOptionBox.className = this.origOptionBox.className.replace(" removed", "");
 			for (var b = 0; b < this.boxes.length; b++) {
 				this.boxes[b].reveal();
@@ -4343,12 +4630,15 @@ function multisearcher() {
 		} else {
 			this.wrapper.removeChild(this.multiwrapper);
 			this.myButton.value = "More Options";
+			this.myButton.title = "More Options";
+			this.myButton.classList.remove("opened");
 			this.origOptionBox.className += " removed";
 			for (var b = 0; b < this.boxes.length; b++) {
 				this.boxes[b].hide();
 			}
 		}
 		this.expanded = !this.expanded;
+		this.recalcHeight();
 	};
 	
 	this.searchAll = function () {
@@ -4372,6 +4662,16 @@ function multisearcher() {
 			this.boxes[i].addCode(tablist);
 		}
 		return tablist;
+	};
+	
+	this.recalcHeight = function () {
+		var addHeight = 0;
+		if (this.expanded) {
+			addHeight = (this.boxes.length * 40) + 35;
+		}
+		GM_addStyle(".sfbgg { padding-top: "+addHeight+"px; } \
+						#mBox, #newVer { top: "+ (101+addHeight) +"px; } \
+						#subform_ctrl, .ksfccl { margin-top: "+ addHeight +"px !important; } ");
 	};
 	
 }
@@ -4424,11 +4724,11 @@ function multisearchbox (parentObj, listNum) {
 		this.active = true;
 		
 		this.wrapping = $create("tr", {
-			className : "SBoxes"
+			className : "gbump_multiSearchBar"
 		});
 		
 		var sbTd = $create("td", {
-			className : "lst-td fullWidthTD"
+			className : "fullWidthTD"
 		});
 		
 		var btnTd = $create("td");
@@ -4441,37 +4741,43 @@ function multisearchbox (parentObj, listNum) {
 		});
 		this.srchBox = $create("input", {
 			type : "text",
-			className : "lst searchBoxes"
+			className : "gbump_searchBoxes"
+		});
+		this.fillBtn = $create('input', {
+			type : 'button',
+			className : 'gbump_multiExp gbump_multiFill',
+			value : 'Fill'
+		});
+		this.clearBtn = $create('input', {
+			type : 'button',
+			className : 'gbump_multiExp gbump_multiClear',
+			value : 'X'
 		});
 		ruse.appendChild(this.srchBox);
+		ruse.appendChild(this.fillBtn);
+		ruse.appendChild(this.clearBtn);
 		sbTd.appendChild(ruse);
 		
 		var wrp = $create('div', {
-			className : 'ds'
+			className : 'gbump_msBar'
 		});
 		ruse = $create('div', {
-			className : 'lsbb'
+			className : 'gbmp'
 		});
 		
 		this.srchBtn = $create('input', {
 			type : 'button',
-			className : 'lsb',
+			className : 'gbump_multiSrchBtn',
 			value : 'Search',
-		});
-		this.fillBtn = $create('input', {
-			type : 'button',
-			className : 'lsb multiExp',
-			value : 'Fill',
 		});
 		this.removeBtn = $create('input', {
 			type : 'button',
-			className : 'lsb multiExp',
-			value : 'Remove',
+			className : 'gbump_btn gbump_multiRemove',
+			value : 'X'
 		});
 		
 		ruse.appendChild(this.getOptBox(this.listNum));
 		ruse.appendChild(this.srchBtn);
-		ruse.appendChild(this.fillBtn);
 		ruse.appendChild(this.removeBtn);
 		wrp.appendChild(ruse);
 		btnTd.appendChild(wrp);
@@ -4484,6 +4790,9 @@ function multisearchbox (parentObj, listNum) {
 		
 		this.fillBtn.addEventListener("click", function () {
 			SR.setValue(SR.parentObj.original.value);
+		}, false);
+		this.clearBtn.addEventListener("click", function () {
+			SR.setValue('');
 		}, false);
 		
 		this.srchBtn.addEventListener("click", function () {
@@ -4499,7 +4808,7 @@ function multisearchbox (parentObj, listNum) {
 	};
 	
 	this.reveal = function () {
-		this.wrapping.className = "SBoxes";
+		this.wrapping.className = "gbump_multiSearchBar";
 	};
 	
 	this.hide = function () {
@@ -4509,7 +4818,7 @@ function multisearchbox (parentObj, listNum) {
 	this.getOptBox = function (_show) {
 		if (!this.optionBox) {
 			this.optionBox = $create("select", {
-				className : "siteSelector lsb"
+				className : "gbump_siteSelector"
 			});
 			for (var i = 0; i < options.searchengines.length; i++) {
 				var opt = $create("option", {
@@ -4534,7 +4843,6 @@ function multisearchbox (parentObj, listNum) {
 	
 	this.setValue = function (value) {
 		this.srchBox.value = value;
-		// TODO: Setup undo ability
 	};
 	
 	this.search = function () {
@@ -4589,7 +4897,7 @@ function setupText(preset) {
 		var indiv = checkforcolon[k].split(" ");
 		var checker = indiv[indiv.length - 1];
 		// Finds google search sytnax and removes it (when it is properly formatted)
-		if (regexColon.test(checker)) {
+		if (regexColon.test(checker) && checkforcolon[k + 1]) {
 			indiv = indiv.slice(0,indiv.length - 1);
 			checkforcolon[k + 1] = checkforcolon[k + 1].split(" ").slice(1,checkforcolon[k + 1].length).join(" ");
 			checkforcolon[k] = indiv.join(" ");
@@ -4601,7 +4909,7 @@ function setupText(preset) {
 	for (var i = 0; i < search.length; i++) {
 		search[i] = search[i].charAt(0).toUpperCase() + search[i].substr(1).toLowerCase();
 	}
-	return search.join(" ");
+	return decodeURIComponent(search.join(" "));
 }
 // Setup the expanded multisearch search box
 function multiSearchSetup() {
@@ -5041,6 +5349,7 @@ function youtubeSearched(response) {
 }
 // Searches for videos based on what the user is searching for
 function menutogglevids(theSearch) {
+	if($('videoList')) $('videoList').parentNode.removeChild($('videoList'));
 	if(options.vdsrchr == "youtube") {
 		get("http://gdata.youtube.com/feeds/api/videos?alt=json-in-script&callback=y&max-results=5&format=5&q=" + encodeURIComponent(theSearch), youtubeSearched, novids);
 	} else {
@@ -5282,6 +5591,13 @@ function Image_Search(query) {
 		this.search();
 	};
 	
+	this.undraw = function () {
+		
+		this.slideshow.undraw();
+		if(this.div.parentNode) this.div.parentNode.removeChild(this.div);
+		
+	};
+	
 	this.next = function () {
 		if(this.setOn < this.sets.length - 1) {
 			if(this.setOn == 0) {
@@ -5424,6 +5740,7 @@ function startslides() {
 }
 // Searches for images based on what the user is searching for
 function menutoggleimages(theSearch) {
+	if(imgSearch) imgSearch.undraw();
 	imgSearch = new Image_Search(theSearch);
 	imgSearch.draw($("mBox"));
 	
@@ -5589,64 +5906,87 @@ function redirInfo() {
 }
 // Checks toggles and calls requested functions
 function runThrough() {
-	var q = document.evaluate('//*[@name="q"]', document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
-	queryBox = q.snapshotItem(0);
-	
-	logoToTrans();
-	
-	if ($("preload")) {
-		resetPg();
-	} else {
-		var pdiv = $create("div", {
-			id : "preload"
-		});
-		document.body.appendChild(pdiv);
-	}
-	setupConf();
-	if(options.tabs) {
-		clickd();
-	}
-	if(options.keyd) {
-		keycuts();
-	}
-	allStyles();
-	
-	// Setup for first loading.
-	if (GM_getValue("loadBefore", false)) {
-		conf.undraw();
-	} else {
-		GM_setValue("loadBefore", true);
-	}
-	
-	// Visual Fixes
-	if (options.sugges) {
-		noSuggestions();
-	}
-	if (options.dym) {
-		didyoumean();
-	}
-	if (options.sideads || options.styl != 'classic') {
-		removeSideAds();
-	} else {
-		showSideAds();
-	}
-	if(options.moveTop) {
-		topContentMove();
-	}
-	
-	// Creates the player if either a video or image search is active
-	if (options.vids || options.imgs) {
+	if (!initialized) {
+		// Checks for script updates
+		scriptPage();
 		
-		var mBox = rightBox("mBox");
-		if ($$(statId, dynaId).childNodes) {
-			$$(statId, dynaId).insertBefore(mBox, $$(statId, dynaId).childNodes[0]);
+		var q = document.evaluate('//*[@name="q"]', document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+		queryBox = q.snapshotItem(0);
+		
+		if ($("preload")) {
+			resetPg();
 		} else {
-			$$(statId, dynaId).appendChild(mBox);
+			var pdiv = $create("div", {
+				id : "preload"
+			});
+			document.body.appendChild(pdiv);
+		}
+		setupConf();
+		if(options.tabs) {
+			clickd();
+		}
+		if(options.keyd) {
+			keycuts();
+		}
+		allStyles();
+		
+		// Setup for first loading.
+		if (GM_getValue("loadBefore", false)) {
+			conf.undraw();
+		} else {
+			GM_setValue("loadBefore", true);
 		}
 		
-		if (options.imgPlyr || options.embd) {
-			makePlayer();
+		// Visual Fixes
+		if (options.sugges) {
+			noSuggestions();
 		}
+		if (options.dym) {
+			didyoumean();
+		}
+		if (options.sideads || options.styl != 'classic') {
+			removeSideAds();
+		} else {
+			showSideAds();
+		}
+		if(options.moveTop) {
+			topContentMove();
+		}
+		
+		// Creates the player if either a video or image search is active
+		if (options.vids || options.imgs) {
+			
+			mBox = rightBox("mBox");
+			// if ($$(statId, dynaId).childNodes) {
+				// $$(statId, dynaId).insertBefore(mBox, $$(statId, dynaId).childNodes[0]);
+			// } else {
+				// $$(statId, dynaId).appendChild(mBox);
+			// }
+			document.body.appendChild(mBox);
+			
+			if (options.imgPlyr || options.embd) {
+				makePlayer();
+			}
+		}
+		
+		if (options.scuts && !$('allSearches')) {
+			multiSearchSetup();
+		}
+		
+		var settings = $create('span', {
+			className : 'gbump_btn',
+			id : 'gbump_settings'
+		});
+		settings.addEventListener('click', function (e) {
+			conf.draw();
+		}, false);
+		var theirButton = $('sblsbb');
+		theirButton.parentNode.appendChild(document.createTextNode(' '));
+		theirButton.parentNode.appendChild(settings);
+		
+		// New google search code doesn't reload page. This checks for changes and redoes all actions
+		var checkpage = setInterval(checknonreload, options.delay);
+		initialized = true;
 	}
 	
 	// Main features
@@ -5665,18 +6005,6 @@ function runThrough() {
 	} else {
 		nowikilink();
 	}
-	
-	if (options.scuts && !$('allSearches')) {
-		multiSearchSetup();
-	}
-	
-	if (delayed) {
-		// New google search code doesn't reload page. This checks for changes and redoes all actions
-		var checkpage = setInterval(checknonreload, options.delay);
-	}
-	
-	// Checks for script updates
-	scriptPage();
 }
 	// End Core Functions -------------------------------------------------------------
 // End Functions --------------------------------------------------------------------
@@ -5698,9 +6026,11 @@ var delayed = false;
 
 var dynaId = 'search';
 var statId = 'ires';
+var mBox;
+var initialized = false;
 
 // Starts the process
-if($$(statId, dynaId) && $$(statId, dynaId).children.length > 0 && !/.*&tbs=.*/.test(location.href)) {
+if($$(statId, dynaId) && $$(statId, dynaId).children.length > 0 && extractPage() == 'web') {
 	ssStore = new stylesheet_store();
 	runThrough();
 } else {
@@ -5709,7 +6039,7 @@ if($$(statId, dynaId) && $$(statId, dynaId).children.length > 0 && !/.*&tbs=.*/.
 }
 
 function waitingForPage() {
-	if($$(statId, dynaId) && $$(statId, dynaId).children.length > 0 && !/.*&tbs=.*/.test(location.href)) {
+	if($$(statId, dynaId) && $$(statId, dynaId).children.length > 0 && extractPage() == 'web') {
 		userInput = setupText();
 		currUrl = location.href;
 		ssStore = new stylesheet_store();
