@@ -4515,7 +4515,11 @@ function multisearcher() {
 		theirButton.parentNode.parentNode.insertBefore(this.origOptionBox, theirButton.parentNode);
 		theirButton.parentNode.parentNode.appendChild(this.myButton);
 		
-		this.newSearchWrapper = findrightnode($cl("lst-td")[0], "sftab").parentNode.parentNode || $cl("lst-td")[0].parentNode.parentNode.parentNode;
+		this.newSearchWrapper = findrightnode($('lst-ib'), "sftab").parentNode || $('lst-ib').parentNode.parentNode.parentNode;
+		while(this.newSearchWrapper && (this.newSearchWrapper.tagName.toLowerCase() != 'tbody' && this.newSearchWrapper.tagName.toLowerCase() != 'table')) {
+			this.newSearchWrapper = this.newSearchWrapper.parentNode;
+		}
+		if(!this.newSearchWrapper) this.newSearchWrapper = findrightnode($cl("lst-td")[0], "sftab").parentNode.parentNode.parentNode.parentNode || $cl("lst-td")[0].parentNode.parentNode.parentNode;
 		
 		var SR = this;
 		this.myButton.addEventListener('click', function (e) {
