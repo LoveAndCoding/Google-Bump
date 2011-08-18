@@ -15,6 +15,7 @@ function optionlist() {
 	this.DEFAULT_SCUTS = true;
 	this.DEFAULT_KEYD = true;
 	this.DEFAULT_TABS = false;
+	this.DEFAULT_INST = true;
 		// Video defaults
 	this.DEFAULT_VIDS = false;
 	this.DEFAULT_VDSRCHR = "google";
@@ -171,6 +172,7 @@ function optionlist() {
 	this.scuts = GM_getValue("scuts", this.DEFAULT_SCUTS);
 	this.keyd = GM_getValue("keyd", this.DEFAULT_KEYD);
 	this.tabs = GM_getValue("tabs", this.DEFAULT_TABS);
+	this.inst = GM_getValue("inst", this.DEFAULT_INST);
 		// Video vars
 	this.vids = GM_getValue("vids", this.DEFAULT_VIDS);
 	this.vdsrchr = GM_getValue("vdsrchr", this.DEFAULT_VDSRCHR);

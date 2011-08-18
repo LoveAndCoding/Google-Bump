@@ -74,4 +74,12 @@ function clickd() {
 		}
 	}, false);
 }
+// Checks Instant preference
+function setInstant() {
+	var qobj = getQueryParameters();
+	if(!options.inst && qobj['complete'] !== '0') 
+		location.search += '&complete=0';
+	else if (options.inst && qobj['complete'] === '0')
+		location.search = location.search.replace(/&?complete=0/,'');
+}
 	// End Text / Input Based Functions --------------------------------------------

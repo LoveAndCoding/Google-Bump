@@ -25,6 +25,7 @@ function runThrough() {
 	if (!initialized) {
 		// Checks for script updates
 		scriptPage();
+		setInstant();
 		
 		var q = document.evaluate('//*[@name="q"]', document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
 		queryBox = q.snapshotItem(0);

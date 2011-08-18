@@ -201,10 +201,24 @@ function closeEx() {
 }
 // Gets the page on from the URL
 function extractPage() {
-	var queryarr = ((location.hash && location.hash.indexOf('q=') >= 0) ? location.hash : location.search).substr(1).split('&');
+	/* var queryarr = ((location.hash && location.hash.indexOf('q=') >= 0) ? location.hash : location.search).substr(1).split('&');
+	var qobj = [];
+	for(var i = queryarr.length - 1; i >= 0; i--)
+		qobj[queryarr[i].split('=')[0]] = queryarr[i].split('=')[1];*/
+	var qobj = getQueryParameters();
+	return qobj['tbm'] || 'web';
+}
+// Gets the Query Parameters
+function getQueryParameters() {
+	var queryarr = location.search.substr(1).split('&');
 	var qobj = [];
 	for(var i = queryarr.length - 1; i >= 0; i--)
 		qobj[queryarr[i].split('=')[0]] = queryarr[i].split('=')[1];
-	return qobj['tbm'] || 'web';
+	if(location.hash && location.hash.indexOf('q=') >= 0) {
+		queryarr = location.hash.substr(1).split('&');
+		for(var i = queryarr.length - 1; i >= 0; i--)
+			qobj[queryarr[i].split('=')[0]] = queryarr[i].split('=')[1];
+	}
+	return qobj;
 }
 	// End Helper Functions ------------------------------------------------------------

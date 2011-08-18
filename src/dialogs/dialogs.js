@@ -601,6 +601,7 @@ function config_dialog(popup) {
 		gen_section.sectionOptions.push(new config_checkBox("Use MultiSearch", "scuts", options.DEFAULT_SCUTS));
 		// gen_section.sectionOptions.push(new config_checkBox("Use Old Button Size", "oldSize", options.DEFAULT_OLDSIZE));
 		gen_section.sectionOptions.push(new config_checkBox("Enable Keyboard Shorcuts", "keyd", options.DEFAULT_KEYD));
+		gen_section.sectionOptions.push(new config_checkBox("Enable Google Instant (Requires Refresh)", "inst", options.DEFAULT_INST));
 		gen_set_window.sections.push(gen_section);
 			// Clutter
 		var app_section = new config_section("Clutter");
