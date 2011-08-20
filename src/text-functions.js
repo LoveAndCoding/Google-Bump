@@ -23,10 +23,10 @@ function redirgo(theList, tablast) {
 function setupText(preset) {
 	var search;
 	var params;
-	var locsrch = location.href.match(/[?&]q=[^&#]+/g);
-	var search = locsrch[locsrch.length - 1].split("+").join(" ").substr(3);
+	var locsrch = getQueryParameters()['q'];
+	if(locsrch == undefined) { return; }
+	var search = locsrch.split("+").join(" ");
 	
-	if(search == undefined) { return; }
 	// Checks for google specific syntax
 	var checkforcolon = search.split(":");
 	var regexColon = new RegExp("^(site|filetype|allintitle|allinbody|allinurl)$");
@@ -78,7 +78,8 @@ function clickd() {
 function setInstant() {
 	var qobj = getQueryParameters();
 	if(!options.inst && qobj['complete'] !== '0') 
-		location.search += '&complete=0';
+		if(location.search.length > 0) location.search += '&complete=0';
+		else location.search = '?complete=0'
 	else if (options.inst && qobj['complete'] === '0')
 		location.search = location.search.replace(/&?complete=0/,'');
 }
