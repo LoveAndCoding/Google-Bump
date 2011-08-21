@@ -1,3 +1,13 @@
+Version 2.11.20110821 - Fix Release - 08/21/11
+
+	* Feature: Instant Search toggling (Requested by Bez)
+	* Feature: Colors can now be entered in either HEX or RGB format
+	* Improved: Color picker now shows you your color choice, and lets you save or cancel selection
+	* Improved: Color picker has a title telling you what you're recoloring
+	* Improved: Color picker has click and drag support when picking colors
+	* Bug: Query wasn't always being grabbed correctly when searched from Google homepage with JS
+	* Bug: Multisearch on some versions of Google attached to the wrong node.
+
 Version 2.10.20110731 - Fix Release - 07/31/11
 
 	* Feature: Video persists through new search (though still not through paging)

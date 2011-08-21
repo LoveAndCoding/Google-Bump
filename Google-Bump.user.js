@@ -2,7 +2,7 @@
 // @name			Google Bump
 // @namespace		http://userscripts.org/scripts/show/33449
 // @description		Adds some functionality to the Google web search. Main features include Multisearch, Video result extraction, Wikipedia definitions and links, and some clutter cleanup by. All options can be turned off.
-// @version			2.10.20110731
+// @version			2.11.20110821
 // @include			http://www.google.tld/
 // @include			http://www.google.tld/#*
 // @include			http://www.google.tld/search?*
@@ -11,14 +11,14 @@
 
 /*
 	Author: KTaShes
-	Date: Jul 31 2011
+	Date: Aug 21 2011
 	
 	Code can be found on GitHub @ http://github.com/ktsashes/Google-Bump
 	
 	This code uses juicer to compile from several different javascript files.
 	Juicer (C) Christian Johansen - http://cjohansen.no/en/ruby/juicer_a_css_and_javascript_packaging_tool
 */
-var version = "2.10";
+var version = "2.11";
 
 var image_store = {
 	
@@ -461,6 +461,7 @@ function optionlist() {
 	this.DEFAULT_SCUTS = true;
 	this.DEFAULT_KEYD = true;
 	this.DEFAULT_TABS = false;
+	this.DEFAULT_INST = true;
 		// Video defaults
 	this.DEFAULT_VIDS = false;
 	this.DEFAULT_VDSRCHR = "google";
@@ -617,6 +618,7 @@ function optionlist() {
 	this.scuts = GM_getValue("scuts", this.DEFAULT_SCUTS);
 	this.keyd = GM_getValue("keyd", this.DEFAULT_KEYD);
 	this.tabs = GM_getValue("tabs", this.DEFAULT_TABS);
+	this.inst = GM_getValue("inst", this.DEFAULT_INST);
 		// Video vars
 	this.vids = GM_getValue("vids", this.DEFAULT_VIDS);
 	this.vdsrchr = GM_getValue("vdsrchr", this.DEFAULT_VDSRCHR);
@@ -856,22 +858,6 @@ function resetPg() {
 	if (wdiv) {
 		wdiv.parentNode.removeChild(wdiv);
 	}
-	// var mdiv = $("mBox");
-	// if (mdiv) {
-		// mdiv.parentNode.removeChild(mdiv);
-	// }
-	// var gset = $('gbump_settings');
-	// if (gset) {
-		// gset.parentNode.removeChild(gset);
-	// }
-	// var xdiv = $("exvidlist");
-	// if (xdiv) {
-		// xdiv.parentNode.removeChild(xdiv);
-	// }
-	// var wldiv = $("wikiLink");
-	// if (wldiv) {
-		// wldiv.parentNode.removeChild(wldiv);
-	// }
 	var gup = $("greyOut");
 	if (gup) {
 		closeEx();
@@ -893,11 +879,38 @@ function closeEx() {
 }
 // Gets the page on from the URL
 function extractPage() {
-	var queryarr = ((location.hash && location.hash.indexOf('q=') >= 0) ? location.hash : location.search).substr(1).split('&');
+	var qobj = getQueryParameters();
+	return qobj['tbm'] || 'web';
+}
+// Gets the Query Parameters
+function getQueryParameters() {
+	var queryarr = location.search.substr(1).split('&');
 	var qobj = [];
 	for(var i = queryarr.length - 1; i >= 0; i--)
 		qobj[queryarr[i].split('=')[0]] = queryarr[i].split('=')[1];
-	return qobj['tbm'] || 'web';
+	if(location.hash && location.hash.indexOf('q=') >= 0) {
+		queryarr = location.hash.substr(1).split('&');
+		for(var i = queryarr.length - 1; i >= 0; i--)
+			qobj[queryarr[i].split('=')[0]] = queryarr[i].split('=')[1];
+	}
+	return qobj;
+}
+// Get page offset
+function getOffset(el) {
+	var offx = el.offsetLeft;
+	var offy = el.offsetTop;
+	while(el.offsetParent && el.offsetParent != document.body) {
+		el = el.offsetParent;
+		offx += el.offsetLeft;
+		offy += el.offsetTop;
+	}
+	return { 0 : offx, 1 : offy, x : offx, y : offy}
+}
+// String left padding
+function strlpad (str, padString, length) {
+	while (str.length < length)
+        str = padString + str;
+    return str;
 }
 	// End Helper Functions ------------------------------------------------------------
 
@@ -1562,6 +1575,14 @@ function stylesheet_store () {
 			border: 1px solid #000000; \
 			-moz-border-radius: 3px; \
 		} \
+		.colorContainer h3 { \
+			font-weight: bold; \
+			font-size: 26px; \
+			/*cursor: -moz-grab;*/ \
+		} \
+		.gb_moving { \
+			cursor: -moz-grabbing; \
+		} \
 		.configColorBox { \
 			width: 15px; \
 			height: 15px; \
@@ -1577,7 +1598,55 @@ function stylesheet_store () {
 		} \
 		.colorToneToBlack, .colorBar { \
 			position: relative; \
+			vertical-align: middle; \
+		} \
+		.colorToneToBlack { \
 			height: 255px; \
+			border: 1px solid #000000; \
+		} \
+		.gb_colorSettings { \
+			display: inline-block; \
+			height: 255px; \
+			text-align: center; \
+			vertical-align: middle; \
+			position: relative; \
+		} \
+		.gb_hexlabel, .gb_rgblabel { \
+			display: block; \
+			text-align: left; \
+			position: relative; \
+			padding-right: 40px; \
+			margin: 5px; \
+			height: 20px; \
+			font-weight: bold; \
+		} \
+		.gb_hexlabel { \
+			padding-right: 70px; \
+		} \
+		.gb_colorInput { \
+			width: 30px; \
+			position: absolute; \
+			top: 0px; \
+			right: 0px; \
+			text-align: right; \
+		} \
+		.gb_hexInput { \
+			width: 60px; \
+			position: absolute; \
+			right: 0px; \
+			top: 0px; \
+			text-align: right; \
+		} \
+		.gb_colorPreview { \
+			width: 100px; \
+			height: 100px; \
+			border: 1px solid #000000; \
+			margin: 0px auto; \
+		} \
+		.gb_colorBtnContainer { \
+			position: absolute; \
+			width: 100%; \
+			bottom: 0px; \
 		} /* "; /* End Stylesheet */
 
 
@@ -2708,10 +2777,11 @@ function verNotice() {
 /**
   *	General Purpose Color Picker
   */
-function color_picker(color) {
+function color_picker(color, title) {
 	
 	this.clickHandles = [];
 	this.color = color;
+	this.title = title;
 	this.bwCanvas;
 	this.bwCtx;
 	this.cbCanvas;
@@ -2723,10 +2793,18 @@ function color_picker(color) {
 			'className' : 'colorContainer'
 		});
 		
+		if (this.title) {
+			this.heading = $create('h3', {
+				'textContent' : this.title
+			});
+			this.container.appendChild(this.heading);
+		}
+		
 		var realtone = this.color;
-		var tone = this.getBaseColor(realtone);
-		this.drawBW(tone, realtone);
-		this.drawCB(0);
+		this.tone = this.getBaseColor(realtone);
+		this.drawBW(this.tone, realtone);
+		this.drawCB(this.tone);
+		this.drawSettings(this.color);
 		
 		document.body.appendChild(this.container);
 	};
@@ -2747,7 +2825,16 @@ function color_picker(color) {
 		this.redrawBW(tone);
 		
 		var SR = this;
-		this.bwCanvas.addEventListener('click', function (e) { SR.clickDelegate(e) }, false);
+		this.bwCanvas.addEventListener('mousedown', function (e) {
+			var cd = function (e) {
+				SR.clickDelegate(e);
+			};
+			cd(e);
+			document.body.addEventListener('mousemove', cd, false);
+			document.body.addEventListener('mouseup', function() {
+				document.body.removeEventListener('mousemove', cd, false);
+			}, false);
+		}, false);
 	};
 	
 	this.redrawBW = function (tone) {
@@ -2763,18 +2850,51 @@ function color_picker(color) {
 		this.bwCtx.fillRect(0,0,255,255);
 	};
 	
+	this.drawBWDot = function (x,y) {
+		this.bwCtx.strokeStyle = "rgba(0,0,0,1)";
+		//this.bwCtx.strokeRect(x-4,y-3, 8, 6);
+		this.bwCtx.beginPath();
+		this.bwCtx.arc(x,y,4,0,Math.PI*2,false);
+		this.bwCtx.closePath();
+		this.bwCtx.stroke();
+		this.bwCtx.strokeStyle = "rgba(255,255,255,1)";
+		//this.bwCtx.strokeRect(x-3,y-2, 6,4);
+		this.bwCtx.beginPath();
+		this.bwCtx.arc(x,y,3,0,Math.PI*2,false);
+		this.bwCtx.closePath();
+		this.bwCtx.stroke();
+	};
+	
 	this.getBaseColor = function (color) {
 		colors = color.split(/,\s?/);
+		var maxIndex = 0;
+		var minIndex = 0;
 		for (var c = 0; c < colors.length; c++) {
-			if (parseInt(colors[c]) > 130) {
-				colors[c] = 255;
-			} else {
-				colors[c] = 0;
+			if (parseInt(colors[c]) > colors[maxIndex]) {
+				maxIndex = c;
+			} else if (parseInt(colors[c]) < colors[minIndex]) {
+				minIndex = c;
 			}
 		}
-		if(colors[0] == colors[1] && colors[1] == colors[2])
-			return '255,0,0'
+		if(maxIndex == minIndex)
+			return '255,0,0';
+		colors[maxIndex] = 255;
+		colors[minIndex] = 0;
 		return colors.join(',');
+	};
+	
+	this.getCBoffset = function (clr) {
+		var base = clr.split(',');
+		if(!(base[0] == base[1] && base[1] == base[2]))
+			for(var i = 7; i < 262; i++) {
+				var data = this.cbCtx.getImageData(15,7+i,1,1).data;
+				
+				if(Math.abs(data[0] - base[0]) < 10 &&
+						Math.abs(data[1] - base[1]) < 10 &&
+						Math.abs(data[2] - base[2]) < 10)
+					return i;
+			}
+		return 7;
 	};
 	
 	this.drawCB = function (yOffset) {
@@ -2783,18 +2903,29 @@ function color_picker(color) {
 			'className' : 'colorBar'
 		});
 		this.cbCanvas.width = 40;
-		this.cbCanvas.height = 255;
+		this.cbCanvas.height = 269;
 		this.cbCanvas.style.position = 'relative';
 		this.container.appendChild(this.cbCanvas);
 		this.cbCtx = this.cbCanvas.getContext('2d');
 		this.redrawCB(yOffset);
 			
 		var SR = this;
-		this.cbCanvas.addEventListener('click', function (e) { SR.colorPick(e) }, false);
+		this.cbCanvas.addEventListener('mousedown', function (e) {
+			SR.colorPick(e);
+			SR.mousePosX = e.pointerX;
+			SR.mousePosY = e.pointerY;
+			var colordrag = function (e) {SR.colorDrag(e);};
+			document.body.addEventListener('mousemove', colordrag, false);
+			document.body.addEventListener('mouseup', function (e) {
+				document.body.removeEventListener('mousemove', colordrag, false);
+				e.preventDefault();
+				e.stopPropagation();
+			}, false);
+		}, false);
 	};
 	
 	this.redrawCB = function (yOffset) {
-		this.cbCtx.clearRect(0,0,255,255);
+		this.cbCtx.clearRect(0,0,255,269);
 		var rtr = this.cbCtx.createLinearGradient(0,0,0,255);
 		rtr.addColorStop(0, 'rgb(255,0,0)');
 		rtr.addColorStop(1/6, 'rgb(255,255,0)');
@@ -2804,41 +2935,205 @@ function color_picker(color) {
 		rtr.addColorStop(5/6, 'rgb(255,0,255)');
 		rtr.addColorStop(1, 'rgb(255,0,0)');
 		this.cbCtx.fillStyle = rtr;
-		this.cbCtx.fillRect(10,0,20,255);
+		this.cbCtx.fillRect(10,7,20,255);
 		
+		if (typeof(yOffset) != typeof(1)) yOffset = this.getCBoffset(yOffset);
 		this.cbCtx.strokeStyle = "rgba(255,255,255,1)";
 		this.cbCtx.strokeRect(7,yOffset-2, 26, 5);
 		this.cbCtx.strokeStyle = "rgba(0,0,0,1)";
 		this.cbCtx.strokeRect(6,yOffset-3,28,7);
 	};
 	
+	this.drawSettings = function () {
+		this.settingsDiv = $create('div', {
+			'class' : 'gb_colorSettings'
+		});
+		
+		
+		this.previewDiv = $create('div', {
+			'class' : 'gb_colorPreview',
+			'style' : 'background-color: rgb('+this.color+');'
+		});
+		this.settingsDiv.appendChild(this.previewDiv);
+		
+		this.redValueInput = $create('input', {
+			'type': 'text',
+			'class': 'gb_colorInput',
+			'id': 'gb_colorInputRed',
+			'pattern' : '^([0-1]?[0-9]{1,2}|2[0-4][0-9]|25[0-5])$',
+			'maxlength' : 3,
+			'value' : this.color.split(',')[0]
+		});
+		var label = $create('label', {
+			'textContent' : 'Red: ',
+			'class': 'gb_rgblabel'
+		});
+		label.appendChild(this.redValueInput);
+		this.settingsDiv.appendChild(label);
+		
+		this.greenValueInput = $create('input', {
+			'type': 'text',
+			'class': 'gb_colorInput',
+			'id': 'gb_colorInputGreen',
+			'pattern' : '^([0-1]?[0-9]{1,2}|2[0-4][0-9]|25[0-5])$',
+			'maxlength' : 3,
+			'value' : this.color.split(',')[1]
+		});
+		label = $create('label', {
+			'textContent' : 'Green: ',
+			'class': 'gb_rgblabel'
+		});
+		label.appendChild(this.greenValueInput);
+		this.settingsDiv.appendChild(label);
+		
+		this.blueValueInput = $create('input', {
+			'type': 'text',
+			'class': 'gb_colorInput',
+			'id': 'gb_colorInputBlue',
+			'pattern' : '^([0-1]?[0-9]{1,2}|2[0-4][0-9]|25[0-5])$',
+			'maxlength' : 3,
+			'value' : this.color.split(',')[2]
+		});
+		label = $create('label', {
+			'textContent' : 'Blue: ',
+			'class': 'gb_rgblabel'
+		});
+		label.appendChild(this.blueValueInput);
+		this.settingsDiv.appendChild(label);
+		this.hexValue = $create('input', {
+			'type': 'text',
+			'class': 'gb_hexInput',
+			'pattern' : '^([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$',
+			'maxlength' : 6,
+			'value' : this.getHex(this.color)
+		});
+		label = $create('label', {
+			'textContent' : 'Hex: ',
+			'class': 'gb_hexlabel'
+		});
+		label.appendChild(this.hexValue);
+		this.settingsDiv.appendChild(label);
+		
+		var SR = this;
+		var chng = function (e) {
+			SR.setColor(([SR.redValueInput.value
+					,SR.greenValueInput.value
+					,SR.blueValueInput.value])
+				.join(','));
+		};
+		this.redValueInput.addEventListener('change', chng, false);
+		this.greenValueInput.addEventListener('change', chng, false);
+		this.blueValueInput.addEventListener('change', chng, false);
+		this.hexValue.addEventListener('change', function () {
+			var clr = SR.getRGB(SR.hexValue.value);
+			SR.setColor(clr);
+			SR.tone = SR.getBaseColor(SR.color);
+			SR.redrawCB(SR.tone);
+			SR.redrawBW(SR.tone);
+		}, false);
+		
+		var btnDiv = $create('div', {
+			'class' : 'gb_colorBtnContainer'
+		});
+		this.saveButton = $create('input', {
+			'type': 'button',
+			'value': 'Save',
+			'class': 'gb_colorPickerButton'
+		});
+		btnDiv.appendChild(this.saveButton);
+		this.cancelButton = $create('input', {
+			'type': 'button',
+			'value': 'Cancel',
+			'class': 'gb_colorPickerButton'
+		});
+		btnDiv.appendChild(this.cancelButton);
+		this.settingsDiv.appendChild(btnDiv);
+		
+		this.cancelButton.addEventListener('click', function () {
+			SR.undraw();
+		}, false);
+		this.saveButton.addEventListener('click', function () {
+			SR.callback();
+			SR.undraw();
+		}, false);
+		
+		this.container.appendChild(this.settingsDiv);
+	};
+	
 	this.colorPick = function (e) {
 		e.stopPropagation();
 		e.preventDefault();
-		if(e.layerX >= 10 && e.layerX < 30) {
-			var data = this.cbCtx.getImageData(e.layerX, e.layerY, 1, 1).data;
-			
+		if(e.layerY >= 7 && e.layerY < 261) {
 			this.redrawCB(e.layerY);
+			var data = this.cbCtx.getImageData(25, e.layerY, 1, 1).data;
 			
-			this.color = data[0] + ',' + data[1] + ',' + data[2];
-			this.redrawBW(this.color);
+			this.tone = data[0] + ',' + data[1] + ',' + data[2];
+			this.redrawBW(this.tone);
 		}
+	};
+	
+	this.setColor = function (rgb) {
+		this.color = rgb;
+		this.previewDiv.style.backgroundColor = 'rgb('+this.color+')';
+		this.redValueInput.value = rgb.split(',')[0];
+		this.greenValueInput.value = rgb.split(',')[1];
+		this.blueValueInput.value = rgb.split(',')[2];
+		this.hexValue.value = this.getHex(rgb);
+	};
+	
+	this.colorDrag = function (e) {
+		e.stopPropagation();
+		e.preventDefault();
+		
+		/* Find Common Offsets, and subtract them */
+		var ly = e.layerY;
+		var minval = 7;
+		var maxval = 261;
+		if(e.originalTarget != this.cbCanvas) {
+			var cby = getOffset(this.cbCanvas);
+			ly = e.clientY - cby.y;
+		}
+		ly = Math.max(minval,Math.min(maxval,ly));
+		this.redrawCB(ly - minval + 7);
+		var data = this.cbCtx.getImageData(25, ly - minval + 7, 1, 1).data;
+		
+		this.tone = data[0] + ',' + data[1] + ',' + data[2];
+		this.redrawBW(this.tone);
 	};
 	
 	this.clickDelegate = function (e) {
-		var data = this.bwCtx.getImageData(e.layerX, e.layerY, 1, 1).data;
+		
+		/* Find Common Offsets, and subtract them */
+		var ly = e.layerY;
+		var lx = e.layerX;
+		var minval = 0;
+		var maxval = 254;
+		this.redrawBW(this.tone);
+		if(e.originalTarget != this.bwCanvas) {
+			var bw = getOffset(this.bwCanvas);
+			ly = e.clientY - bw.y;
+			lx = e.clientX - bw.x;
+		}
+		ly = Math.max(minval,Math.min(maxval,ly));
+		lx = Math.max(minval,Math.min(maxval,lx));
+		var data = this.bwCtx.getImageData(lx, ly, 1, 1).data;
 		var selection = data[0] + ',' + data[1] + ',' + data[2];
 		
-		for(var cd = 0; cd < this.clickHandles.length; cd++) {
-			this.clickHandles[cd](e, selection);
-		}
+		this.setColor(selection);
+		this.drawBWDot(lx, ly);
 	};
 	
-	this.registerClick = function (func) {
+	this.callback = function () {
+		for(var cd = 0; cd < this.clickHandles.length; cd++) {
+			this.clickHandles[cd](this.color);
+		}
+	}
+	
+	this.registerCallback = function (func) {
 		this.clickHandles.push(func);
 	};
 	
-	this.unregisterClick = function (func) {
+	this.unregisterCallback = function (func) {
 		if(func) {
 			for(var ch = 0; ch < this.clickHandles.length; ch++) {
 				if(func == this.clickHandles[ch]) {
@@ -2853,6 +3148,33 @@ function color_picker(color) {
 	
 	this.undraw = function () {
 		$remove(this.container);
+	};
+	
+	this.getHex = function (clr) {
+		var cspl = clr.split(',');
+		if(cspl.length == 3) {
+			return (
+				strlpad(parseInt(cspl[0]).toString(16),'0',2)+ '' +
+				strlpad(parseInt(cspl[1]).toString(16),'0',2)+ '' +
+				strlpad(parseInt(cspl[2]).toString(16),'0',2)+ '');
+		}
+		return '';
+	};
+	
+	this.getRGB = function (hex) {
+		if(hex.length == 3) {
+			hex = 
+				hex.substr(0,1)+hex.substr(0,1) +
+				hex.substr(1,1)+hex.substr(1,1) +
+				hex.substr(2,1)+hex.substr(2,1);
+		}
+		if (hex.length == 6) {
+			return (
+				parseInt(hex.substr(0,2),16) + ',' +
+				parseInt(hex.substr(2,2),16) + ',' +
+				parseInt(hex.substr(4,2),16));
+		}
+		return '';
 	};
 }
 
@@ -3173,7 +3495,7 @@ function config_colorBox(label, id, dflt) {
 		});
 		this.box.style.backgroundColor = 'rgb(' + this.currentValue + ')';
 		
-		this.popout = popupManager.newColor(this.currentValue);
+		this.popout = popupManager.newColor(this.currentValue, this.label);
 		
 		var SR = this;
 		this.box.addEventListener("click", function(event) { 
@@ -3203,10 +3525,9 @@ function config_colorBox(label, id, dflt) {
 			}, false);
 			event.stopPropagation();
 		}, true);
-		this.popout.registerClick(function(e, clr) {
+		this.popout.registerCallback(function(clr) {
 			SR.box.style.backgroundColor = "rgb(" + clr + ")";
 			GM_setValue(id, clr);
-			popupManager.closeColor();
 		});
 		
 		var hldr = $create('div', {
@@ -3516,8 +3837,8 @@ function popup_manager () {
 		return this.newPopup(0);
 	}
 	
-	this.newColor = function (tone) {
-		var cp = new color_picker(tone);
+	this.newColor = function (tone, txt) {
+		var cp = new color_picker(tone, txt);
 		this.popup.push(cp);
 		this.colorPopup.push(cp);
 		return cp;
@@ -3531,6 +3852,7 @@ function popup_manager () {
 	};
 	
 	this.closeAll = function () {
+		this.closeColor();
 		for(var p = 0; p < this.popup.length; p++) {
 			this.popup[p].undraw();
 		}
@@ -3543,6 +3865,7 @@ function popup_manager () {
 	};
 	
 	this.readySwitch = function () {
+		this.closeColor();
 		for(var p = 0; p < this.popup.length; p++) {
 			this.popup[p].undraw_dialog();
 		}
@@ -4063,6 +4386,7 @@ function config_dialog(popup) {
 		gen_section.sectionOptions.push(new config_checkBox("Use MultiSearch", "scuts", options.DEFAULT_SCUTS));
 		// gen_section.sectionOptions.push(new config_checkBox("Use Old Button Size", "oldSize", options.DEFAULT_OLDSIZE));
 		gen_section.sectionOptions.push(new config_checkBox("Enable Keyboard Shorcuts", "keyd", options.DEFAULT_KEYD));
+		gen_section.sectionOptions.push(new config_checkBox("Enable Google Instant (Requires Refresh)", "inst", options.DEFAULT_INST));
 		gen_set_window.sections.push(gen_section);
 			// Clutter
 		var app_section = new config_section("Clutter");
@@ -4889,10 +5213,10 @@ function redirgo(theList, tablast) {
 function setupText(preset) {
 	var search;
 	var params;
-	var locsrch = location.href.match(/[?&]q=[^&#]+/g);
-	var search = locsrch[locsrch.length - 1].split("+").join(" ").substr(3);
+	var locsrch = getQueryParameters()['q'];
+	if(locsrch == undefined) { return; }
+	var search = locsrch.split("+").join(" ");
 	
-	if(search == undefined) { return; }
 	// Checks for google specific syntax
 	var checkforcolon = search.split(":");
 	var regexColon = new RegExp("^(site|filetype|allintitle|allinbody|allinurl)$");
@@ -4939,6 +5263,15 @@ function clickd() {
 			}
 		}
 	}, false);
+}
+// Checks Instant preference
+function setInstant() {
+	var qobj = getQueryParameters();
+	if(!options.inst && qobj['complete'] !== '0') 
+		if(location.search.length > 0) location.search += '&complete=0';
+		else location.search = '?complete=0'
+	else if (options.inst && qobj['complete'] === '0')
+		location.search = location.search.replace(/&?complete=0/,'');
 }
 	// End Text / Input Based Functions --------------------------------------------
 
@@ -5913,6 +6246,7 @@ function runThrough() {
 	if (!initialized) {
 		// Checks for script updates
 		scriptPage();
+		setInstant();
 		
 		var q = document.evaluate('//*[@name="q"]', document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
 		queryBox = q.snapshotItem(0);
