@@ -315,7 +315,7 @@ function config_colorBox(label, id, dflt) {
 		});
 		this.box.style.backgroundColor = 'rgb(' + this.currentValue + ')';
 		
-		this.popout = popupManager.newColor(this.currentValue);
+		this.popout = popupManager.newColor(this.currentValue, this.label);
 		
 		var SR = this;
 		this.box.addEventListener("click", function(event) { 
@@ -345,10 +345,9 @@ function config_colorBox(label, id, dflt) {
 			}, false);
 			event.stopPropagation();
 		}, true);
-		this.popout.registerClick(function(e, clr) {
+		this.popout.registerCallback(function(clr) {
 			SR.box.style.backgroundColor = "rgb(" + clr + ")";
 			GM_setValue(id, clr);
-			popupManager.closeColor();
 		});
 		
 		var hldr = $create('div', {

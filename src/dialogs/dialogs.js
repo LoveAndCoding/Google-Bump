@@ -54,8 +54,8 @@ function popup_manager () {
 		return this.newPopup(0);
 	}
 	
-	this.newColor = function (tone) {
-		var cp = new color_picker(tone);
+	this.newColor = function (tone, txt) {
+		var cp = new color_picker(tone, txt);
 		this.popup.push(cp);
 		this.colorPopup.push(cp);
 		return cp;
@@ -69,6 +69,7 @@ function popup_manager () {
 	};
 	
 	this.closeAll = function () {
+		this.closeColor();
 		for(var p = 0; p < this.popup.length; p++) {
 			this.popup[p].undraw();
 		}
@@ -81,6 +82,7 @@ function popup_manager () {
 	};
 	
 	this.readySwitch = function () {
+		this.closeColor();
 		for(var p = 0; p < this.popup.length; p++) {
 			this.popup[p].undraw_dialog();
 		}

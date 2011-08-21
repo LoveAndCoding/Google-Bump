@@ -164,22 +164,6 @@ function resetPg() {
 	if (wdiv) {
 		wdiv.parentNode.removeChild(wdiv);
 	}
-	// var mdiv = $("mBox");
-	// if (mdiv) {
-		// mdiv.parentNode.removeChild(mdiv);
-	// }
-	// var gset = $('gbump_settings');
-	// if (gset) {
-		// gset.parentNode.removeChild(gset);
-	// }
-	// var xdiv = $("exvidlist");
-	// if (xdiv) {
-		// xdiv.parentNode.removeChild(xdiv);
-	// }
-	// var wldiv = $("wikiLink");
-	// if (wldiv) {
-		// wldiv.parentNode.removeChild(wldiv);
-	// }
 	var gup = $("greyOut");
 	if (gup) {
 		closeEx();
@@ -201,10 +185,6 @@ function closeEx() {
 }
 // Gets the page on from the URL
 function extractPage() {
-	/* var queryarr = ((location.hash && location.hash.indexOf('q=') >= 0) ? location.hash : location.search).substr(1).split('&');
-	var qobj = [];
-	for(var i = queryarr.length - 1; i >= 0; i--)
-		qobj[queryarr[i].split('=')[0]] = queryarr[i].split('=')[1];*/
 	var qobj = getQueryParameters();
 	return qobj['tbm'] || 'web';
 }
@@ -220,5 +200,22 @@ function getQueryParameters() {
 			qobj[queryarr[i].split('=')[0]] = queryarr[i].split('=')[1];
 	}
 	return qobj;
+}
+// Get page offset
+function getOffset(el) {
+	var offx = el.offsetLeft;
+	var offy = el.offsetTop;
+	while(el.offsetParent && el.offsetParent != document.body) {
+		el = el.offsetParent;
+		offx += el.offsetLeft;
+		offy += el.offsetTop;
+	}
+	return { 0 : offx, 1 : offy, x : offx, y : offy}
+}
+// String left padding
+function strlpad (str, padString, length) {
+	while (str.length < length)
+        str = padString + str;
+    return str;
 }
 	// End Helper Functions ------------------------------------------------------------
