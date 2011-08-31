@@ -119,13 +119,15 @@ function multisearcher() {
 			SR.addBox();
 		}, false);
 		
-		theirButton.parentNode.addEventListener("click", function (event) {
+		var submitCheck = function (event) {
 			if (SR.expanded) {
 				event.stopPropagation();
 				event.preventDefault();
 				redirgo([SR.origOptionBox.value, $('lst-ib').value], false);
 			}
-		}, false);
+		};
+		theirButton.addEventListener("click", submitCheck, false);
+		theirButton.form.addEventListener("submit", submitCheck, false);
 		
 		srchAll.addEventListener("click", function (event) {
 			event.stopPropagation();

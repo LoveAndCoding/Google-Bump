@@ -4,6 +4,9 @@
 		#sbds  { \
 			white-space: nowrap; \
 		} \
+		.kpbb { \
+			display: inline-block; \
+		} \
 		#gbump_moreOptsBtn { \
 			width: 27px; \
 			text-indent: -1000px; \

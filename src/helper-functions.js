@@ -101,7 +101,8 @@ function linkit(theLink, tabit, under) {
 	if (tabit || (options.tabs && under)) {
 		GM_openInTab(theLink);
 	} else {
-		location.href = theLink;
+		// Eliminate race conditions by sending it to the back of the queue
+		setTimeout(function () {window.location = theLink;},0);
 	}
 }
 // Goes up until if finds the proper node, and then returns the given attribute
