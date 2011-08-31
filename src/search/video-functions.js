@@ -65,14 +65,18 @@ function showvids(response) {
 }
 // Handles Youtube Searches
 function youtubeSearched(response) {
-	eval("var nv = " + response.responseText.substr(1));
+	eval("var nv = " + response.responseText);
 	var results = nv.feed.entry;
 	
 	var box = rightBox("videoList");
 	
 	if(results && results.length > 0) {
 		for(var v = 0; v < results.length; v++) {
-			var new_vid = new indiv_video_result(results[v].media$group.media$thumbnail[0].url, results[v].link[0].href.match(/.*watch\?v=[^&]*/)[0], "youtube", results[v].title.$t);
+			var vid_src = results[v].link[0].href.match(/^.+watch\?v=[^&]+/)[0];
+			var emb_src = vid_src.replace(/watch\?v=/, 'v/') + '?1=1';
+			var img_src = results[v].media$group.media$thumbnail[0].url;
+			var vid_title = results[v].title.$t;
+			var new_vid = new indiv_video_result(img_src, vid_src, emb_src, "YouTube", vid_title);
 			new_vid.draw(box);
 		}
 		
@@ -94,7 +98,7 @@ function youtubeSearched(response) {
 function menutogglevids(theSearch) {
 	if($('videoList')) $('videoList').parentNode.removeChild($('videoList'));
 	if(options.vdsrchr == "youtube") {
-		get("http://gdata.youtube.com/feeds/api/videos?alt=json-in-script&callback=y&max-results=5&format=5&q=" + encodeURIComponent(theSearch), youtubeSearched, novids);
+		get("http://gdata.youtube.com/feeds/api/videos?alt=json&max-results=5&format=5&q=" + encodeURIComponent(theSearch), youtubeSearched, novids);
 	} else {
 		get("http://ajax.googleapis.com/ajax/services/search/video?v=1.0&gbv=2&rsz=5&start=0&q=" + encodeURIComponent(theSearch), showvids, novids);
 	}
