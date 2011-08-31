@@ -204,7 +204,7 @@ function makePlayer() {
 // Change the icon sheet from Google to be transparent
 function iconSheetTrans() {
 	var img = new Image();
-	img.src = unsafeWindow.getComputedStyle($cl('micon')[0], null).backgroundImage.replace(/^url\("/,'').replace(/"\)$/,'');
+	img.src = unsafeWindow.getComputedStyle($cl('csb')[0], null).backgroundImage.replace(/^url\("/,'').replace(/"\)$/,'');
 	try {
 		var canvas = $create('canvas', {
 			id : 'transLogo',
