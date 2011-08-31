@@ -2,7 +2,7 @@
 // @name			Google Bump
 // @namespace		http://userscripts.org/scripts/show/33449
 // @description		Adds some functionality to the Google web search. Main features include Multisearch, Video result extraction, Wikipedia definitions and links, and some clutter cleanup by. All options can be turned off.
-// @version			2.11.20110821
+// @version			2.12.20110831
 // @include			http://www.google.tld/
 // @include			http://www.google.tld/#*
 // @include			http://www.google.tld/search?*
@@ -11,14 +11,14 @@
 
 /*
 	Author: KTaShes
-	Date: Aug 21 2011
+	Date: Aug 31 2011
 	
 	Code can be found on GitHub @ http://github.com/ktsashes/Google-Bump
 	
 	This code uses juicer to compile from several different javascript files.
 	Juicer (C) Christian Johansen - http://cjohansen.no/en/ruby/juicer_a_css_and_javascript_packaging_tool
 */
-var version = "2.11";
+var version = "2.12";
 
 var image_store = {
 	
@@ -795,7 +795,8 @@ function linkit(theLink, tabit, under) {
 	if (tabit || (options.tabs && under)) {
 		GM_openInTab(theLink);
 	} else {
-		location.href = theLink;
+		// Eliminate race conditions by sending it to the back of the queue
+		setTimeout(function () {window.location = theLink;},0);
 	}
 }
 // Goes up until if finds the proper node, and then returns the given attribute
@@ -2287,6 +2288,9 @@ function stylesheet_store () {
 		#sbds  { \
 			white-space: nowrap; \
 		} \
+		.kpbb { \
+			display: inline-block; \
+		} \
 		#gbump_moreOptsBtn { \
 			width: 27px; \
 			text-indent: -1000px; \
@@ -2698,7 +2702,7 @@ function makePlayer() {
 // Change the icon sheet from Google to be transparent
 function iconSheetTrans() {
 	var img = new Image();
-	img.src = unsafeWindow.getComputedStyle($cl('micon')[0], null).backgroundImage.replace(/^url\("/,'').replace(/"\)$/,'');
+	img.src = unsafeWindow.getComputedStyle($cl('csb')[0], null).backgroundImage.replace(/^url\("/,'').replace(/"\)$/,'');
 	try {
 		var canvas = $create('canvas', {
 			id : 'transLogo',
@@ -4902,13 +4906,15 @@ function multisearcher() {
 			SR.addBox();
 		}, false);
 		
-		theirButton.parentNode.addEventListener("click", function (event) {
+		var submitCheck = function (event) {
 			if (SR.expanded) {
 				event.stopPropagation();
 				event.preventDefault();
 				redirgo([SR.origOptionBox.value, $('lst-ib').value], false);
 			}
-		}, false);
+		};
+		theirButton.addEventListener("click", submitCheck, false);
+		theirButton.form.addEventListener("submit", submitCheck, false);
 		
 		srchAll.addEventListener("click", function (event) {
 			event.stopPropagation();
@@ -5659,14 +5665,18 @@ function showvids(response) {
 }
 // Handles Youtube Searches
 function youtubeSearched(response) {
-	eval("var nv = " + response.responseText.substr(1));
+	eval("var nv = " + response.responseText);
 	var results = nv.feed.entry;
 	
 	var box = rightBox("videoList");
 	
 	if(results && results.length > 0) {
 		for(var v = 0; v < results.length; v++) {
-			var new_vid = new indiv_video_result(results[v].media$group.media$thumbnail[0].url, results[v].link[0].href.match(/.*watch\?v=[^&]*/)[0], "youtube", results[v].title.$t);
+			var vid_src = results[v].link[0].href.match(/^.+watch\?v=[^&]+/)[0];
+			var emb_src = vid_src.replace(/watch\?v=/, 'v/') + '?1=1';
+			var img_src = results[v].media$group.media$thumbnail[0].url;
+			var vid_title = results[v].title.$t;
+			var new_vid = new indiv_video_result(img_src, vid_src, emb_src, "YouTube", vid_title);
 			new_vid.draw(box);
 		}
 		
@@ -5688,7 +5698,7 @@ function youtubeSearched(response) {
 function menutogglevids(theSearch) {
 	if($('videoList')) $('videoList').parentNode.removeChild($('videoList'));
 	if(options.vdsrchr == "youtube") {
-		get("http://gdata.youtube.com/feeds/api/videos?alt=json-in-script&callback=y&max-results=5&format=5&q=" + encodeURIComponent(theSearch), youtubeSearched, novids);
+		get("http://gdata.youtube.com/feeds/api/videos?alt=json&max-results=5&format=5&q=" + encodeURIComponent(theSearch), youtubeSearched, novids);
 	} else {
 		get("http://ajax.googleapis.com/ajax/services/search/video?v=1.0&gbv=2&rsz=5&start=0&q=" + encodeURIComponent(theSearch), showvids, novids);
 	}

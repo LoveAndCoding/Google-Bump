@@ -1,3 +1,10 @@
+Version 2.12.20110831 - Fix Release - 08/31/11
+
+	* Bug: Multisearch button display was incorrect
+	* Bug: Multisearch from the main search box would not work
+	* Bug: With the removal of icons on the left, the script would fail
+	* Bug: YouTube API calls were not being processed correctly
+
 Version 2.11.20110821 - Fix Release - 08/21/11
 
 	* Feature: Instant Search toggling (Requested by Bez)
@@ -6,7 +13,7 @@ Version 2.11.20110821 - Fix Release - 08/21/11
 	* Improved: Color picker has a title telling you what you're recoloring
 	* Improved: Color picker has click and drag support when picking colors
 	* Bug: Query wasn't always being grabbed correctly when searched from Google homepage with JS
-	* Bug: Multisearch on some versions of Google attached to the wrong node.
+	* Bug: Multisearch on some versions of Google attached to the wrong node
 
 Version 2.10.20110731 - Fix Release - 07/31/11
 
